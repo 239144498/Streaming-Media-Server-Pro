@@ -19,7 +19,7 @@ Streaming-Media-Server-Pro
 
 RESTful API
 ---
-[https://239144498.github.io/Streaming-Media-Server-Pro/](https://239144498.github.io/Streaming-Media-Server-Pro/)
+[https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145](https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145)
 
 实现效果：
 ---
