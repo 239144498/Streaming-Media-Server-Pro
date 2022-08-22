@@ -17,6 +17,10 @@ Streaming-Media-Server-Pro
 - MySql或PostgreSql缓存
 - 多服务器分流
 
+RESTful API
+---
+[https://239144498.github.io/Streaming-Media-Server-Pro/](https://239144498.github.io/Streaming-Media-Server-Pro/)
+
 实现效果：
 ---
 #### ios软件观看效果
@@ -30,7 +34,7 @@ Streaming-Media-Server-Pro
 原理介绍
 ---
 如下图所示：
-<img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg?ik-sdk-version=javascript-1.4.3&amp;updatedAt=1661141230698" title="节目单"/>
+<img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" title="原理图"/>
 
 ### **文字详解**
 - ① 客户端请求m3u8文件
@@ -51,6 +55,9 @@ Streaming-Media-Server-Pro
 
 使用方式
 ---
+
+
+
 #### Mysql操作
 ##### 创建数据库
 ``` 
@@ -74,7 +81,7 @@ use video;
 
 DROP event IF EXISTS auto_delete;
 CREATE EVENT auto_delete
-ON SCHEDULE EVERY 30 minute     # xx分钟根据存储和查询性能综合决定
+ON SCHEDULE EVERY 30 minute     # xx分钟根据数据库的存储和查询性能综合决定
 DO
 TRUNCATE video;
 ``` 
@@ -90,7 +97,6 @@ pip install -r requirements.txt
 ``` code
 python3 main.py
 ```
-
 现已支持频道
 ---
 - [x] 民视第一台
@@ -226,3 +232,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
