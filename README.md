@@ -16,6 +16,8 @@ Streaming-Media-Server-Pro
 - Redis缓存
 - MySql或PostgreSql缓存
 - 多服务器分流
+- 清晰度可自定义
+- 请求主机可自定义
 
 REST API
 ---
