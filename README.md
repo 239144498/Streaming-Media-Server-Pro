@@ -17,7 +17,7 @@ Streaming-Media-Server-Pro
 - MySql或PostgreSql缓存
 - 多服务器分流
 
-RESTful API
+REST API
 ---
 [https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145](https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145)
 
