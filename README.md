@@ -39,6 +39,7 @@ REST API
 <img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" title="原理图"/>
 
 ### **文字详解**
+图中多台服务器是一种理想情况下实现，实际python程序、redis和mysql都可以在同一台服务器中实现
 - ① 客户端请求m3u8文件
 	- 1-> 查看内存是否缓存，否则服务器执行图流程2
 	- 2-> BackgroundTasks任务：执行图流程3，分布式下载数量根据设置的缓冲区大小决定
