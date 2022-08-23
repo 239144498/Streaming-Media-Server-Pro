@@ -24,7 +24,7 @@ def generate_file6(
         hd: Any = Query("1080")):
     """
     最新版 apiv3
-    该版本具有redis缓存，视频中转缓存处理等优点
+    该版本具有redis缓存，视频中转缓存处理等优点,直白说就是播放稳定不卡顿，看超清不是问题
     :param background_tasks:
     :param host:
     :param fid:
