@@ -86,7 +86,7 @@ DO
 TRUNCATE video;
 ``` 
 #### python部署:  
-##### 终端命令下克隆厂库
+##### 命令终端执行
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```
