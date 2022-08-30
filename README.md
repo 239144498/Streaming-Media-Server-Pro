@@ -85,7 +85,8 @@ ON SCHEDULE EVERY 30 minute     # xx分钟根据数据库的存储和查询性�
 DO
 TRUNCATE video;
 ``` 
-#### python部署:  
+#### python部署: 
+远程托管：https://www.pythonanywhere.com/
 ##### 命令终端执行
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
