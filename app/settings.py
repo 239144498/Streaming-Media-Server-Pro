@@ -9,6 +9,7 @@ import requests
 request = requests.session()
 print("配置加载中...")
 
+
 PATH = Path(__file__).parent
 ROOT = PATH.parent
 
