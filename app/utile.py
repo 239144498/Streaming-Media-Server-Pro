@@ -1,12 +1,24 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-import random
-from apscheduler.schedulers.background import BackgroundScheduler, BlockingScheduler
-from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-from apscheduler.triggers.interval import IntervalTrigger
+import asyncio
+import datetime
+import re
+import time
+
 from urllib.parse import quote
+from loguru import logger
 from threading import Thread
-from app.tools import *
+from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.schedulers.background import BlockingScheduler, BackgroundScheduler
+from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+
+from app.common.endecrypt import get4gtvurl
+from app.common.gitrepo import agit, request
+from app.common.generateEpg import postask, generateprog
+from app.common.tools import genftlive, now_time, solvelive, generate_url, gdata
+from app.modules.DBtools import redisState, cur, DB
+from app.settings import repoaccess_token, xmlaccess_token, xmlowner, xmlrepo, PATH, localhost, repoState, HD, \
+    repoowner, idata, default_cfg, downurls, vbuffer
 
 
 class container:
@@ -18,38 +30,43 @@ class container:
         Thread(target=self.init).start()
 
     def inin_repo(self):
-        print("开始初始化")
+        logger.info("开始初始化")
         self.repo = str(datetime.date.today())
         state = agit(repoaccess_token).cat_repo(self.owner, self.repo)
         if state == 404:
             agit(repoaccess_token).create_repo(self.repo)
-            print("创建repo", self.repo, "完成")
+            logger.success(("创建repo", self.repo, "完成"))
 
     def init(self):
-        self.inin_repo()
-        # 读取redis缓存数据到内存
-        keys = cur.keys()
-        _ = []
-        for k in keys:
-            _.append(k)
-        for key, value in zip(_, cur.mget(_)):
-            _ = eval(value)
-            if len(_) < 3:
-                continue
-            self.updatelocal(key, _)
+        if repoState:
+            self.inin_repo()
+            # 读取已上传到agit的文件名到内存
+            reposha = agit(repoaccess_token).get_repo_sha(self.owner, self.repo)
+            for i in agit(repoaccess_token).cat_repo_tree(self.owner, self.repo, reposha)['tree']:
+                if i["size"] >= 5000 and ".ts" in i["path"]:
+                    self.filename.update({i["path"]: -1})
 
-        # 读取已上传到agit的文件名到内存
-        reposha = agit(repoaccess_token).get_repo_sha(self.owner, self.repo)
-        for i in agit(repoaccess_token).cat_repo_tree(self.owner, self.repo, reposha)['tree']:
-            if i["size"] >= 5000 and ".ts" in i["path"]:
-                self.filename.update({i["path"]: -1})
-        print("init final")
+        if redisState:
+            # 读取redis数据到内存
+            keys = cur.keys()
+            _ = []
+            for k in keys:  # 排除非电视节目
+                if "4gtv" in str(k) or "litv" in str(k):
+                    _.append(k)
+            for key, value in zip(_, cur.mget(_)):
+                _ = eval(value)
+                if len(_) < 3:
+                    continue
+                self.updatelocal(key, _)
+
+        logger.success("init final")
 
     def updateonline(self, fid, hd):
         url = get4gtvurl(fid, idata[fid]['nid'], hd)
         last = int(re.findall(r"expires.=(\d+)", url).pop())
         start, seq, gap = genftlive(url)
-        cur.setex(fid, last - now_time(), str([url, last, start, seq, gap]))
+        if redisState:
+            cur.setex(fid, last - now_time(), str([url, last, start, seq, gap]))
         self.para[fid] = {
             "url": url,
             "last": last,
@@ -75,23 +92,15 @@ class container:
         :return:
         """
         if not self.para.get(fid) or self.para.get(fid)['last'] - now_time() < 0:  # 本地找
-            _temp = cur.get(fid)
-            if not _temp or eval(_temp)[1] - now_time() < 0:  # redis找
-                if hd == "1080" and fid in """
-                    4gtv-4gtv070
-                    4gtv-4gtv083
-                    4gtv-4gtv059
-                    4gtv-4gtv077
-                    4gtv-4gtv014
-                    4gtv-4gtv084
-                    4gtv-4gtv085
-                    4gtv-4gtv080
-                    """:
-                    hd = "720"
-                self.updateonline(fid, hd)
+            if redisState:
+                _temp = cur.get(fid)
+                if not _temp or eval(_temp)[1] - now_time() < 0:  # redis找
+                    self.updateonline(fid, hd)
+                else:  # 找到放进内存
+                    _ = eval(_temp)
+                    self.updatelocal(fid, _)
             else:
-                _ = eval(_temp)
-                self.updatelocal(fid, _)
+                self.updateonline(fid, hd)
 
     def generalfun(self, fid, hd):
         """
@@ -100,21 +109,23 @@ class container:
         :param hd:
         :return:
         """
-        now = now_time()
-        data = self.para[fid]
+        data = self.para.get(fid)
         if "4gtv-4gtv" in fid or "litv-ftv10" in fid or "litv-longturn17" == fid or "litv-longturn18" == fid:
             url = idata[fid][hd]
-            seq = round((now - data['start']) / idata[fid]["x"])
-            begin = (seq + data['seq']) * idata[fid]["x"]
-            return data["gap"], seq, url, begin
+            now = now_time()
+            seq = round((now - data['start']) / idata[fid]['x']) - 1
+            begin = (seq + data['seq']) * idata[fid]['x']
+            return data["gap"], (begin - idata[fid]['x1']) // idata[fid]['x'], url, begin
         elif "4gtv-live" in fid:
             token = re.findall(r"(token1=.*&expires1=\d+)&", data['url']).pop()
             url = idata[fid]['url'] + "?" + token
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]["x"])
+            now = now_time()
+            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
             return data["gap"], seq, url, 0
         else:
             url = idata[fid][hd]
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]["x"])
+            now = now_time()
+            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
             return data["gap"], seq, url, 0
 
     def generatem3u8(self, host, fid, hd):
@@ -128,12 +139,15 @@ class container:
 #EXT-X-INDEPENDENT-SEGMENTS"""
         for num1 in range(5):
             yield f"\n#EXTINF:{idata[fid]['gap']}" \
-                  + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]["x"]), seq + num1, url)
+                  + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]['x']), seq + num1, url)
 
     def new_generatem3u8(self, host, fid, hd, background_tasks):
         self.check(fid, hd)
         gap, seq, url, begin = self.generalfun(fid, hd)
-        background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
+        if default_cfg.get("downchoose") == "online":
+            background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
+        elif default_cfg.get("downchoose") == "local":
+            background_tasks.add_task(backtasklocal, url, fid, seq, hd, begin, host)
         yield f"""#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:{gap}
@@ -141,12 +155,12 @@ class container:
 #EXT-X-INDEPENDENT-SEGMENTS"""
         tsname = fid + str(seq) + ".ts"
         if tsname in self.filename and self.filename.get(tsname) == 1:
-            for num1 in range(5): # 控制第一次读取是从第一个ts开始
-                url = "\n" + os.environ['local'] + f"/call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}"
+            for num1 in range(vbuffer):
+                url = "\n" + localhost + f"/call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}"
                 yield f"\n#EXTINF:{idata[fid]['gap']}" + url
         else:
             for num1 in range(1):
-                url = "\n" + os.environ['local'] + f"/call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}"
+                url = "\n" + localhost + f"/call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}"
                 yield f"\n#EXTINF:{idata[fid]['gap']}" + url
 
     def geturl(self, fid, hd):
@@ -158,24 +172,25 @@ get = container()
 
 
 def call_get(url, tsname):
-    res = request.get(url)
-    get.filename.update({tsname: 1})
-    # print(tsname, url[:20], res.text)
+    with request.get(url) as res:
+        get.filename.update({tsname: 1})
 
 
 def backtaskonline(url, fid, seq, hd, begin, host):
     threads = []
-    urlset = ["https://xxxx/url3?url=", "https://xxxx/url3?url=",
-              "https://xxxx/url3?url=", "https://xxxx/url3?url=",
-              "https://xxxx/url3?url="]
+    # 分布式下载，改成你的链接，看不懂就去看我发布的教程
+    # urlset = ["https://www.example1.com/url3?url=", "https://www.example2.com/url3?url=",
+    #           "https://www.example3.com/url3?url=", "https://www.example4.com/url3?url=",
+    #           "https://www.example5.com/url3?url="]
+    urlset = downurls
     # random.shuffle(urlset)
-    for i in range(0, 5):
+    for i in range(0, vbuffer):
         tsname = fid + str(seq + i) + ".ts"
         # .ts已下载或正在下载
         if tsname in get.filename:
             continue
         get.filename.update({tsname: 0})
-        herf = generate_url(fid, host, hd, begin + (i * idata[fid]["x"]), seq + i, url)
+        herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
         x = urlset.pop() + quote(herf) + f"&filepath={tsname}"
         t = Thread(target=call_get, args=(x, tsname))
         threads.append(t)
@@ -187,25 +202,78 @@ def backtaskonline(url, fid, seq, hd, begin, host):
         t.join()
 
 
+def backtasklocal(url, fid, seq, hd, begin, host):
+    threads = []
+    # 本地多线程下载
+    for i in range(0, vbuffer):
+        tsname = fid + str(seq + i) + ".ts"
+        # .ts已下载或正在下载
+        if tsname in get.filename:
+            continue
+        get.filename.update({tsname: 0})
+        herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
+        t = Thread(target=downvideo, args=(herf, tsname))
+        threads.append(t)
+    for i in range(len(threads)):
+        threads[i].start()
+        time.sleep(1.2 + i * 0.1)
+    for t in threads:
+        t.join()
+
+
+def downvideo(url: str, filepath: str):
+    """
+    本地下载存放到数据库
+    :param url:
+    :param filepath:
+    :return:
+    """
+    header = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
+        "Accept-Encoding": "gzip, deflate, br",
+    }
+    a = time.time()
+    repo = str(datetime.date.today())
+    with request.get(url=url, headers=header) as res:
+        status = res.status_code
+        content = res.content
+        b = time.time()
+        sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
+        a1 = DB(0).execute(sql, (filepath, content, len(content)))  # 执行sql语句
+        get.filename.update({filepath: 1})
+        c = time.time()
+        return {
+            "总时长": round(c - a, 2),
+            "请求": round(b - a, 2),
+            "请求状态": status,
+            "上传": round(c - b, 2),
+            "上传状态": a1,
+            "字长": len(content),
+            "repo": repo
+        }
+
+
 def gotask():
     get.filename.clear()
-    get.inin_repo()
-    if "Windows" in platform.platform():
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        asyncio.run(postask())
-    else:
-        new_loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(new_loop)
-        loop = asyncio.get_event_loop()
-        task = asyncio.ensure_future(postask())
-        loop.run_until_complete(asyncio.wait([task]))
+    if repoState:
+        import platform
+        get.inin_repo()
+        if "Windows" in platform.platform():
+            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+            asyncio.run(postask())
+        else:
+            new_loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(new_loop)
+            loop = asyncio.get_event_loop()
+            task = asyncio.ensure_future(postask())
+            loop.run_until_complete(asyncio.wait([task]))
 
-    content = generateprog(gdata())
-    filepath = "4gtvchannel.xml"
-    agit(xmlaccess_token).update_repo_file(xmlowner, xmlrepo, filepath, content)
-    with open("EPG.xml", "wb") as f:
-        f.write(content)
-    print("今日任务完成")
+        content = generateprog(gdata)
+        filepath = "4gtvchannel.xml"
+        agit(xmlaccess_token).update_repo_file(xmlowner, xmlrepo, filepath, content)
+        with open(PATH / "assets/EPG.xml", "wb") as f:
+            f.write(content)
+    logger.success("今日任务完成")
 
 
 def sqltask():
@@ -217,7 +285,7 @@ def sqltask():
             if i < 100:
                 _.update({keys[i]: get.filename.get(keys[i])})
         get.filename = _
-    print("删除完成")
+    logger.success("删除完成")
 
 
 def everyday(t=2):
@@ -229,9 +297,9 @@ def everyday(t=2):
         'coalesce': False,  # 默认为新任务关闭合并模式（）
         'max_instances': 3  # 设置新任务的默认最大实例数为3
     }
-    scheduler = BlockingScheduler(executors=executors, job_defaults=job_defaults, timezone='Asia/Shanghai')
-    scheduler.add_job(gotask, 'cron', day_of_week='0-6', hour=t, minute=00, second=00, misfire_grace_time=120)
-    scheduler.add_job(func=sqltask, trigger=IntervalTrigger(minutes=59), misfire_grace_time=120)
-    print(scheduler.get_jobs())
+    scheduler = BlockingScheduler(timezone='Asia/Shanghai', executors=executors, job_defaults=job_defaults)
+    scheduler.add_job(gotask, 'cron', max_instances=10, day_of_week='0-6', hour=t, minute=00, second=00,
+                      misfire_grace_time=120)
+    scheduler.add_job(func=sqltask, max_instances=10, trigger=IntervalTrigger(minutes=59), misfire_grace_time=120)
+    logger.info(scheduler.get_jobs())
     scheduler.start()
-
