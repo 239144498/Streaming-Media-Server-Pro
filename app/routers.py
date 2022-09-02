@@ -254,7 +254,6 @@ def downts(vname):
 
 if __name__ == '__main__':
     import uvicorn
-    # alter table video engine = InnoDB
 
     print(localhost)
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")  # reload=True, debug=True
