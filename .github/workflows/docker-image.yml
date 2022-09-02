@@ -1,5 +1,5 @@
 # 将项目构建镜像并发布至 Docker Hub
-name: CI to Docker Hub
+name: build
 
 # 在 Push 到 main 分支后启动该流程
 on:
