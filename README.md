@@ -6,18 +6,19 @@ Streaming-Media-Server-Pro
 
 核心功能
 ---
-- 生成m3u
+- 生成m3u文件
 - 生成m3u8文件
 - 视频中转（具有缓冲区）
 - 异步下载视频
 - 流媒体转发
 - 生成[EPG节目单](https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml) 每日实时更新
 - 分布式处理ts片段
-- Redis缓存
-- MySql或PostgreSql缓存
+- Redis缓存参数
+- MySql或PostgreSql缓存视频
 - 多服务器分流
+- 自定义增加节目频道
 - 清晰度可自定义
-- 请求主机可自定义
+- 请求主机可自定义（作为反代和分流）
 
 REST API
 ---
@@ -52,9 +53,9 @@ REST API
 - ③ 还有很多技术细节就不一一展开，只列出以上部分  
 
 该项目根据分析4gtv网站的接口，通过算法得到生成ts视频的一些关键参数，省去请求网站从而得到m3u8文件的通信时长等开销，针对海外视频网站被墙隔离，支持以下几种观看方式：
-- 通过**具有缓冲区的中转服务**观看（调用api接口 online.m3u8）
-- 通过**CDN**或**反向代理**观看（调用api接口 channel.m3u8?&host=xxx）
-- 使用**科学上网软件**观看（调用api接口 channel2.m3u8）  
+- 通过**具有缓冲区的中转服务**观看（调用api接口 /online.m3u8）
+- 通过**CDN**或**反向代理**观看（调用api接口 /channel.m3u8?&host=xxx）
+- 使用**科学上网软件**观看（调用api接口 /channel2.m3u8）  
 
 使用方式
 ---
@@ -85,9 +86,7 @@ ON SCHEDULE EVERY 30 minute     # xx分钟根据数据库的存储和查询性�
 DO
 TRUNCATE video;
 ``` 
-#### python部署: 
-远程托管：https://www.pythonanywhere.com/
-##### 命令终端执行
+#### python部署:  
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```
@@ -119,7 +118,6 @@ python3 main.py
 - [x] 新唐人亚太台
 - [x] 中天综合台
 - [x] ARIRANG阿里郎频道
-- [x] Global Trekker
 - [x] LiveABC互动英语频道
 - [x] 达文西频道
 - [x] ELTV生活英语台
