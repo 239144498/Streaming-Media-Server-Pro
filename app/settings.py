@@ -7,11 +7,11 @@ from pathlib import Path
 import requests
 
 request = requests.session()
-
+print("配置加载中...")
 
 PATH = Path(__file__).parent
 ROOT = PATH.parent
-print("配置加载中...")
+
 cfg = ConfigParser()
 cfg.read(ROOT / "app/assets/config.ini", encoding="utf-8")
 redis_cfg = dict(cfg.items("redis"))
