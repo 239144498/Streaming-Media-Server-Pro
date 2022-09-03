@@ -9,6 +9,39 @@ Streaming-Media-Server-Pro
 # 部署教程地址：https://www.cnblogs.com/1314h/p/16651157.html
 ## ==**新版本已发布，增加了自定义添加频道功能，你想看的都可以放进来；程序稳定性更高，只需要修改config.ini配置参数即可运行；你们期待的教程重磅来袭！**==
 
+**项目树形图**
+```
+.
+|-- Dockerfile
+|-- LICENSE
+|-- Procfile
+|-- README.md
+|-- app
+|   |-- __init__.py
+|   |-- assets
+|   |   |-- EPG.xml
+|   |   |-- config.ini
+|   |   `-- diyepg.txt
+|   |-- common
+|   |   |-- __init__.py
+|   |   |-- diyEpg.py
+|   |   |-- endecrypt.py
+|   |   |-- generateEpg.py
+|   |   |-- gitrepo.py
+|   |   `-- tools.py
+|   |-- main.py
+|   |-- modules
+|   |   |-- DBtools.py
+|   |   |-- __init__.py
+|   |   |-- dbMysql.py
+|   |   `-- dbPostgresql.py
+|   |-- routers.py
+|   |-- settings.py
+|   `-- utile.py
+|-- main.py
+`-- requirements.txt
+```
+
 
 核心功能
 ---
