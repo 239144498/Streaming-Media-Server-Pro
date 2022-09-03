@@ -152,7 +152,7 @@ def channel2(
 @app.get('/program.m3u')
 def program(host: Any = Query(localhost),
             hd: Any = Query("720"),
-            name="online"):
+            name="channel"):
     """
     生成频道表
     :param name:
