@@ -1,13 +1,15 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
 import os
-from configparser import ConfigParser
-from pathlib import Path
-
 import requests
 
+from configparser import ConfigParser
+from pathlib import Path
+from loguru import logger
+
+
 request = requests.session()
-print("配置加载中...")
+logger.info("配置加载中...")
 
 
 PATH = Path(__file__).parent
@@ -71,4 +73,4 @@ gdata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }
-print("配置加载完成")
+logger.info("配置加载完成")

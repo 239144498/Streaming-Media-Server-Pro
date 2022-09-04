@@ -16,7 +16,7 @@ app = FastAPI()
 
 @app.get('/')
 def index():
-    return Response(status_code=403, content="no access")
+    return Response(status_code=200, content="Hello World!")
 
 
 @app.get('/online.m3u8')
@@ -35,7 +35,7 @@ def online(
     :return:
     """
     if default_cfg['defaultdb'] == "":
-        return PlainTextResponse("此功能禁用，请连接数据库")
+        return PlainTextResponse("此功能禁用，请先连接数据库")
     if not host:
         if "4gtv-live" in fid:
             host = "https://" + host2
@@ -64,7 +64,7 @@ def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     """
     logger.info((fid, seq))
     if default_cfg['defaultdb'] == "":
-        return PlainTextResponse("此功能禁用，请连接数据库")
+        return PlainTextResponse("此功能禁用，请先连接数据库")
     vname = fid + str(seq) + ".ts"
     if "4gtv-live" in fid:
         host = "https://" + host2
@@ -150,7 +150,7 @@ def channel2(
 
 
 @app.get('/program.m3u')
-def program(host: Any = Query(localhost),
+def program(host: Any = Query(None),
             hd: Any = Query("720"),
             name="channel"):
     """
@@ -160,7 +160,6 @@ def program(host: Any = Query(localhost),
     :param hd:
     :return:
     """
-    name += ".m3u8"
     return StreamingResponse(generate_m3u(host, hd, name), 200, {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
@@ -223,33 +222,6 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
             if res.status != 200:
                 return Response(status_code=403)
             return Response(content=await res.content.read(), status_code=200, headers=headers, media_type='video/MP2T')
-
-
-@app.get("/down/{vname:path}")
-def downts(vname):
-    """
-    预设功能
-    :param vname:
-    :return:
-    """
-    if default_cfg['defaultdb'] == "":
-        return PlainTextResponse("此功能禁用，请连接数据库")
-    sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
-    content = DBconnect.fetchone(sql)
-    return Response(content['vcontent'], status_code=200, headers={
-        'Content-Type': 'video/MP2T',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=600',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'content-type, date',
-        'Access-Control-Allow-Methods': 'GET',
-        'Age': '0',
-        'Via': 'ViaMotion Edge',
-        'X-Anevia-Edge': 'MISS',
-        'X-Cache': 'MISS, HIT',
-        'Accept-Ranges': 'bytes'
-    }, media_type='video/MP2T')
-
 
 
 if __name__ == '__main__':
