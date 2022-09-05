@@ -31,13 +31,14 @@ vbuffer = int(default_cfg.get("vbuffer"))
 downurls = eval(default_cfg.get("downurls"))
 downurls = downurls * (vbuffer//len(downurls)+1)
 if "x" in localhost:
-    raise Exception("请先配置config.ini再运行！")
+    raise Exception("请先配置好config.ini再运行！教程地址：https://www.cnblogs.com/1314h/p/16651157.html")
 
 host1 = advanced_cfg.get("host1")
 host2 = advanced_cfg.get("host2")
 tvglogo = advanced_cfg.get("tvglogo")
 proxies = advanced_cfg.get("proxies")
-os.environ["proxies"] = proxies
+if proxies:
+    os.environ["proxies"] = proxies
 
 xmlowner = other_cfg.get("xmlowner")
 xmlrepo = other_cfg.get("xmlrepo")

@@ -4,7 +4,6 @@ import time
 from typing import Any
 from fastapi.responses import StreamingResponse, RedirectResponse, Response, PlainTextResponse
 from fastapi import FastAPI, Query, BackgroundTasks
-from aiohttp import ClientSession
 from app.common.tools import generate_m3u, writefile
 from app.modules.DBtools import DBconnect
 from app.modules.request import request
@@ -217,11 +216,10 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
         "Connection": "keep-alive",
         "Upgrade-Insecure-Requests": "1",
     }
-    async with ClientSession(headers=header) as request1:
-        async with request1.get(url=url, headers=header) as res:
-            if res.status != 200:
-                return Response(status_code=403)
-            return Response(content=await res.content.read(), status_code=200, headers=headers, media_type='video/MP2T')
+    with request.get(url=url, headers=header) as res:
+        if res.status_code != 200:
+            return Response(status_code=403)
+        return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
 
 
 if __name__ == '__main__':

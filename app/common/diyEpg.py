@@ -4,7 +4,7 @@ from app.settings import PATH
 
 
 def return_diyepg():
-    filename = PATH / "assets/diyepg.txt"
+    filename = PATH / "assets/diychannel.txt"
     if filename.is_file():
         with open(filename, "r", encoding="utf-8") as f:
             return f.read()
