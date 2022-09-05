@@ -12,7 +12,7 @@ try:
         host=redis_cfg['host'],
         port=int(redis_cfg['port']),
         password=redis_cfg['password'],
-        ssl=True,
+        ssl=False,
         decode_responses=True,
         health_check_interval=30,
     )
