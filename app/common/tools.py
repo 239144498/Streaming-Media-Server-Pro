@@ -4,8 +4,8 @@ import re
 import time
 
 from app.common.diyEpg import return_diyepg
-from app.settings import gdata, localhost
-from app.common.gitrepo import request
+from app.modules.request import request
+from app.settings import gdata, localhost, tvglogo
 
 
 def generate_m3u(host, hd, name):
@@ -21,7 +21,7 @@ def generate_m3u(host, hd, name):
     for i in gdata:
         # tvg-ID="" 频道id匹配epg   fsLOGO_MOBILE 台标 | fsHEAD_FRAME 播放预览
         yield '#EXTINF:{} tvg-chno="{}" tvg-id="{}" tvg-name="{}" tvg-logo="{}" group-title="{}",{}\n'.format(
-            -1, i['fnCHANNEL_NO'], i['fs4GTV_ID'], i['fsNAME'], i['fsHEAD_FRAME'], i['fsTYPE_NAME'], i['fsNAME'])
+            -1, i['fnCHANNEL_NO'], i['fs4GTV_ID'], i['fsNAME'], i[tvglogo], i['fsTYPE_NAME'], i['fsNAME'])
         if not host:
             yield localhost + f"/{name}?fid={i['fs4GTV_ID']}&hd={hd}\n"
         else:

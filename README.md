@@ -6,8 +6,9 @@ Streaming-Media-Server-Pro
 并且拥有免费且流畅的观看体验。
 
 -------------
+## **新版本已发布，增加了自定义添加频道功能，你想看的都可以加进来；程序稳定性更高！只需修改config.ini配置参数即可运行；你们期待的教程重磅来袭！**  
+
 # 部署教程地址：https://www.cnblogs.com/1314h/p/16651157.html
-## ==**新版本已发布，增加了自定义添加频道功能，你想看的都可以放进来；程序稳定性更高，只需要修改config.ini配置参数即可运行；你们期待的教程重磅来袭！**==
 
 **项目树形图**
 ```
@@ -56,12 +57,13 @@ Streaming-Media-Server-Pro
 - MySql或PostgreSql缓存视频
 - 多服务器分流
 - 自定义增加节目频道
+- 自定义电视台标
 - 清晰度可自定义
 - 请求主机可自定义（作为反代和分流）
 
 REST API
 ---
-[https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145](https://www.apifox.cn/apidoc/shared-95689a43-31f7-4ef2-952a-cecff34105f2/api-35577145)
+[https://stream.naihe.cf/redoc](https://stream.naihe.cf/redoc)
 
 实现效果：
 ---

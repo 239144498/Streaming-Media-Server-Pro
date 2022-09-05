@@ -13,12 +13,13 @@ from apscheduler.schedulers.background import BlockingScheduler, BackgroundSched
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
 from app.common.endecrypt import get4gtvurl
-from app.common.gitrepo import agit, request
+from app.common.gitrepo import agit
 from app.common.generateEpg import postask, generateprog
 from app.common.tools import genftlive, now_time, solvelive, generate_url, gdata
 from app.modules.DBtools import redisState, cur, DB
+from app.modules.request import request
 from app.settings import repoaccess_token, xmlaccess_token, xmlowner, xmlrepo, PATH, localhost, repoState, HD, \
-    repoowner, idata, default_cfg, downurls, vbuffer
+    repoowner, idata, downurls, vbuffer, downchoose
 
 
 class container:
@@ -144,9 +145,9 @@ class container:
     def new_generatem3u8(self, host, fid, hd, background_tasks):
         self.check(fid, hd)
         gap, seq, url, begin = self.generalfun(fid, hd)
-        if default_cfg.get("downchoose") == "online":
+        if downchoose == "online":
             background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
-        elif default_cfg.get("downchoose") == "local":
+        elif downchoose == "local":
             background_tasks.add_task(backtasklocal, url, fid, seq, hd, begin, host)
         yield f"""#EXTM3U
 #EXT-X-VERSION:3

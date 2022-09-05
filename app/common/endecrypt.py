@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 import re
 import json
-import requests
 
 from base64 import b64decode, b64encode
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
 
+from app.modules.request import request
 from app.settings import key, iv, HD, data3
-
-request = requests.session()
 
 
 def decrypt(info):

@@ -22,7 +22,7 @@ def generatehead(tvdoc):
 def generatebody1(tvdoc, tv, var):
     # channel 标签
     channel = tvdoc.createElement("channel")
-    channel.setAttribute("id", str(var['fnID']))
+    channel.setAttribute("id", str(var['fs4GTV_ID']))
 
     # display-name
     display_name = tvdoc.createElement("display-name")
@@ -70,7 +70,7 @@ def generateprog(tvlist):
     data1.update(data2)
     tvs = data1
     for k, v in tvs.items():
-        generatebody2(tvdoc, tv, str(idata[k]['nid']), v)
+        generatebody2(tvdoc, tv, k, v)
     return tvdoc.toprettyxml(indent="\t", encoding="UTF-8")
 
 

@@ -1,15 +1,15 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
 import time
-import requests
 from typing import Any
 from fastapi.responses import StreamingResponse, RedirectResponse, Response, PlainTextResponse
 from fastapi import FastAPI, Query, BackgroundTasks
 from aiohttp import ClientSession
 from app.common.tools import generate_m3u, writefile
 from app.modules.DBtools import DBconnect
+from app.modules.request import request
 from app.utile import get, backtaskonline, backtasklocal
-from app.settings import headers, PORT, PATH, host1, host2, localhost, default_cfg
+from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb
 from loguru import logger
 app = FastAPI()
 
@@ -34,7 +34,7 @@ def online(
     :param hd:
     :return:
     """
-    if default_cfg['defaultdb'] == "":
+    if defaultdb == "":
         return PlainTextResponse("此功能禁用，请先连接数据库")
     if not host:
         if "4gtv-live" in fid:
@@ -63,7 +63,7 @@ def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     :return:
     """
     logger.info((fid, seq))
-    if default_cfg['defaultdb'] == "":
+    if defaultdb == "":
         return PlainTextResponse("此功能禁用，请先连接数据库")
     vname = fid + str(seq) + ".ts"
     if "4gtv-live" in fid:
@@ -71,9 +71,9 @@ def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     else:
         host = "https://" + host1
     gap, seq, url, begin = get.generalfun(fid, hd)
-    if default_cfg.get("downchoose") == "online":
+    if downchoose == "online":
         background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
-    elif default_cfg.get("downchoose") == "local":
+    elif downchoose == "local":
         background_tasks.add_task(backtasklocal, url, fid, seq, hd, begin, host)
     for i in range(1, 10):
         if get.filename.get(vname) and get.filename.get(vname) != 0:
@@ -184,7 +184,7 @@ def epg(background_tasks: BackgroundTasks):
             data = f.read()
             f.close()
     else:
-        with requests.get("https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml") as res:
+        with request.get("https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml") as res:
             data = res.content
             if res.status_code == 200:
                 background_tasks.add_task(writefile, pathname, data)

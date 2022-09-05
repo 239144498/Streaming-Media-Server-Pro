@@ -3,7 +3,7 @@
 import redis
 from app.modules.dbMysql import get_mysql_conn
 from app.modules.dbPostgresql import get_postgre_conn
-from app.settings import redis_cfg, default_cfg
+from app.settings import redis_cfg, defaultdb
 from loguru import logger
 
 try:
@@ -30,14 +30,14 @@ class DB(object):
     对数据库进行封装，消除差异性
     """
     def __init__(self, x=1):
-        if default_cfg.get("defaultdb") == "mysql":
+        if defaultdb == "mysql":
             if x:
                 logger.info("检测mysql连接")
             self.dbname = "mysql"
             self.mysql = get_mysql_conn()
             if x:
                 logger.info("mysql已连接")
-        elif default_cfg.get("defaultdb") == "postgresql":
+        elif defaultdb == "postgresql":
             if x:
                 logger.info("检测postgresql连接")
             self.dbname = "postgresql"

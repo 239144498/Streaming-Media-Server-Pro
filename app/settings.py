@@ -1,14 +1,13 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
 import os
-import requests
 
 from configparser import ConfigParser
 from pathlib import Path
 from loguru import logger
 
+from app.modules.request import request
 
-request = requests.session()
 logger.info("配置加载中...")
 
 
@@ -21,16 +20,24 @@ redis_cfg = dict(cfg.items("redis"))
 mysql_cfg = dict(cfg.items("mysql"))
 postgre_cfg = dict(cfg.items("postgresql"))
 default_cfg = dict(cfg.items("default"))
+advanced_cfg = dict(cfg.items("advanced"))
 other_cfg = dict(cfg.items("other"))
 
 PORT = int(os.getenv("PORT", default=default_cfg.get("port")))
-
-host1 = default_cfg.get("host1")
-host2 = default_cfg.get("host2")
-vbuffer = int(default_cfg.get("vbuffer"))
-downurls = eval(default_cfg.get("downurls"))
-downurls = downurls * (vbuffer//len(downurls)+1)
 localhost = os.environ.get("localhost") or default_cfg.get("localhost")
+downchoose = default_cfg.get("downchoose")
+defaultdb = default_cfg.get("defaultdb")
+if "x" in localhost:
+    raise Exception("请先配置config.ini再运行！")
+
+host1 = advanced_cfg.get("host1")
+host2 = advanced_cfg.get("host2")
+vbuffer = int(advanced_cfg.get("vbuffer"))
+downurls = eval(advanced_cfg.get("downurls"))
+downurls = downurls * (vbuffer//len(downurls)+1)
+tvglogo = advanced_cfg.get("tvglogo")
+proxies = advanced_cfg.get("proxies")
+os.environ["proxies"] = proxies
 
 xmlowner = other_cfg.get("xmlowner")
 xmlrepo = other_cfg.get("xmlrepo")

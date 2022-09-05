@@ -1,11 +1,9 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-import requests
 from urllib import parse
 from base64 import b64encode
 
-request = requests.session()
-requests.packages.urllib3.disable_warnings()
+from app.modules.request import netreq
 
 
 class agit:
@@ -20,7 +18,7 @@ class agit:
             "Content-Type": "application/json",
         }
         self.access_token = access_token
-        self.request = requests.session()
+        self.request = netreq()
 
     def get_file_sha(self, owner, repo, filepath, branch="master", i=0):
         if i > 10:
