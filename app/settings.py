@@ -27,14 +27,14 @@ PORT = int(os.getenv("PORT", default=default_cfg.get("port")))
 localhost = os.environ.get("localhost") or default_cfg.get("localhost")
 downchoose = default_cfg.get("downchoose")
 defaultdb = default_cfg.get("defaultdb")
+vbuffer = int(default_cfg.get("vbuffer"))
+downurls = eval(default_cfg.get("downurls"))
+downurls = downurls * (vbuffer//len(downurls)+1)
 if "x" in localhost:
     raise Exception("请先配置config.ini再运行！")
 
 host1 = advanced_cfg.get("host1")
 host2 = advanced_cfg.get("host2")
-vbuffer = int(advanced_cfg.get("vbuffer"))
-downurls = eval(advanced_cfg.get("downurls"))
-downurls = downurls * (vbuffer//len(downurls)+1)
 tvglogo = advanced_cfg.get("tvglogo")
 proxies = advanced_cfg.get("proxies")
 os.environ["proxies"] = proxies
