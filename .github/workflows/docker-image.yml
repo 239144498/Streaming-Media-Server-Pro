@@ -40,6 +40,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/streaming:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/streaming:${{ steps.date.outputs.today }}
-      # 完成
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+#      # 完成
+#      - name: Image digest
+#        run: echo ${{ steps.docker_build.outputs.digest }}
