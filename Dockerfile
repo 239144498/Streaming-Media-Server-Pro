@@ -1,5 +1,8 @@
 FROM python:3.9
 
+RUN localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
+ENV LC_ALL zh_CN.UTF-8
+
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
