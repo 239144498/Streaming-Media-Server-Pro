@@ -1,6 +1,6 @@
 [Streaming-Media-Server-Pro](https://github.com/239144498/Streaming-Media-Server-Pro)
 -------------
-
+[![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)  
 &emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，
 想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，
 并且拥有免费且流畅的观看体验。
