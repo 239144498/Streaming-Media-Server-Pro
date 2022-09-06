@@ -15,8 +15,8 @@ RUN apt-get update -y \
     && apt-get install libssl-dev openssl -y \
     && apt-get install libffi-dev -y \
     && python -m pip install --upgrade pip \
-    && pip install pep517 \
-    && pip install --no-cache-dir --upgrade -r /code/requirements.txt
+    && pip3 install pep517 \
+    && pip3 install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./app /code/app
 
 EXPOSE 8080
