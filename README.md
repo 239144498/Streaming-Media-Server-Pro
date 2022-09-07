@@ -65,6 +65,10 @@ REST API 接口指南
 ---
 [https://stream.naihe.cf/redoc](https://stream.naihe.cf/redoc)
 
+![image-20220907113407730](http://typora.datastream.tebi.io/image-20220907113407730.png)
+
+**这是体验接口1天内所使用的外出流量，平台发出了警告，为了长期发展现限制online.m3u8和channel.m3u8接口禁用状态，channel2.m3u8可正常访问**
+
 实现效果：
 ---
 #### ios软件观看效果
