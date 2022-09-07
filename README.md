@@ -67,7 +67,7 @@ REST API 接口指南
 
 ![image-20220907113407730](http://typora.datastream.tebi.io/image-20220907113407730.png)
 
-**这是体验接口1天内所使用的外出流量，平台发出了警告，为了长期发展现限制online.m3u8和channel.m3u8接口禁用状态，channel2.m3u8可正常访问**
+**这是体验接口1天内所使用的外出流量，总有人对体验接口进行滥用，平台发出了警告，为了长期发展即刻起限制online.m3u8和channel.m3u8接口禁用状态，channel2.m3u8可正常访问**
 
 实现效果：
 ---
