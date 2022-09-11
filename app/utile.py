@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import asyncio
 import datetime
 import re
@@ -28,24 +31,6 @@ class container:
         self.para = {}
         self.filename = dict()  # -1->redis | 0->downloading | 1->completed
         self.owner = repoowner
-        Thread(target=self.init).start()
-
-    def inin_repo(self):
-        logger.info("开始初始化")
-        self.repo = str(datetime.date.today())
-        state = agit(repoaccess_token).cat_repo(self.owner, self.repo)
-        if state == 404:
-            agit(repoaccess_token).create_repo(self.repo)
-            logger.success(("创建repo", self.repo, "完成"))
-
-    def init(self):
-        if repoState:
-            self.inin_repo()
-            # 读取已上传到agit的文件名到内存
-            reposha = agit(repoaccess_token).get_repo_sha(self.owner, self.repo)
-            for i in agit(repoaccess_token).cat_repo_tree(self.owner, self.repo, reposha)['tree']:
-                if i["size"] >= 5000 and ".ts" in i["path"]:
-                    self.filename.update({i["path"]: -1})
 
         if redisState:
             # 读取redis数据到内存
@@ -184,7 +169,6 @@ def backtaskonline(url, fid, seq, hd, begin, host):
     #           "https://www.example3.com/url3?url=", "https://www.example4.com/url3?url=",
     #           "https://www.example5.com/url3?url="]
     urlset = downurls
-    # random.shuffle(urlset)
     for i in range(0, vbuffer):
         tsname = fid + str(seq + i) + ".ts"
         # .ts已下载或正在下载

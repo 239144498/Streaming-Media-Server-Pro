@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import os
 
 from configparser import ConfigParser
@@ -15,13 +18,17 @@ PATH = Path(__file__).parent
 ROOT = PATH.parent
 
 cfg = ConfigParser()
-cfg.read(ROOT / "app/assets/config.ini", encoding="utf-8")
-redis_cfg = dict(cfg.items("redis"))
-mysql_cfg = dict(cfg.items("mysql"))
-postgre_cfg = dict(cfg.items("postgresql"))
-default_cfg = dict(cfg.items("default"))
-advanced_cfg = dict(cfg.items("advanced"))
-other_cfg = dict(cfg.items("other"))
+cfg.read(ROOT / "app/assets/config1.ini", encoding="utf-8")
+try:
+    redis_cfg = dict(cfg.items("redis"))
+    mysql_cfg = dict(cfg.items("mysql"))
+    postgre_cfg = dict(cfg.items("postgresql"))
+    default_cfg = dict(cfg.items("default"))
+    advanced_cfg = dict(cfg.items("advanced"))
+    other_cfg = dict(cfg.items("other"))
+except Exception as e:
+    logger.error(e)
+    raise Exception("检查config.ini是否配置正确！教程地址：https://www.cnblogs.com/1314h/p/16651157.html")
 
 PORT = int(os.getenv("PORT", default=default_cfg.get("port")))
 localhost = os.environ.get("localhost") or default_cfg.get("localhost")
@@ -78,6 +85,7 @@ data3 = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 gdata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data2",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }

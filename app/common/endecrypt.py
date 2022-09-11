@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import re
 import json
 
@@ -32,7 +35,7 @@ def encrypt(fs4GTV_ID, fnID):
         "Accept": "application/json, text/plain, */*",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"
     }
-    # 需要特定地区ip才能访问
+    # 需要特定地区ip才能访问，否则请求失败
     url = data3['a2']
     data = {'value': value}
     with request.post(url=url, json=data, headers=headers) as res:
@@ -45,8 +48,11 @@ def get4gtvurl(fs4GTV_ID, fnID, hd):
         link = decrypt(info)
     else:
         url = data3['a1'] + "?vid={}&nid={}&fid={}".format(fs4GTV_ID, fnID, fs4GTV_ID)
-        res = request.get(url=url)
-        link = res.url
+        with request.get(url=url) as res:
+            if res.status_code == 200 or 310 - res.status_code < 10:
+                res.encoding = "utf-8"
+                print(res.text)
+            link = res.url
     return re.sub(r"(\w+\.m3u8)", HD[str(hd)], link)
 
 

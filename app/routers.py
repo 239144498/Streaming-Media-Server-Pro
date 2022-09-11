@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import time
 from typing import Any
 from fastapi.responses import StreamingResponse, RedirectResponse, Response, PlainTextResponse
@@ -10,7 +13,7 @@ from app.modules.request import request
 from app.utile import get, backtaskonline, backtasklocal
 from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb
 from loguru import logger
-app = FastAPI(title='流媒体服务器专业版',
+app = FastAPI(title='Streaming-Media-Server-Pro',
               description='该程序由Naihe，239144498@qq.com制作；\nGithub开源地址：https://github.com/239144498/Streaming-Media-Server-Pro\n这是一个强大的IPTV源后端服务，具有视频缓冲区功能，程序内置了很多独家频道，不够？你还可以自定义添加电视源；超多功能接口，还可以添加你的代理，并且适合分布式部署，非常适合作为家庭影院的IPTV服务！可玩性超高，更多详情点击查看。 ')
 
 

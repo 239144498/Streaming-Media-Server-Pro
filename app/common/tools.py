@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import re
 import time
 
@@ -40,7 +43,6 @@ def get_4gtv(url):
         "Accept": "*/*",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
         "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
-        "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
     }
     with request.get(url=url, headers=header) as res:
@@ -56,8 +58,11 @@ def solvelive(now, t1, t2, gap):
 def genftlive(url):
     start = time.time()
     data = get_4gtv(url)
-    seq = re.findall("#EXT-X-MEDIA-SEQUENCE:(\d+)\n", data).pop()
-    gap = re.findall("#EXT-X-TARGETDURATION:(\d+)\n", data).pop()
+    try:
+        seq = re.findall("#EXT-X-MEDIA-SEQUENCE:(\d+)\n", data).pop()
+        gap = re.findall("#EXT-X-TARGETDURATION:(\d+)\n", data).pop()
+    except:
+        raise Exception("请求", url, "返回信息", data, "不能正确得到seq")
     return start, int(seq), int(gap)
 
 

@@ -1,5 +1,8 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
+# @Author: Naihe
+# @Email: 239144498@qq.com
+# @Software: Streaming-Media-Server-Pro
 import redis
 from app.modules.dbMysql import get_mysql_conn
 from app.modules.dbPostgresql import get_postgre_conn
