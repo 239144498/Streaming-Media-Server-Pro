@@ -1,8 +1,5 @@
 FROM python:3.9
 
-#设置编码
-ENV LANG C.UTF-8
-
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
