@@ -18,7 +18,7 @@ PATH = Path(__file__).parent
 ROOT = PATH.parent
 
 cfg = ConfigParser()
-cfg.read(ROOT / "app/assets/config1.ini", encoding="utf-8")
+cfg.read(ROOT / "app/assets/config.ini", encoding="utf-8")
 try:
     redis_cfg = dict(cfg.items("redis"))
     mysql_cfg = dict(cfg.items("mysql"))
