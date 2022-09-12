@@ -49,7 +49,7 @@ def get4gtvurl(fs4GTV_ID, fnID, hd):
     else:
         url = data3['a1'] + "?vid={}&nid={}&fid={}".format(fs4GTV_ID, fnID, fs4GTV_ID)
         with request.get(url=url) as res:
-            if res.status_code != 200 or 310 - res.status_code > 10:
+            if res.status_code != 200 and 310 - res.status_code > 10:
                 res.encoding = "utf-8"
                 print(res.text)
             link = res.url
