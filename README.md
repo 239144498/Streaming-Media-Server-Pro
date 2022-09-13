@@ -271,15 +271,7 @@ python3 main.py
 - [x] 华语综艺台
 - [x] 在diychannel.txt文件添加更多频道
 
-License
----
-Released under the MIT license.
-
-Copyright, 2022, by naihe,239144498@qq.com .
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+<h3 dir="auto">❤ 打赏 Donation</h3>
+<p dir="auto">&emsp;&emsp;如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.</p>
+<p><img src="https://ik.imagekit.io/naihe/pay/zsm.png" width="384px" height="384px" /></p>
+<p><strong>&emsp;&emsp;你在GitHub给的<code>star</code>或者<code>赞助</code>是我长期维护此项目的动力所在，由衷感谢每一位支持者，&ldquo;每一次你花的钱都是在为你想要的世界投票&rdquo;。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。</strong></p>
