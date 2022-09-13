@@ -1,6 +1,6 @@
 [Streaming-Media-Server-Pro](https://github.com/239144498/Streaming-Media-Server-Pro)
 -------------
-[![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)  
+[![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/31776721-e836-4042-a22a-3afe29ff1824/deploy-status)](https://app.netlify.com/sites/nowtv/deploys)  
 
 &emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，
