@@ -271,7 +271,7 @@ python3 main.py
 - [x] 华语综艺台
 - [x] 在diychannel.txt文件添加更多频道
 
-📋 打赏名单 Donation List
+<h3 dir="auto">📋 打赏名单 Donation List</h3>
 
 非常感谢「 [这些用户](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/Donation-List) 」对本项目的赞助支持！
 
