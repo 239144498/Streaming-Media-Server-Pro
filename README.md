@@ -65,11 +65,8 @@
 
 REST API 接口指南
 ---
-[https://stream.naihe.cf/redoc](https://stream.naihe.cf/redoc)
+[https://stream.naihe.cf/redoc](https://stream.naihe.cf/redoc)  
 
-![image-20220907113407730](http://typora.datastream.tebi.io/image-20220907113407730.png)
-
-**我发现有人对体验接口每天进行24h不间断恶意攻击，这是接口1天内所使用的外出流量，平台发出了警告，为了长期发展即刻起开启接口限流，感谢理解。**
 
 实现效果：
 ---
