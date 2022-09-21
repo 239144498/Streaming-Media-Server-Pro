@@ -65,7 +65,7 @@
 
 REST API 接口指南
 ---
-[https://streams.run.goorm.io/docs](https://streams.run.goorm.io/docs)  
+[https://stream.naihe.cf/docs](https://stream.naihe.cf/docs)  
 
 
 实现效果：
