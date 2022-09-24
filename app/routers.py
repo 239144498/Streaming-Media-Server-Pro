@@ -18,12 +18,12 @@ app = FastAPI(title='Streaming-Media-Server-Pro',
 
 
 @app.get('/')
-def index():
+async def index():
     return Response(status_code=200, content="Hello World!")
 
 
 @app.get('/online.m3u8')
-def online(
+async def online(
         background_tasks: BackgroundTasks,
         host: Any = Query(None),
         fid: Any = Query(...),
@@ -56,7 +56,7 @@ def online(
 
 
 @app.get('/call.ts')
-def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
+async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     """
     v3 版中读取数据库ts视频发送给客户端
     :param background_tasks:
@@ -115,7 +115,7 @@ def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
 
 
 @app.get('/channel.m3u8')
-def channel(
+async def channel(
         host: Any = Query(localhost),
         fid: Any = Query(...),
         hd: Any = Query("720")):
@@ -140,7 +140,7 @@ def channel(
 
 
 @app.get('/channel2.m3u8')
-def channel2(
+async def channel2(
         fid: Any = Query(...),
         hd: Any = Query("720")):
     """
@@ -153,7 +153,7 @@ def channel2(
 
 
 @app.get('/program.m3u')
-def program(host: Any = Query(None),
+async def program(host: Any = Query(None),
             hd: Any = Query("720"),
             name="channel"):
     """
@@ -175,7 +175,7 @@ def program(host: Any = Query(None),
 
 
 @app.get('/EPG.xml')
-def epg(background_tasks: BackgroundTasks):
+async def epg(background_tasks: BackgroundTasks):
     """
     获取4gtv中未来3天所有节目表
     :param background_tasks:
@@ -195,7 +195,7 @@ def epg(background_tasks: BackgroundTasks):
 
 
 @app.get("/live/{file_path:path}")
-async def downlive(file_path: str, token1: str = None, expires1: int = None):
+async async def downlive(file_path: str, token1: str = None, expires1: int = None):
     """
     v2 版下载中转
     :param file_path:
