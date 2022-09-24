@@ -5,7 +5,7 @@
 # @Software: Streaming-Media-Server-Pro
 import redis
 from app.modules.dbMysql import get_mysql_conn
-from app.modules.dbPostgresql import get_postgre_conn
+# from app.modules.dbPostgresql import get_postgre_conn
 from app.settings import redis_cfg, defaultdb
 from loguru import logger
 
@@ -40,13 +40,13 @@ class DB(object):
             self.mysql = get_mysql_conn()
             if x:
                 logger.info("mysql已连接")
-        elif defaultdb == "postgresql":
-            if x:
-                logger.info("检测postgresql连接")
-            self.dbname = "postgresql"
-            self.postgre = get_postgre_conn()
-            if x:
-                logger.info("postgresql已连接")
+#         elif defaultdb == "postgresql":
+#             if x:
+#                 logger.info("检测postgresql连接")
+#             self.dbname = "postgresql"
+#             self.postgre = get_postgre_conn()
+#             if x:
+#                 logger.info("postgresql已连接")
         else:
             self.dbname = ""
             if x:
@@ -56,26 +56,26 @@ class DB(object):
         if self.dbname == "mysql":
             content = self.mysql.fetchone(sql)
             return content
-        elif self.dbname == "postgresql":
-            content = self.postgre.fetchone(sql)
-            content.update({"vcontent": content['vcontent'].tobytes()})
-            return content
+#         elif self.dbname == "postgresql":
+#             content = self.postgre.fetchone(sql)
+#             content.update({"vcontent": content['vcontent'].tobytes()})
+#             return content
 
     def fetchall(self, sql):
         if self.dbname == "mysql":
             content = self.mysql.fetchall(sql)
             return content
-        elif self.dbname == "postgresql":
-            content = self.postgre.fetchall(sql)
-            return content
+#         elif self.dbname == "postgresql":
+#             content = self.postgre.fetchall(sql)
+#             return content
 
     def execute(self, sql, value):
         if self.dbname == "mysql":
             content = self.mysql.execute(sql, value)
             return content
-        elif self.dbname == "postgresql":
-            content = self.postgre.execute(sql)
-            return content
+#         elif self.dbname == "postgresql":
+#             content = self.postgre.execute(sql)
+#             return content
 
 
 DBconnect = DB()
