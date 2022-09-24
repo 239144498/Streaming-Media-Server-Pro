@@ -4,6 +4,7 @@
 # @Email: 239144498@qq.com
 # @Software: Streaming-Media-Server-Pro
 import time
+import asyncio
 from typing import Any
 from fastapi.responses import StreamingResponse, RedirectResponse, Response, PlainTextResponse
 from fastapi import FastAPI, Query, BackgroundTasks
@@ -94,7 +95,7 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
                 'Content-Length': str(len(content['vcontent'])),
             }, media_type='video/MP2T')
         else:
-            time.sleep(2 - i * 0.095)
+            await asyncio.sleep(2 - i * 0.095)
     else:
         print("未命中", fid)
         vname = fid + str(seq - 1) + ".ts" + hd
