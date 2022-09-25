@@ -196,7 +196,7 @@ async def epg(background_tasks: BackgroundTasks):
 
 
 @app.get("/live/{file_path:path}")
-async async def downlive(file_path: str, token1: str = None, expires1: int = None):
+async def downlive(file_path: str, token1: str = None, expires1: int = None):
     """
     v2 版下载中转
     :param file_path:
