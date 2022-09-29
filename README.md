@@ -10,8 +10,6 @@
 -------------
 ### **&emsp;&emsp;新版本已发布，增加了自定义添加频道功能，你想看的都可以加进来；程序稳定性更高！只需修改config.ini配置参数即可运行；你们期待的教程重磅来袭！**  
 
-### 部署教程地址：https://www.cnblogs.com/1314h/p/16651157.html
-
 **项目树形图**
 ```
 .
@@ -103,40 +101,18 @@ REST API 接口指南
 
 使用方式
 ---
-#### Mysql操作
-##### 创建数据库
-``` 
-CREATE DATABASE media
-``` 
-##### 创建video表
-``` 
-create table media.video(
-    vname varchar(30) not null,
-    CONSTRAINT video_pk PRIMARY KEY (vname),
-    vcontent  MEDIUMBLOB NOT NULL,
-    vsize varchar(20) NULL,
-    ctime  timestamp(0) default now()
-);
-``` 
-##### CIL执行，设置定时事件
-``` 
-SET GLOBAL event_scheduler = ON;
-
-use video;
-
-DROP event IF EXISTS auto_delete;
-CREATE EVENT auto_delete
-ON SCHEDULE EVERY 30 minute     # xx分钟根据数据库的存储和查询性能综合决定
-DO
-TRUNCATE video;
-``` 
-#### python部署:  
+#### python部署: 
+版本要求3.9+
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```
 ##### 安装依赖
 ``` code
 pip install -r requirements.txt
+```
+##### 修改配置文件ip
+``` code
+项目路径下/app/assets/config.ini，将localhost=更改为你的ip或者域名
 ```
 ##### 运行
 ``` code
