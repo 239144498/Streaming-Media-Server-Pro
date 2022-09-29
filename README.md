@@ -118,7 +118,8 @@ pip install -r requirements.txt
 ``` code
 python3 main.py
 ```
-**更多教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
+
+**（docker部署）更多教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
 
 现已支持频道
 ---
