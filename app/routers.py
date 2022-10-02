@@ -12,10 +12,12 @@ from app.common.tools import generate_m3u, writefile
 from app.modules.DBtools import DBconnect
 from app.modules.request import request
 from app.utile import get, backtaskonline, backtasklocal
-from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb
+from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb, describe
 from loguru import logger
-app = FastAPI(title='Streaming-Media-Server-Pro',
-              description='该程序由Naihe，239144498@qq.com制作；\nGithub开源地址：https://github.com/239144498/Streaming-Media-Server-Pro\n这是一个强大的IPTV源后端服务，具有视频缓冲区功能，程序内置了很多独家频道，不够？你还可以自定义添加电视源；超多功能接口，还可以添加你的代理，并且适合分布式部署，非常适合作为家庭影院的IPTV服务！可玩性超高，更多详情点击查看。 ')
+
+
+app = FastAPI(title='流媒体服务专业版',
+              description=describe)
 
 
 @app.get('/')
@@ -98,21 +100,6 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
             await asyncio.sleep(2 - i * 0.095)
     else:
         print("未命中", fid)
-        vname = fid + str(seq - 1) + ".ts" + hd
-        if get.filename.get(vname) and get.filename.get(vname) != 0:
-            sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
-            content = DBconnect.fetchone(sql)
-            return Response(content=content.get("vcontent"), status_code=200, headers={
-                'Content-Type': 'video/MP2T',
-                'Connection': 'keep-alive',
-                'Cache-Control': 'max-age=600',
-                'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Headers": "content-type, date",
-                "Access-Control-Allow-Methods": "GET",
-                "Age": "0",
-                'Accept-Ranges': 'bytes',
-                'Content-Length': str(len(content['vcontent'])),
-            }, media_type='video/MP2T')
 
 
 @app.get('/channel.m3u8')

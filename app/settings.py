@@ -69,10 +69,7 @@ headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'content-type, date',
     'Access-Control-Allow-Methods': 'GET',
-    'Age': '0',
     'Via': 'ViaMotion Edge',
-    'X-Anevia-Edge': 'MISS',
-    'X-Cache': 'MISS, HIT',
     'Accept-Ranges': 'bytes'
 }
 
@@ -87,4 +84,28 @@ gdata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }
+
+describe = """\n
+主要实现功能：
+- 生成m3u文件
+- 生成m3u8文件
+- 视频中转（具有缓冲区）
+- 异步下载视频
+- 流媒体转发
+- 生成[EPG节目单](https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml) 每日实时更新
+- 分布式处理ts片段
+- Redis缓存参数
+- MySql或PostgreSql缓存视频
+- 正向代理请求
+- 自定义增加节目频道
+- 自定义电视台标
+- 清晰度可自定义
+- 反向代理或套CDN请求（负载均衡）
+### 使用说明
+1. 接口说明: [查看接口使用教程](https://www.cnblogs.com/1314h/p/16651157.html)
+2. 项目代码: [Github开源代码](https://github.com/239144498/Streaming-Media-Server-Pro)
+### 接口列表：
+- **向下滑动查看**
+"""
+
 logger.info("配置加载完成")

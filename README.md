@@ -8,15 +8,11 @@
 并且拥有免费且流畅的观看体验。
 
 -------------
-### **&emsp;&emsp;新版本已发布，增加了自定义添加频道功能，你想看的都可以加进来；程序稳定性更高！只需修改config.ini配置参数即可运行；你们期待的教程重磅来袭！**  
+### **&emsp;&emsp;最新版本已发布，增加了自定义添加频道功能，程序稳定性更高！程序一键部署；你们期待的教程重磅来袭！**  
 
 **项目树形图**
 ```
 .
-|-- Dockerfile
-|-- LICENSE
-|-- Procfile
-|-- README.md
 |-- app
 |   |-- __init__.py
 |   |-- assets
@@ -30,17 +26,21 @@
 |   |   |-- generateEpg.py
 |   |   |-- gitrepo.py
 |   |   `-- tools.py
-|   |-- main.py
 |   |-- modules
 |   |   |-- DBtools.py
 |   |   |-- __init__.py
 |   |   |-- dbMysql.py
 |   |   `-- dbPostgresql.py
+|   |-- main.py
 |   |-- routers.py
 |   |-- settings.py
 |   `-- utile.py
 |-- main.py
-`-- requirements.txt
+|-- requirements.txt
+|-- Dockerfile
+|-- LICENSE
+|-- Procfile
+`-- README.md
 ```
 
 
@@ -64,7 +64,7 @@
 REST API 接口指南
 ---
 [https://stream.naihe.cf/docs](https://stream.naihe.cf/docs)  
-
+<img src="https://ik.imagekit.io/naihe/github/apilist.png" title="api列表"/>
 
 实现效果：
 ---
@@ -102,7 +102,7 @@ REST API 接口指南
 使用方式
 ---
 #### python部署: 
-版本要求3.9+
+python版本推荐3.9+
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```
@@ -110,16 +110,12 @@ git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ``` code
 pip install -r requirements.txt
 ```
-##### 修改配置文件ip
-``` code
-项目路径下/app/assets/config.ini，将localhost=更改为你的ip或者域名
-```
 ##### 运行
 ``` code
 python3 main.py
 ```
 
-**（docker部署）更多教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
+**（docker部署）进阶使用教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
 
 现已支持频道
 ---

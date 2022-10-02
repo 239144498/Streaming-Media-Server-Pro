@@ -242,7 +242,6 @@ def gotask():
     get.filename.clear()
     if repoState:
         import platform
-        get.inin_repo()
         if "Windows" in platform.platform():
             asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
             asyncio.run(postask())
@@ -262,6 +261,7 @@ def gotask():
 
 
 def sqltask():
+    # 保留最近100条缓存，避免长时间运行内存溢出
     keys = list(get.filename)
     keys.reverse()
     _ = {}
