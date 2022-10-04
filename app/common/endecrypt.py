@@ -7,11 +7,13 @@ import re
 import json
 
 from base64 import b64decode, b64encode
+
+import requests
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import AES
 
 from app.modules.request import request
-from app.settings import key, iv, HD, data3
+from app.settings import key, iv, HD, data3, edata
 
 
 def decrypt(info):
@@ -24,12 +26,7 @@ def decrypt(info):
 
 
 def encrypt(fs4GTV_ID, fnID):
-    raw = {"fnCHANNEL_ID": fnID, "fsASSET_ID": fs4GTV_ID, "fsDEVICE_TYPE": "pc",
-           "clsIDENTITY_VALIDATE_ARUS": {"fsVALUE": ""}}
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    plaintext = bytes(json.dumps(raw), 'utf-8')
-    ciphertext = cipher.encrypt(pad(plaintext, AES.block_size))
-    value = b64encode(ciphertext).decode('utf-8')
+    value = edata[fs4GTV_ID]
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json, text/plain, */*",
@@ -42,11 +39,37 @@ def encrypt(fs4GTV_ID, fnID):
         return res.json()
 
 
+def decrypt2(info):
+    true = True
+    false =False
+    null = None
+    with requests.post(url=data3['a3'], json={"Data": info["Data"]}) as res:
+        info = eval(json.loads(res.content.decode("utf-8")))
+        link = info["flstURLs"][1]
+        return link
+
+
+def encrypt2(fs4GTV_ID, fnID):
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/plain, */*",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"
+    }
+    url = data3['a2']
+    value = edata[fs4GTV_ID]
+    data = {'value': value}
+    with request.post(url=url, json=data, headers=headers) as res:
+        return res.json()
+
+
 def get4gtvurl(fs4GTV_ID, fnID, hd):
     if key and iv:  # 需要特定地区ip请求接口会报错
         info = encrypt(fs4GTV_ID, fnID)
         link = decrypt(info)
-    else:
+    elif "http" in data3['a3']:
+        info = encrypt2(fs4GTV_ID, fnID)
+        link = decrypt2(info)
+    elif "http" in data3['a1']:
         url = data3['a1'] + "?vid={}&nid={}&fid={}".format(fs4GTV_ID, fnID, fs4GTV_ID)
         with request.get(url=url) as res:
             if res.status_code != 200 and 310 - res.status_code > 10:
@@ -59,3 +82,4 @@ def get4gtvurl(fs4GTV_ID, fnID, hd):
 if __name__ == '__main__':
     a = get4gtvurl("4gtv-4gtv018", 11, 720)
     print(a)
+

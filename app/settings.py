@@ -80,7 +80,8 @@ data3 = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 gdata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data2",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
-
+edata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data4",
+                          headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }
