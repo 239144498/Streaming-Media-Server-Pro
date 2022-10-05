@@ -43,9 +43,17 @@
 `-- README.md
 ```
 
+### 自制视频网站
+
+这是在线视频网站，后端对接的公益接口，可以在线观看接口内的所有电视。
+
+https://player.naihe.cf![](https://ik.imagekit.io/naihe/enshan/img2.png?ik-sdk-version=javascript-1.4.3&updatedAt=1663063546393)
+
+![](https://ik.imagekit.io/naihe/enshan/img1.png?ik-sdk-version=javascript-1.4.3&updatedAt=1663063320781)
 
 核心功能
 ---
+
 - 生成m3u文件
 - 生成m3u8文件
 - 视频中转（具有缓冲区）
@@ -79,7 +87,7 @@ REST API 接口指南
 原理介绍
 ---
 如下图所示：
-<img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" title="原理图"/>
+<img src="https://ik.imagekit.io/naihe/github/ԭ��ʾ��ͼ.jpg" title="原理图"/>
 
 ### **文字详解**
 图中多台服务器是一种理想情况下实现，实际python程序、redis和mysql都可以在同一台服务器中实现
