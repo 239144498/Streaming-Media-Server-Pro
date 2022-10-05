@@ -45,11 +45,13 @@
 
 ### 自制视频网站
 
-这是在线视频网站，后端对接的公益接口，可以在线观看接口内的所有电视。
+后端对接的项目接口，可以在线观看接口内的所有电视。
 
-https://player.naihe.cf![](https://ik.imagekit.io/naihe/enshan/img2.png?ik-sdk-version=javascript-1.4.3&updatedAt=1663063546393)
+https://player.naihe.cf  
 
-![](https://ik.imagekit.io/naihe/enshan/img1.png?ik-sdk-version=javascript-1.4.3&updatedAt=1663063320781)
+![](https://ik.imagekit.io/naihe/enshan/img2.png)  
+
+![](https://ik.imagekit.io/naihe/enshan/img1.png)  
 
 核心功能
 ---
