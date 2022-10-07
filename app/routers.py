@@ -12,11 +12,11 @@ from app.common.tools import generate_m3u, writefile
 from app.modules.DBtools import DBconnect
 from app.modules.request import request
 from app.utile import get, backtaskonline, backtasklocal
-from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb, describe
+from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb, describe, idata
 from loguru import logger
 
-
 app = FastAPI(title='流媒体服务专业版',
+              version="1.1.0",
               description=describe)
 
 
@@ -42,6 +42,8 @@ async def online(
     """
     if defaultdb == "":
         return PlainTextResponse("此功能禁用，请先连接数据库")
+    if not (fid in idata):
+        return Response("NOT FOUND " + fid)
     if not host:
         if "4gtv-live" in fid:
             host = "https://" + host2
@@ -68,9 +70,10 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     :param hd:
     :return:
     """
-    logger.info((fid, seq))
     if defaultdb == "":
         return PlainTextResponse("此功能禁用，请先连接数据库")
+    if not (fid in idata):
+        return Response("NOT FOUND " + fid)
     vname = fid + str(seq) + ".ts"
     if "4gtv-live" in fid:
         host = "https://" + host2
@@ -116,6 +119,8 @@ async def channel(
     :param hd:
     :return:
     """
+    if not (fid in idata):
+        return Response("NOT FOUND " + fid)
     return StreamingResponse(get.generatem3u8(host, fid, hd), 200, {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
@@ -137,13 +142,47 @@ async def channel2(
     :param hd:
     :return:
     """
+    if not (fid in idata):
+        return Response("NOT FOUND " + fid)
     return RedirectResponse(get.geturl(fid, hd), status_code=302)
+
+
+@app.get('/channel3.m3u8', summary="转发m3u8")
+async def channel(
+        host: Any = Query(localhost),
+        fid: Any = Query(...),
+        hd: Any = Query("720")):
+    """
+    新版优化api v3
+    在redis中设置截止时间，过期重新获取保存到redis，默认通过读取redis参数，构造ts链接，待优化redis无参数请求耗时较长
+    对api请求进一步优化
+    :param host:
+    :param fid:
+    :param hd:
+    :return:
+    """
+    if not (fid in idata):
+        return Response("NOT FOUND " + fid)
+    if not host:
+        if "4gtv-live" not in fid:
+            host = "https://" + host1
+        else:
+            return Response("参数无效")
+    return StreamingResponse(get.generatem3u8(host, fid, hd), 200, {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Content-Type': 'application/vnd.apple.mpegurl',
+        'Expires': '-1',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': 'true',
+    })
 
 
 @app.get('/program.m3u')
 async def program(host: Any = Query(None),
-            hd: Any = Query("720"),
-            name="channel"):
+                  hd: Any = Query("720"),
+                  name="channel"):
     """
     生成频道表
     :param name:
@@ -170,7 +209,8 @@ async def epg(background_tasks: BackgroundTasks):
     :return:
     """
     pathname = PATH / "assets/EPG.xml"
-    if pathname.exists() and time.strftime('%Y-%m-%d') == time.strftime('%Y-%m-%d', time.localtime(pathname.lstat().st_ctime)):
+    if pathname.exists() and time.strftime('%Y-%m-%d') == time.strftime('%Y-%m-%d',
+                                                                        time.localtime(pathname.lstat().st_ctime)):
         with open(pathname, "r", encoding="utf-8") as f:
             data = f.read()
             f.close()

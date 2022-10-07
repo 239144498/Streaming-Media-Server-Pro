@@ -76,6 +76,9 @@ def get4gtvurl(fs4GTV_ID, fnID, hd):
                 res.encoding = "utf-8"
                 print(res.text)
             link = res.url
+        return link
+    else:
+        raise Exception("未找到链接")
     return re.sub(r"(\w+\.m3u8)", HD[str(hd)], link)
 
 

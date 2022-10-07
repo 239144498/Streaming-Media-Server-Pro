@@ -151,7 +151,10 @@ class container:
 
     def geturl(self, fid, hd):
         self.check(fid, hd)
-        return re.sub(r"(\w+\.m3u8)", HD[hd], self.para[fid]['url'])
+        if "4gtv-live" not in fid:
+            return re.sub(r"(\w+\.m3u8)", "channel3.m3u8", self.para[fid]['url'])
+        else:
+            return re.sub(r"(\w+\.m3u8)", HD[hd], self.para[fid]['url'])
 
 
 get = container()
