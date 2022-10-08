@@ -49,8 +49,13 @@ class container:
 
     def updateonline(self, fid, hd):
         url = get4gtvurl(fid, idata[fid]['nid'], hd)
-        last = int(re.findall(r"expires.=(\d+)", url).pop())
-        start, seq, gap = genftlive(url)
+        try:
+            last = int(re.findall(r"expires.=(\d+)", url).pop())
+            start, seq, gap = genftlive(url)
+        except:
+            idata.pop(fid)
+            logger.warning(f"删除 {fid}")
+            return
         if redisState:
             cur.setex(fid, last - now_time(), str([url, last, start, seq, gap]))
         self.para[fid] = {
