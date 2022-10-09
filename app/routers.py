@@ -8,21 +8,22 @@ import asyncio
 from typing import Any
 from fastapi.responses import StreamingResponse, RedirectResponse, Response, PlainTextResponse
 from fastapi import FastAPI, Query, BackgroundTasks
-from app.common.tools import generate_m3u, writefile
+from app.common.tools import generate_m3u, writefile, now_time
 from app.modules.DBtools import DBconnect
 from app.modules.request import request
+from app.scheams.basic import Response200, Response404
 from app.utile import get, backtaskonline, backtasklocal
 from app.settings import headers, PORT, PATH, host1, host2, localhost, downchoose, defaultdb, describe, idata
-from loguru import logger
+
 
 app = FastAPI(title='流媒体服务专业版',
-              version="1.1.0",
+              version="1.2.1",
               description=describe)
 
 
 @app.get('/')
 async def index():
-    return Response(status_code=200, content="Hello World!")
+    return Response200(data="Hello World!")
 
 
 @app.get('/online.m3u8')
@@ -41,9 +42,12 @@ async def online(
     :return:
     """
     if defaultdb == "":
-        return PlainTextResponse("此功能禁用，请先连接数据库")
+        return Response404(data="请先连接数据库")
     if not (fid in idata):
-        return Response("NOT FOUND " + fid)
+        return Response404(data=f"Not found {fid}")
+    t = idata[fid].get("lt", 0) - now_time()
+    if t > 0:
+        return Response404(data=f"{fid} 频道暂不可用，请过 {t} 秒后再试")
     if not host:
         if "4gtv-live" in fid:
             host = "https://" + host2
@@ -53,10 +57,6 @@ async def online(
         "Cache-Control": "no-cache",
         "Pragma": "no-cache",
         'Content-Type': 'application/vnd.apple.mpegurl',
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Expires": "-1",
     })
 
 
@@ -71,9 +71,9 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     :return:
     """
     if defaultdb == "":
-        return PlainTextResponse("此功能禁用，请先连接数据库")
+        return Response404(data="此功能禁用，请先连接数据库")
     if not (fid in idata):
-        return Response("NOT FOUND " + fid)
+        return Response404(data="NOT FOUND " + fid)
     vname = fid + str(seq) + ".ts"
     if "4gtv-live" in fid:
         host = "https://" + host2
@@ -88,21 +88,10 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
         if get.filename.get(vname) and get.filename.get(vname) != 0:
             sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
             content = DBconnect.fetchone(sql)
-            return Response(content=content['vcontent'], status_code=200, headers={
-                'Content-Type': 'video/MP2T',
-                'Connection': 'keep-alive',
-                'Cache-Control': 'max-age=600',
-                'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Headers": "content-type, date",
-                "Access-Control-Allow-Methods": "GET",
-                "Age": "0",
-                'Accept-Ranges': 'bytes',
-                'Content-Length': str(len(content['vcontent'])),
-            }, media_type='video/MP2T')
+            return Response(content=content['vcontent'], status_code=200, headers=headers, media_type='video/MP2T')
         else:
             await asyncio.sleep(2 - i * 0.095)
-    else:
-        print("未命中", fid)
+    return Response404()
 
 
 @app.get('/channel.m3u8')
@@ -120,15 +109,14 @@ async def channel(
     :return:
     """
     if not (fid in idata):
-        return Response("NOT FOUND " + fid)
+        return Response404(data=f"Not found {fid}")
+    t = idata[fid].get("lt", 0) - now_time()
+    if t > 0:
+        return Response404(data=f"{fid} 频道暂不可用，请过 {t} 秒后再试")
     return StreamingResponse(get.generatem3u8(host, fid, hd), 200, {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'Content-Type': 'application/vnd.apple.mpegurl',
-        'Expires': '-1',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Credentials': 'true',
     })
 
 
@@ -143,12 +131,15 @@ async def channel2(
     :return:
     """
     if not (fid in idata):
-        return Response("NOT FOUND " + fid)
+        return Response404(data=f"Not found {fid}")
+    t = idata[fid].get("lt", 0) - now_time()
+    if t > 0:
+        return Response404(data=f"{fid} 频道暂不可用，请过 {t} 秒后再试")
     return RedirectResponse(get.geturl(fid, hd), status_code=302)
 
 
 @app.get('/channel3.m3u8', summary="转发m3u8")
-async def channel(
+async def channel3(
         host: Any = Query(localhost),
         fid: Any = Query(...),
         hd: Any = Query("720")):
@@ -162,20 +153,20 @@ async def channel(
     :return:
     """
     if not (fid in idata):
-        return Response("NOT FOUND " + fid)
+        return Response404(data=f"Not found {fid}")
+    t = idata[fid].get("lt", 0) - now_time()
+    if t > 0:
+        return Response404(data=f"{fid} 频道暂不可用，请过 {t} 秒后再试")
     if not host:
         if "4gtv-live" not in fid:
             host = "https://" + host1
         else:
-            return Response("参数无效")
+            return Response200(data="参数无效")
     return StreamingResponse(get.generatem3u8(host, fid, hd), 200, {
         'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'Content-Type': 'application/vnd.apple.mpegurl',
         'Expires': '-1',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Credentials': 'true',
     })
 
 
@@ -195,9 +186,6 @@ async def program(host: Any = Query(None),
         'Pragma': 'no-cache',
         'Content-Type': 'application/vnd.apple.mpegurl',
         'Expires': '-1',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Credentials': 'true',
     })
 
 
@@ -219,7 +207,7 @@ async def epg(background_tasks: BackgroundTasks):
             data = res.content
             if res.status_code == 200:
                 background_tasks.add_task(writefile, pathname, data)
-    return Response(data, 200)
+    return Response(data, 200, media_type='application/xml')
 
 
 @app.get("/live/{file_path:path}")
@@ -233,7 +221,7 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
     """
     file_path = "/live/" + file_path
     if "live/pool/" not in file_path:
-        return Response(status_code=404, content="404")
+        return Response404(data="error")
     if token1 and expires1:
         file_path += f"?token1={token1}&expires1={expires1}"
     if "live/pool/4gtv-live" in file_path:
@@ -250,7 +238,7 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
     }
     with request.get(url=url, headers=header) as res:
         if res.status_code != 200:
-            return Response(status_code=403)
+            return Response404(status_code=403)
         return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
 
 

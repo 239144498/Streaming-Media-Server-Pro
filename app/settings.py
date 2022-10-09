@@ -50,10 +50,8 @@ xmlrepo = other_cfg.get("xmlrepo")
 xmlaccess_token = other_cfg.get("xmlaccess_token")
 repoowner = other_cfg.get("repoowner")
 repoaccess_token = other_cfg.get("repoaccess_token")
-key = other_cfg.get("key", "").encode()
-iv = other_cfg.get("iv", "").encode()
 
-if xmlowner and xmlrepo and xmlaccess_token:
+if xmlowner and xmlaccess_token:
     xmlState = True
 else:
     xmlState = False
@@ -66,10 +64,6 @@ headers = {
     'Content-Type': 'video/MP2T',
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=600',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'content-type, date',
-    'Access-Control-Allow-Methods': 'GET',
-    'Via': 'ViaMotion Edge',
     'Accept-Ranges': 'bytes'
 }
 

@@ -4,9 +4,9 @@
 # @Email: 239144498@qq.com
 # @Software: Streaming-Media-Server-Pro
 from psycopg2 import pool
-from psycopg2.extras import DictCursor, execute_batch
+from psycopg2.extras import DictCursor
 
-from app.settings import cfg, postgre_cfg
+from app.settings import postgre_cfg
 
 
 class PostgreSql(object):
@@ -53,9 +53,6 @@ class PostgreSql(object):
                         cursor.execute(sql)
                         res = cursor.rowcount
                     conn.commit()
-                    # if "delete" in sql:
-                    #     sql = "VACUUM FULL video;"
-                    #     cursor.execute(sql)
                     self.closeConnect(conn, cursor)
                     return res
         except Exception as e:
@@ -107,6 +104,5 @@ def get_postgre_conn():
 if __name__ == '__main__':
     cur = get_postgre_conn()
     sql = 'SELECT * FROM video ORDER BY ctime DESC LIMIT 1'
-    # sql = "SELECT content FROM video where vname='{}'".format("123.ts")
     result = cur.fetchone(sql)
     print(result['vcontent'].tobytes())

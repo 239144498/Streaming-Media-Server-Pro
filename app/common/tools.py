@@ -46,7 +46,7 @@ def get_4gtv(url):
         "Connection": "keep-alive",
     }
     with request.get(url=url, headers=header) as res:
-        return res.text
+        return res.status_code, res.text
 
 
 def solvelive(now, t1, t2, gap):
@@ -55,15 +55,10 @@ def solvelive(now, t1, t2, gap):
     return seq
 
 
-def genftlive(url):
-    start = time.time()
-    data = get_4gtv(url)
-    try:
-        seq = re.findall("#EXT-X-MEDIA-SEQUENCE:(\d+)\n", data).pop()
-        gap = re.findall("#EXT-X-TARGETDURATION:(\d+)\n", data).pop()
-    except:
-        raise Exception("请求", url, "返回信息", data, "不能正确得到seq")
-    return start, int(seq), int(gap)
+def genftlive(data):
+    seq = re.findall(r"#EXT-X-MEDIA-SEQUENCE:(\d+)\n", data).pop()
+    gap = re.findall(r"#EXT-X-TARGETDURATION:(\d+)\n", data).pop()
+    return int(seq), int(gap)
 
 
 def generate_url(fid, host, hd, begin, seq, url):
@@ -77,4 +72,3 @@ def generate_url(fid, host, hd, begin, seq, url):
 
 def now_time():
     return int(time.time())
-

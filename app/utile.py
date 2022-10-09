@@ -12,7 +12,7 @@ from urllib.parse import quote
 from loguru import logger
 from threading import Thread
 from apscheduler.triggers.interval import IntervalTrigger
-from apscheduler.schedulers.background import BlockingScheduler, BackgroundScheduler
+from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
 from app.common.endecrypt import get4gtvurl
@@ -21,7 +21,7 @@ from app.common.generateEpg import postask, generateprog
 from app.common.tools import genftlive, now_time, solvelive, generate_url, gdata
 from app.modules.DBtools import redisState, cur, DB
 from app.modules.request import request
-from app.settings import repoaccess_token, xmlaccess_token, xmlowner, xmlrepo, PATH, localhost, repoState, HD, \
+from app.settings import xmlaccess_token, xmlowner, xmlrepo, PATH, localhost, repoState, HD, \
     repoowner, idata, downurls, vbuffer, downchoose
 
 
@@ -29,7 +29,7 @@ class container:
     def __init__(self):
         self.repo = None
         self.para = {}
-        self.filename = dict()  # -1->redis | 0->downloading | 1->completed
+        self.filename = {}  # -1->redis | 0->downloading | 1->completed
         self.owner = repoowner
 
         if redisState:
@@ -48,23 +48,33 @@ class container:
         logger.success("init final")
 
     def updateonline(self, fid, hd):
-        url = get4gtvurl(fid, idata[fid]['nid'], hd)
-        try:
+        status_code, url, data = get4gtvurl(fid, hd)
+        start = time.time()
+        if status_code == 200:
             last = int(re.findall(r"expires.=(\d+)", url).pop())
-            start, seq, gap = genftlive(url)
-        except:
-            idata.pop(fid)
-            logger.warning(f"删除 {fid}")
-            return
-        if redisState:
-            cur.setex(fid, last - now_time(), str([url, last, start, seq, gap]))
-        self.para[fid] = {
-            "url": url,
-            "last": last,
-            "start": start,
-            "seq": seq,
-            "gap": gap
-        }
+            seq, gap = genftlive(data)
+            if redisState:
+                cur.setex(fid, last - now_time(), str([url, last, start, seq, gap]))
+            self.para[fid] = {
+                "url": url,
+                "last": last,
+                "start": start,
+                "seq": seq,
+                "gap": gap
+            }
+            return 200
+        elif status_code == 429:
+            if "/second" in data:
+                idata[fid]["lt"] = now_time() + 1
+            elif "/day" in data:
+                idata[fid]["lt"] = now_time() + 3600
+        elif status_code > 503:
+            idata[fid]["lt"] = now_time() + 60
+        elif status_code == 403:
+            idata[fid]["lt"] = now_time() + 3
+        else:
+            idata[fid]["lt"] = now_time() + 60
+        return 404
 
     def updatelocal(self, fid, _):
         self.para[fid] = {
@@ -74,6 +84,7 @@ class container:
             "seq": _[3],
             "gap": _[4]
         }
+        return 200
 
     def check(self, fid, hd):
         """
@@ -82,16 +93,19 @@ class container:
         :param hd:
         :return:
         """
+        code = 200
         if not self.para.get(fid) or self.para.get(fid)['last'] - now_time() < 0:  # 本地找
             if redisState:
                 _temp = cur.get(fid)
                 if not _temp or eval(_temp)[1] - now_time() < 0:  # redis找
-                    self.updateonline(fid, hd)
+                    code = self.updateonline(fid, hd)
                 else:  # 找到放进内存
                     _ = eval(_temp)
-                    self.updatelocal(fid, _)
+                    code = self.updatelocal(fid, _)
             else:
-                self.updateonline(fid, hd)
+                code = self.updateonline(fid, hd)
+        return code
+
 
     def generalfun(self, fid, hd):
         """
@@ -107,20 +121,22 @@ class container:
             seq = round((now - data['start']) / idata[fid]['x']) - 1
             begin = (seq + data['seq']) * idata[fid]['x']
             return data["gap"], (begin - idata[fid]['x1']) // idata[fid]['x'], url, begin
-        elif "4gtv-live" in fid:
+        if "4gtv-live" in fid:
             token = re.findall(r"(token1=.*&expires1=\d+)&", data['url']).pop()
             url = idata[fid]['url'] + "?" + token
             now = now_time()
             seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
             return data["gap"], seq, url, 0
-        else:
+        if "4gtv-ftv" in fid:
             url = idata[fid][hd]
             now = now_time()
             seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
             return data["gap"], seq, url, 0
 
     def generatem3u8(self, host, fid, hd):
-        self.check(fid, hd)
+        code = self.check(fid, hd)
+        if code == 404:
+            return "404"
         gap, seq, url, begin = self.generalfun(fid, hd)
         yield f"""#EXTM3U
 #EXT-X-VERSION:3
@@ -133,7 +149,9 @@ class container:
                   + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]['x']), seq + num1, url)
 
     def new_generatem3u8(self, host, fid, hd, background_tasks):
-        self.check(fid, hd)
+        code = self.check(fid, hd)
+        if code == 404:
+            return "404"
         gap, seq, url, begin = self.generalfun(fid, hd)
         if downchoose == "online":
             background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
@@ -155,7 +173,9 @@ class container:
                 yield f"\n#EXTINF:{idata[fid]['gap']}" + url
 
     def geturl(self, fid, hd):
-        self.check(fid, hd)
+        code = self.check(fid, hd)
+        if code == 404:
+            return "https://github.com/239144498/Streaming-Media-Server-Pro"
         if "4gtv-live" not in fid:
             return re.sub(r"(\w+\.m3u8)", "channel3.m3u8", self.para[fid]['url'])
         else:
@@ -187,10 +207,9 @@ def backtaskonline(url, fid, seq, hd, begin, host):
         x = urlset.pop() + quote(herf) + f"&filepath={tsname}"
         t = Thread(target=call_get, args=(x, tsname))
         threads.append(t)
-    for i in range(len(threads)):
-        threads[i].start()
-        time.sleep(1 + i * 0.1)
-        # time.sleep(1)
+    for index, element in enumerate(threads):
+        element.start()
+        time.sleep(1 + index * 0.1)
     for t in threads:
         t.join()
 
@@ -207,9 +226,9 @@ def backtasklocal(url, fid, seq, hd, begin, host):
         herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
         t = Thread(target=downvideo, args=(herf, tsname))
         threads.append(t)
-    for i in range(len(threads)):
-        threads[i].start()
-        time.sleep(1.2 + i * 0.1)
+    for index, element in enumerate(threads):
+        element.start()
+        time.sleep(1.2 + index * 0.1)
     for t in threads:
         t.join()
 
@@ -274,9 +293,9 @@ def sqltask():
     keys.reverse()
     _ = {}
     if len(keys) > 100:
-        for i in range(len(keys)):
-            if i < 100:
-                _.update({keys[i]: get.filename.get(keys[i])})
+        for index, element in enumerate(keys):
+            if index < 100:
+                _.update({element: get.filename.get(element)})
         get.filename = _
     logger.success("删除完成")
 

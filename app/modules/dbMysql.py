@@ -6,7 +6,7 @@
 import time
 import pymysql
 import contextlib
-from pymysql.cursors import DictCursor, Cursor, SSCursor
+from pymysql.cursors import DictCursor, Cursor
 
 from app.settings import mysql_cfg
 
