@@ -238,7 +238,7 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
     }
     with request.get(url=url, headers=header) as res:
         if res.status_code != 200:
-            return Response404(status_code=403)
+            return Response404()
         return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
 
 
