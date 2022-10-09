@@ -72,6 +72,12 @@ class container:
             idata[fid]["lt"] = now_time() + 60
         elif status_code == 403:
             idata[fid]["lt"] = now_time() + 3
+        elif status_code == 404:
+            idata[fid]["lt"] = now_time() + 30
+        elif status_code == 405:
+            idata[fid]["lt"] = now_time() + 60 * 30
+        elif status_code == 424:
+            idata[fid]["lt"] = now_time() + 3600 * 24
         else:
             idata[fid]["lt"] = now_time() + 60
         return 404
@@ -105,7 +111,6 @@ class container:
             else:
                 code = self.updateonline(fid, hd)
         return code
-
 
     def generalfun(self, fid, hd):
         """
