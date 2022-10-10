@@ -135,7 +135,7 @@ class container:
             now = now_time()
             seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
             return data["gap"], seq, url, 0
-        if "4gtv-ftv" in fid:
+        if "litv-ftv" in fid or "litv-longturn" in fid:
             url = idata[fid][hd]
             now = now_time()
             seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
