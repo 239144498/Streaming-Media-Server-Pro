@@ -50,7 +50,10 @@ class container:
     def updateonline(self, fid, hd):
         status_code, url, data = get4gtvurl(fid, hd)
         start = time.time()
-        if status_code == 200:
+        if status_code == 200 or abs(status_code - 300) < 10:
+            if "#EXTM3U" not in data:
+                idata[fid]["lt"] = now_time() + 10
+                return 404
             last = int(re.findall(r"expires.=(\d+)", url).pop())
             seq, gap = genftlive(data)
             if redisState:
@@ -63,18 +66,18 @@ class container:
                 "gap": gap
             }
             return 200
+        elif abs(status_code - 503) < 10:
+            idata[fid]["lt"] = now_time() + 60
         elif status_code == 429:
             if "/second" in data:
                 idata[fid]["lt"] = now_time() + 1
             elif "/day" in data:
                 idata[fid]["lt"] = now_time() + 3600
-        elif status_code > 503:
-            idata[fid]["lt"] = now_time() + 60
         elif status_code == 403:
             idata[fid]["lt"] = now_time() + 3
         elif status_code == 404:
             idata[fid]["lt"] = now_time() + 30
-        elif status_code == 405:
+        elif status_code == 412:
             idata[fid]["lt"] = now_time() + 60 * 30
         elif status_code == 424:
             idata[fid]["lt"] = now_time() + 3600 * 24

@@ -8,7 +8,6 @@ import json
 import requests
 
 from app.common.tools import get_4gtv
-from app.modules.request import request
 from app.settings import HD, data3, edata
 
 
@@ -31,7 +30,7 @@ def encrypt(fs4GTV_ID):
     url = data3['a2']
     value = edata[fs4GTV_ID]
     data = {'value': value}
-    with request.post(url=url, json=data, headers=headers) as res:
+    with requests.post(url=url, json=data, headers=headers) as res:
         return res.json()
 
 
@@ -44,7 +43,12 @@ def get4gtvurl(fs4GTV_ID, hd):
         return status_code, url, data
     if "http" in data3['a1']:
         url = data3['a1'] + "?fid={}&type=1".format(fs4GTV_ID)
-        with request.get(url=url) as res:
+        header = {
+            "Accept": "*/*",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
+            "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+        }
+        with requests.get(url=url, headers=header) as res:
             return res.status_code, res.url, res.text
 
 
