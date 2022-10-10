@@ -152,8 +152,8 @@ async def channel3(
     :param hd:
     :return:
     """
-    if not (fid in idata):
-        return Response404(data=f"Not found {fid}")
+    if not (fid in get.para):
+        return Response404(data=f"先请求channel2.m3u8接口")
     t = idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response404(data=f"{fid} 频道暂不可用，请过 {t} 秒后再试")
