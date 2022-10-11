@@ -4,12 +4,14 @@
 # @Email: 239144498@qq.com
 # @Software: Streaming-Media-Server-Pro
 import os
+import time
 
 from configparser import ConfigParser
 from pathlib import Path
 from loguru import logger
 
-from app.modules.request import request
+import requests
+request = requests.session()
 
 logger.info("配置加载中...")
 
@@ -18,7 +20,9 @@ PATH = Path(__file__).parent
 ROOT = PATH.parent
 
 cfg = ConfigParser()
+
 cfg.read(ROOT / "app/assets/config.ini", encoding="utf-8")
+
 try:
     redis_cfg = dict(cfg.items("redis"))
     mysql_cfg = dict(cfg.items("mysql"))
@@ -70,10 +74,13 @@ headers = {
 
 idata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+time.sleep(0.1)
 data3 = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data3",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+time.sleep(0.1)
 gdata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data2",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+time.sleep(0.1)
 edata = eval(request.get("https://agit.ai/239144498/owner/raw/branch/master/data4",
                           headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 HD = {
