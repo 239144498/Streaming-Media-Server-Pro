@@ -1,9 +1,13 @@
+<div align="center">
+
 [Streaming-Media-Server-Pro](https://github.com/239144498/Streaming-Media-Server-Pro)
 -------------
 [![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/31776721-e836-4042-a22a-3afe29ff1824/deploy-status)](https://app.netlify.com/sites/nowtv/deploys)  
 
 Documentation: English version | [中文版](https://github.com/239144498/Streaming-Media-Server-Pro)
+
+</div>
 
 _&emsp;&emsp; In today's fast growing internet, there are thousands of users who have a need to watch TV, and I, 
 want to create a goal that everyone has their own TV channel, where everyone can filter their favorite shows to their liking, 
