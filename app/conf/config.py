@@ -75,7 +75,7 @@ host1 = advanced_cfg.get("host1")
 host2 = advanced_cfg.get("host2")
 tvglogo = advanced_cfg.get("tvglogo")
 proxies = advanced_cfg.get("proxies")
-DEBUG = eval(os.getenv("DEBUG", default=advanced_cfg.get("debug")))
+DEBUG = eval(os.getenv("DEBUG", default=advanced_cfg.get("debug", "False")))
 if proxies:
     os.environ["proxies"] = proxies
 
@@ -98,21 +98,12 @@ headers = {
     'Content-Type': 'video/MP2T',
     'Connection': 'keep-alive',
     'Cache-Control': 'max-age=600',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Allow-Credentials': 'true',
-    'Via': 'ViaMotion Edge',
     'Accept-Ranges': 'bytes'
 }
 headers2 = {
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
     'Content-Type': 'application/vnd.apple.mpegurl',
-    'Expires': '-1',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Allow-Credentials': 'true',
 }
+
 idata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
@@ -122,7 +113,6 @@ data3 = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main
 gdata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data2",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
-
 edata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data4",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
