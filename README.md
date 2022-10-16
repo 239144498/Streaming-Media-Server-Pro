@@ -7,9 +7,32 @@
 *想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，*
 *并且拥有免费且流畅的观看体验。*
 
+---
 ### **&emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+迭代方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，各位给个star⭐鼓励支持下。**
 
-**项目树形图**
+---
+
+目录
+-------------------
+- [项目树形图](#项目树形图)
+- [公益视频网站](#公益视频网站)
+- [核心功能](#核心功能)
+- [REST API 接口指南](#rest-api-接口指南)
+- [实现效果：](#实现效果)
+    - [ios软件观看效果](#ios软件观看效果)
+- [原理介绍](#原理介绍)
+- [文字详解](#文字详解)
+- [使用方式](#使用方式)
+  - [python部署:](#python部署)
+  - [安装依赖](#安装依赖)
+  - [运行](#运行)
+- [现已支持频道](#现已支持频道)
+- [📋 打赏名单 Donation List](#-打赏名单-donation-list)
+- [❤ 打赏 Donation](#-打赏-donation)
+- [免责声明](#免责声明)
+
+项目树形图
+---
 
 ```
 .
@@ -61,7 +84,8 @@
 
 ```
 
-### 公益视频网站
+公益视频网站
+---
 
 后端对接的项目接口，可以在线观看接口内的所有电视。
 
@@ -94,23 +118,22 @@ REST API 接口指南
 [https://stream.naihe.cf/docs](https://stream.naihe.cf/docs)  
 <img src="https://ik.imagekit.io/naihe/github/apilist.png" title="api列表"/>
 
-实现效果：
+播放效果
 ---
-#### ios软件观看效果
 
-<img height="300" src="https://ik.imagekit.io/naihe/github/1.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660959995410" title="播放效果" width="600"/>
+<img height="300" src="https://ik.imagekit.io/naihe/github/1.png" title="播放效果" alt=""/>
 
-<img height="600" src="https://ik.imagekit.io/naihe/github/2.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660959995410" title="频道表" width="300"/>
+<img height="600" src="https://ik.imagekit.io/naihe/github/2.png" title="频道表" alt=""/>
 
-<img height="600" src="https://ik.imagekit.io/naihe/github/3.png?ik-sdk-version=javascript-1.4.3&updatedAt=1660959995410" title="节目单" width="300"/>
+<img height="600" src="https://ik.imagekit.io/naihe/github/3.png" title="节目单" alt=""/>
 
 原理介绍
 ---
 如下图所示：
 <img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" title="原理图"/>
 
-
-### **文字详解**
+文字详解
+---
 图中多台服务器是一种理想情况下实现，实际python程序、redis和mysql都可以在同一台服务器中实现
 - ① 客户端请求m3u8文件
    - 1-> 查看内存是否缓存，否则服务器执行图流程2
@@ -130,16 +153,16 @@ REST API 接口指南
 
 使用方式
 ---
-#### python部署: 
+### python部署: 
 python版本推荐3.9+
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```
-##### 安装依赖
+### 安装依赖
 ``` code
 pip install -r requirements.txt
 ```
-##### 运行
+### 运行
 ``` code
 python3 main.py
 ```
@@ -269,17 +292,20 @@ python3 main.py
 - [x] 华语综艺台
 - [x] 在diychannel.txt文件添加更多频道
 
-<h3 dir="auto">📋 打赏名单 Donation List</h3>
-
+📋 打赏名单 Donation List
+---
 非常感谢「 [这些用户](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/Donation-List) 」对本项目的赞助支持！
 
-<h3 dir="auto">❤ 打赏 Donation</h3>
-<p dir="auto">&emsp;&emsp;如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.</p>
-<p  style="text-align: center;"><img src="https://ik.imagekit.io/naihe/pay/zsm.png" width="384px" height="384px" /></p>
-<p><strong>&emsp;&emsp;你在GitHub给的<code>star</code>或者<code>赞助</code>是我长期维护此项目的动力所在，由衷感谢每一位支持者，&ldquo;每一次你花的钱都是在为你想要的世界投票&rdquo;。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。</strong></p>
+❤ 打赏 Donation
+---
+  如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.
 
-# 免责声明
+![](https://ik.imagekit.io/naihe/pay/zsm.png)
 
+**  你在GitHub给的`star`或者`赞助`是我长期维护此项目的动力所在，由衷感谢每一位支持者，“每一次你花的钱都是在为你想要的世界投票”。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。**
+
+免责声明
+-------
 本程序仅供学习了解, 请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源 使用本程序必循遵守部署免责声明 本程序仅供学习了解, 请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源
 
 使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责
