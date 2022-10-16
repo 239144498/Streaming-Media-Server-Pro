@@ -17,9 +17,8 @@
 - [项目树形图](#项目树形图)
 - [公益视频网站](#公益视频网站)
 - [核心功能](#核心功能)
-- [REST API 接口指南](#rest-api-接口指南)
-- [实现效果：](#实现效果)
-    - [ios软件观看效果](#ios软件观看效果)
+- [程序接口指南](#程序接口指南)
+- [播放效果](#播放效果)
 - [原理介绍](#原理介绍)
 - [文字详解](#文字详解)
 - [使用方式](#使用方式)
@@ -113,7 +112,7 @@ https://player.naihe.cf
 - 清晰度可自定义
 - 反向代理或套CDN请求（负载均衡）
 
-REST API 接口指南
+程序接口指南
 ---
 [https://stream.naihe.cf/docs](https://stream.naihe.cf/docs)  
 <img src="https://ik.imagekit.io/naihe/github/apilist.png" title="api列表"/>
@@ -121,7 +120,7 @@ REST API 接口指南
 播放效果
 ---
 
-<img height="300" src="https://ik.imagekit.io/naihe/github/1.png" title="播放效果" alt=""/>
+<img src="https://ik.imagekit.io/naihe/github/1.png" title="播放效果" alt=""/>
 
 <img height="600" src="https://ik.imagekit.io/naihe/github/2.png" title="频道表" alt=""/>
 
