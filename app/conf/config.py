@@ -96,9 +96,23 @@ else:
 
 headers = {
     'Content-Type': 'video/MP2T',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=600',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true',
+    'Via': 'ViaMotion Edge',
     'Accept-Ranges': 'bytes'
 }
-
+headers2 = {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Content-Type': 'application/vnd.apple.mpegurl',
+    'Expires': '-1',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true',
+}
 idata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)

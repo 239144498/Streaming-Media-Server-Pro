@@ -123,18 +123,18 @@ class container:
         if "4gtv-4gtv" in fid or "litv-ftv10" in fid or "litv-longturn17" == fid or "litv-longturn18" == fid:
             url = idata[fid][hd] + token
             now = now_time()
-            seq = round((now - data['start']) / idata[fid]['x']) - 1
+            seq = round((now - data['start']) / idata[fid]['x']) - 2
             begin = (seq + data['seq']) * idata[fid]['x']
             return data["gap"], (begin - idata[fid]['x1']) // idata[fid]['x'], url, begin
         if "4gtv-live" in fid:
             url = idata[fid]['url'] + token
             now = now_time()
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
+            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 3
             return data["gap"], seq, url, 0
         if "litv-ftv" in fid or "litv-longturn" in fid:
             url = idata[fid][hd] + token
             now = now_time()
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 1
+            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 2
             return data["gap"], seq, url, 0
 
     async def generatem3u8(self, host, fid, hd):

@@ -15,7 +15,7 @@ from fastapi.responses import StreamingResponse, RedirectResponse
 from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
 from app.common.header import random_header
-from app.conf.config import default_cfg, idata, localhost, host2, host1, headers
+from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
 from app.scheams.basic import Response200, Response400
 
@@ -42,8 +42,7 @@ async def online(
     code = await get.check(fid)
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
-    return StreamingResponse(get.new_generatem3u8(host, fid, hd, background_tasks), 200,
-                             media_type="application/vnd.apple.mpegurl")
+    return StreamingResponse(get.new_generatem3u8(host, fid, hd, background_tasks), 200, headers=headers2)
 
 
 @sgtv.get('/channel.m3u8', summary="代理|转发m3u8")
@@ -64,7 +63,7 @@ async def channel1(
     code = await get.check(fid)  # 檢查是否出错
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
-    return StreamingResponse(get.generatem3u8(host or "239144498@qq.com", fid, hd), 200, media_type="application/vnd.apple.mpegurl")
+    return StreamingResponse(get.generatem3u8(host or "239144498@qq.com", fid, hd), 200, headers=headers2)
 
 
 @sgtv.get('/channel2.m3u8', summary="重定向m3u8")
@@ -85,7 +84,7 @@ async def channel2(
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     host = host or host2 if "4gtv-live" in fid else host1
-    return RedirectResponse(f"channel.m3u8?fid={fid}&hd={hd}&host={host}", status_code=307)
+    return RedirectResponse(f"channel.m3u8?fid={fid}&hd={hd}&host={host}", status_code=302)
 
 
 @sgtv.get('/program.m3u', summary="IPTV频道列表")
@@ -97,7 +96,7 @@ async def program(
     生成频道表，由程序生成数据
     """
     name += ".m3u8"
-    return StreamingResponse(generate_m3u(host, hd, name), 200, media_type="application/vnd.apple.mpegurl")
+    return StreamingResponse(generate_m3u(host, hd, name), 200, headers=headers2)
 
 
 @sgtv.get('/epg.xml', summary="IPTV节目预告")
@@ -158,4 +157,4 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
             if res.status != 200:
                 logger.warning(await res.text())
                 return Response400(msg="Error in requestr")
-            return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')
+            return Response(content=await res.read(), status_code=200, headers=headers)
