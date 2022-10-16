@@ -4,28 +4,28 @@
 # @Email   : 239144498@qq.com
 # @File    : basic.py
 # @Software: PyCharm
-from enum import Enum
-from typing import Any
+from typing import Union
 
-from pydantic import BaseModel, Field
-
-
-class CodeEnum(int, Enum):
-    """业务状态码"""
-    SUCCESS = 200
-    FAIL = 404
+from fastapi.responses import JSONResponse, Response
 
 
-class ResponseBasic(BaseModel):
-    code: CodeEnum = Field(default=CodeEnum.SUCCESS, description="业务状态码 200 是成功, 404 是失败")
-    data: Any = Field(default=None, description="数据结果")
-    msg: str = Field(default="请求成功", description="提示")
+def Response200(*, data: Union[list, dict, str] = None, msg="请求成功", code=200) -> Response:
+    return JSONResponse(
+        status_code=code,
+        content={
+            "code": code,
+            "msg": msg,
+            "data": data,
+        }
+    )
 
 
-class Response200(ResponseBasic):
-    pass
-
-
-class Response404(ResponseBasic):
-    code: CodeEnum = CodeEnum.FAIL
-    msg: str = "请求失败"
+def Response400(*, data: Union[list, dict, str] = None, msg="请求成功", code=400) -> Response:
+    return JSONResponse(
+        status_code=code,
+        content={
+            "code": code,
+            "msg": msg,
+            "data": data,
+        }
+    )

@@ -1,27 +1,27 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-# @Author: Naihe
-# @Email: 239144498@qq.com
-# @Software: Streaming-Media-Server-Pro
+import requests
 from urllib import parse
 from base64 import b64encode
 
-from app.modules.request import netreq
+from app.common.header import random_header
+
+request = requests.session()
+requests.packages.urllib3.disable_warnings()
 
 
 class agit:
     def __init__(self, access_token):
         self.headers = {
             "Host": "agit.ai",
-            "Connection": "keep-alive",
             "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
             "Accept-Encoding": "gzip, deflate, br",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
+            "User-Agent": random_header(),
             "accept": "application/json",
             "Content-Type": "application/json",
         }
         self.access_token = access_token
-        self.request = netreq()
+        self.request = requests.session()
 
     def get_file_sha(self, owner, repo, filepath, branch="master", i=0):
         if i > 10:
@@ -32,7 +32,7 @@ class agit:
                 raise Exception(res.text)
             return res.json()['sha']
 
-    def get_repo_sha(self, owner, repo, branch="master", i=0):
+    def get_repo_sha(self, owner, repo, branch="master"):
         url = f"https://agit.ai/api/v1/repos/{owner}/{repo}/git/refs/heads/{branch}?access_token={self.access_token}"
         with self.request.get(url=url, headers=self.headers) as res:
             if res.status_code != 200:
@@ -143,9 +143,3 @@ class agit:
             return res.status_code
 
 
-if __name__ == '__main__':
-    import datetime
-
-    repo = str(datetime.date.today())
-    repoaccess_token = "5e06fxxxxxac2xxxxxxab0d2baefdxxxxx"
-    a1 = agit(repoaccess_token).create_repo(repo)

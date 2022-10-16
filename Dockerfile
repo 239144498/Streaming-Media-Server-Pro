@@ -1,5 +1,5 @@
 FROM python:3.9
-
+LABEL maintainer="Naihe <239144498@qq.com>"
 WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt

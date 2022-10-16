@@ -1,11 +1,16 @@
-aiohttp==3.8.1
 APScheduler==3.9.1
-fastapi==0.82.0
-loguru==0.6.0
+fastapi>=0.78.0
+loguru>=0.5.3
 pycryptodome==3.15.0
 PyMySQL==1.0.2
 redis==4.3.4
-requests==2.28.1
-uvicorn==0.18.3
+requests>=2.27.0
+uvicorn>=0.15.0
 starlette==0.19.1
-# psycopg2-binary
+asyncio>=3.4.3
+pydantic>=1.8.2
+configparser>=5.2.0
+email-validator
+aiodns
+aiohttp
+Brotli

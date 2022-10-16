@@ -1,14 +1,11 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-# @Author: Naihe
-# @Email: 239144498@qq.com
-# @Software: Streaming-Media-Server-Pro
 import time
 import pymysql
 import contextlib
 from pymysql.cursors import DictCursor, Cursor
 
-from app.settings import mysql_cfg
+from app.conf.config import mysql_cfg
 
 
 class MySQLConnect(object):

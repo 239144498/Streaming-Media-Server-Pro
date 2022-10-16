@@ -1,17 +1,16 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-# @Author: Naihe
-# @Email: 239144498@qq.com
-# @Software: Streaming-Media-Server-Pro
 import time
-import aiohttp
 import datetime
 import asyncio
 
+import aiohttp
+from loguru import logger
 from xml.dom.minidom import Document
 
-from app.settings import idata
-from app.modules.DBtools import cur
+from app.common.header import random_header
+from app.conf.config import idata
+from app.db.DBtools import cur
 
 
 def generatehead(tvdoc):
@@ -25,7 +24,7 @@ def generatehead(tvdoc):
 def generatebody1(tvdoc, tv, var):
     # channel 标签
     channel = tvdoc.createElement("channel")
-    channel.setAttribute("id", str(var['fs4GTV_ID']))
+    channel.setAttribute("id", str(var['fnID']))
 
     # display-name
     display_name = tvdoc.createElement("display-name")
@@ -73,35 +72,34 @@ def generateprog(tvlist):
     data1.update(data2)
     tvs = data1
     for k, v in tvs.items():
-        generatebody2(tvdoc, tv, k, v)
+        generatebody2(tvdoc, tv, str(idata[k]['nid']), v)
     return tvdoc.toprettyxml(indent="\t", encoding="UTF-8")
 
 
 async def download(fid, now, i=0):
-    if i > 10:
+    if i > 3:
         raise Exception(f"下载节目单{fid}失败")
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
+        "User-Agent": random_header(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
         "Accept-Encoding": "gzip, deflate, br",
-        "Connection": "keep-alive",
     }
     try:
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.get(f"https://www.4gtv.tv/proglist/{fid}.txt") as res:
-                res.encoding = "utf-8"
                 return cur.hset(now, fid, await res.text())
-    except:
+    except Exception as e:
+        logger.error(e)
         return await download(fid, now, i + 1)
 
 
 async def postask():
     start = time.time()
-    print(start)
+    logger.info(start)
     now = str(datetime.date.today())
     fids = str(cur.hkeys(now))
-    print(fids)
+    logger.info(fids)
     tasks = []
     for fid in idata.keys():
         if fid in fids:
@@ -109,7 +107,7 @@ async def postask():
         tasks.append(download(fid, now))
     await asyncio.gather(*tasks)
     end = time.time()
-    print("耗时: %s" % (end - start))
+    logger.info("耗时: %s" % (end - start))
     cur.expire(now, 432000)
 
 

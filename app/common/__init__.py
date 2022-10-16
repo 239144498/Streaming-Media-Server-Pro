@@ -1,5 +1,6 @@
-#!/usr/bin python3
 # -*- coding: utf-8 -*-
-# @Author: Naihe
-# @Email: 239144498@qq.com
-# @Software: Streaming-Media-Server-Pro
+# @Time    : 2022/10/8
+# @Author  : Naihe
+# @Email   : 239144498@qq.com
+# @File    : __init__.py
+# @Software: PyCharm

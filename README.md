@@ -3,50 +3,65 @@
 [![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/31776721-e836-4042-a22a-3afe29ff1824/deploy-status)](https://app.netlify.com/sites/nowtv/deploys)  
 
-&emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，
-想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，
-并且拥有免费且流畅的观看体验。
+*&emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，*
+*想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，*
+*并且拥有免费且流畅的观看体验。*
 
--------------
-
-### **接口中所有频道已恢复正常！**
-
-### **&emsp;&emsp;最新版本已发布，增加了自定义添加频道功能，程序稳定性更高！现在可以一键部署，你们期待的教程重磅来袭！**  
+### **&emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+迭代方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，希望给个star⭐鼓励支持下。**
 
 **项目树形图**
+
 ```
 .
-|-- app
-|   |-- __init__.py
-|   |-- assets
-|   |   |-- EPG.xml
-|   |   |-- config.ini
-|   |   `-- diyepg.txt
-|   |-- common
-|   |   |-- __init__.py
-|   |   |-- diyEpg.py
-|   |   |-- endecrypt.py
-|   |   |-- generateEpg.py
-|   |   |-- gitrepo.py
-|   |   `-- tools.py
-|   |-- modules
-|   |   |-- DBtools.py
-|   |   |-- __init__.py
-|   |   |-- dbMysql.py
-|   |   `-- dbPostgresql.py
-|   |-- main.py
-|   |-- routers.py
-|   |-- settings.py
-|   `-- utile.py
-|-- main.py
-|-- requirements.txt
-|-- Dockerfile
-|-- LICENSE
-|-- Procfile
-`-- README.md
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── a4gtv
+│   │   │   ├── __init__.py
+│   │   │   ├── endecrypt.py
+│   │   │   ├── generateEpg.py
+│   │   │   ├── tasks.py
+│   │   │   ├── tools.py
+│   │   │   └── utile.py
+│   │   └── v2
+│   │       ├── __init__.py
+│   │       └── endpoints
+│   │           ├── __init__.py
+│   │           ├── more.py
+│   │           └── sgtv.py
+│   ├── assets
+│   │   ├── EPG.xml
+│   │   ├── diyepg.txt
+│   │   └── log
+│   ├── common
+│   │   ├── __init__.py
+│   │   ├── costum_logging.py
+│   │   ├── diyEpg.py
+│   │   ├── gitrepo.py
+│   │   └── header.py
+│   ├── conf
+│   │   ├── __init__.py
+│   │   ├── config.ini
+│   │   └── config.py
+│   ├── db
+│   │   ├── __init__.py
+│   │   ├── DBtools.py
+│   │   └── dbMysql.py
+│   └── scheams
+│       ├── __init__.py
+│       └── basic.py
+├── main.py
+├── requirements.txt
+├── Dockerfile
+├── README.md
+├── Procfile
+└── LICENSE
+
 ```
 
-### 自制视频网站
+### 公益视频网站
 
 后端对接的项目接口，可以在线观看接口内的所有电视。
 
@@ -94,17 +109,18 @@ REST API 接口指南
 如下图所示：
 <img src="https://ik.imagekit.io/naihe/github/%E5%8E%9F%E7%90%86%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" title="原理图"/>
 
+
 ### **文字详解**
 图中多台服务器是一种理想情况下实现，实际python程序、redis和mysql都可以在同一台服务器中实现
 - ① 客户端请求m3u8文件
-	- 1-> 查看内存是否缓存，否则服务器执行图流程2
-	- 2-> BackgroundTasks任务：执行图流程3，分布式下载数量根据设置的缓冲区大小决定
+   - 1-> 查看内存是否缓存，否则服务器执行图流程2
+   - 2-> BackgroundTasks任务：执行图流程3，分布式下载数量根据设置的缓冲区大小决定
     - 3<- 返回m3u8文件
 - ② 客户端请求ts片
-	- 1-> 查看本地是否缓存，否则服务器执行图流程2
-	- 2-> BackgroundTasks任务：执行图流程3
-	- 3-> 查看内存是否已下载完成状态，下载完执行图流程4，否则循环判断等待
-	- 4<- 返回ts文件
+   - 1-> 查看本地是否缓存，否则服务器执行图流程2
+   - 2-> BackgroundTasks任务：执行图流程3
+   - 3-> 查看内存是否已下载完成状态，下载完执行图流程4，否则循环判断等待
+   - 4<- 返回ts文件
 - ③ 还有很多技术细节就不一一展开，只列出以上部分  
 
 该项目根据分析4gtv网站的接口，通过算法得到生成ts视频的一些关键参数，省去请求网站从而得到m3u8文件的通信时长等开销，针对海外视频网站被墙隔离，支持以下几种观看方式：
@@ -128,7 +144,7 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-**（docker部署）进阶使用教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
+**（docker部署）更多使用教程详情 https://www.cnblogs.com/1314h/p/16651157.html**
 
 现已支持频道
 ---
@@ -206,7 +222,6 @@ python3 main.py
 - [x] 幸福空间居家台
 - [x] Love Nature
 - [x] History 历史频道
-- [x] HISTORY 2 频道
 - [x] Smithsonian Channel
 - [x] 爱尔达生活旅游台
 - [x] LUXE TV Channel
@@ -262,3 +277,9 @@ python3 main.py
 <p dir="auto">&emsp;&emsp;如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.</p>
 <p  style="text-align: center;"><img src="https://ik.imagekit.io/naihe/pay/zsm.png" width="384px" height="384px" /></p>
 <p><strong>&emsp;&emsp;你在GitHub给的<code>star</code>或者<code>赞助</code>是我长期维护此项目的动力所在，由衷感谢每一位支持者，&ldquo;每一次你花的钱都是在为你想要的世界投票&rdquo;。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。</strong></p>
+
+# 免责声明
+
+本程序仅供学习了解, 请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源 使用本程序必循遵守部署免责声明 本程序仅供学习了解, 请于下载后 24 小时内删除, 不得用作任何商业用途, 文字、数据及图片均有所属版权, 如转载须注明来源
+
+使用本程序必循遵守部署服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责服务器所在地、所在国家和用户所在国家的法律法规, 程序作者不对使用者任何不当行为负责
