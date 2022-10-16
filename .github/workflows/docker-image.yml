@@ -5,8 +5,9 @@ name: builds
 on:
   push:
     branches: [ main ]
-    tags:
-          - 'v*.*'
+    tags: [ 'v*.*' ]
+    paths-ignore: [ '**.md' ]
+
 jobs:
   buildx:
     runs-on: ubuntu-latest

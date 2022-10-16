@@ -156,5 +156,6 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
     async with aiohttp.ClientSession(headers=header) as session:
         async with session.get(url=url) as res:
             if res.status != 200:
+                logger.warning(await res.text())
                 return Response400(msg="Error in requestr")
             return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')

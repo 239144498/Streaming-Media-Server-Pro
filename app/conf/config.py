@@ -57,7 +57,7 @@ config = Config()
 request = requests.session()
 
 cfg = ConfigParser()
-cfg.read(config.ROOT / "conf/config.ini", encoding="utf-8")
+cfg.read(config.ROOT / "assets/config.ini", encoding="utf-8")
 redis_cfg = dict(cfg.items("redis"))
 mysql_cfg = dict(cfg.items("mysql"))
 default_cfg = dict(cfg.items("default"))

@@ -61,16 +61,16 @@ class container:
         logger.success("init final")
 
     async def updateonline(self, fid, _=0):
-        status_code, url, data = await get4gtvurl(fid)
-        start = now_time()
+        status_code, url, data, start = await get4gtvurl(fid)
+        url2 = re.findall(r"((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)", data).pop()[0]
         if (status_code == 200 or abs(status_code - 300) < 10) and "#EXTM3U" in data:
             if "4gtv-live" not in fid:
                 _ = 3600 * 12
             last = int(re.findall(r"expires.=(\d+)", url).pop()) + _
             seq, gap = genftlive(data)
-            self.updatelocal(fid, [url, last, start, seq, gap])
+            self.updatelocal(fid, [url2, last, start, seq, gap])
             if redisState:
-                cur.setex(fid, last - start, str([url, last, start, seq, gap]))
+                cur.setex(fid, last - start, str([url2, last, start, seq, gap]))
             return 200
         elif abs(status_code - 503) < 10:   # 服务器维护
             idata[fid]["lt"] = start + 10
