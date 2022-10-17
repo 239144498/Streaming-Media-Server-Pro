@@ -34,7 +34,7 @@ class Config(BaseSettings):
 - **向下滑动查看**
 """
 
-    VERSION = "2.2.6"
+    VERSION = "2.2"
 
     CONTACT = {
         "name": "Naihe",
@@ -48,7 +48,7 @@ class Config(BaseSettings):
 
     ROOT = Path(__file__).parent.parent  # .app
 
-    LOG_DIR = ROOT / f"assets/log"
+    LOG_DIR = ROOT / "log"
 
 
 logger.info("配置加载中...")
@@ -96,26 +96,41 @@ else:
 
 headers = {
     'Content-Type': 'video/MP2T',
-    'Connection': 'keep-alive',
     'Cache-Control': 'max-age=600',
     'Accept-Ranges': 'bytes'
 }
 headers2 = {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
     'Content-Type': 'application/vnd.apple.mpegurl',
+    'Expires': '-1',
 }
 
+print(".", end="")
 idata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+print(".", end="")
 data3 = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data3",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+print(".", end="")
 gdata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data2",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+print(".", end="")
 edata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data4",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+print(".", end="")
+version = request.get("https://raw.githubusercontent.com/382420058/owner/main/version",
+                         headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text.strip("\n")
+print(".", end="\n")
+
+if config.VERSION != version:
+    logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")
+    logger.warning("更新地址：https://github.com/239144498/Streaming-Media-Server-Pro")
+
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }

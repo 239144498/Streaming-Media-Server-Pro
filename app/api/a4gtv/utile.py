@@ -60,12 +60,12 @@ class container:
 
         logger.success("init final")
 
-    async def updateonline(self, fid, _=0):
-        status_code, url, data, start = await get4gtvurl(fid)
+    def updateonline(self, fid, _=0):
+        status_code, url, data, start = get4gtvurl(fid)
         url2 = re.findall(r"((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)", data).pop()[0]
         if (status_code == 200 or abs(status_code - 300) < 10) and "#EXTM3U" in data:
             if "4gtv-live" not in fid:
-                _ = 3600 * 12
+                _ = 3600 * 23
             last = int(re.findall(r"expires.=(\d+)", url).pop()) + _
             seq, gap = genftlive(data)
             self.updatelocal(fid, [url2, last, start, seq, gap])
@@ -73,13 +73,13 @@ class container:
                 cur.setex(fid, last - start, str([url2, last, start, seq, gap]))
             return 200
         elif abs(status_code - 503) < 10:   # 服务器维护
-            idata[fid]["lt"] = start + 10
+            idata[fid]["lt"] = start + 20
         elif status_code == 403:    # 链接失效
             idata[fid]["lt"] = start + 3
         else:   # 其他情况
-            idata[fid]["lt"] = start + 5
+            idata[fid]["lt"] = start + 10
         logger.warning("未获得有效数据")
-        print(status_code, url, data)
+        logger.warning(f"{status_code}, {url}, {data}")
         return 404
 
     def updatelocal(self, fid, _):
@@ -92,7 +92,7 @@ class container:
         }
         return 200
 
-    async def check(self, fid):
+    def check(self, fid):
         """
         处理参数
         :param fid:
@@ -103,12 +103,12 @@ class container:
             if redisState:
                 _temp = cur.get(fid)
                 if not _temp or eval(_temp)[1] - now_time() < 0:  # redis找
-                    code = await self.updateonline(fid)
+                    code = self.updateonline(fid)
                 else:  # 找到放进内存
                     _ = eval(_temp)
                     code = self.updatelocal(fid, _)
             else:
-                code = await self.updateonline(fid)
+                code = self.updateonline(fid)
         return code
 
     def generalfun(self, fid, hd):
@@ -129,7 +129,7 @@ class container:
         if "4gtv-live" in fid:
             url = idata[fid]['url'] + token
             now = now_time()
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 3
+            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 5
             return data["gap"], seq, url, 0
         if "litv-ftv" in fid or "litv-longturn" in fid:
             url = idata[fid][hd] + token
@@ -137,7 +137,7 @@ class container:
             seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 2
             return data["gap"], seq, url, 0
 
-    async def generatem3u8(self, host, fid, hd):
+    def generatem3u8(self, host, fid, hd):
         gap, seq, url, begin = self.generalfun(fid, hd)
         yield f"""#EXTM3U
 #EXT-X-VERSION:3
@@ -149,7 +149,7 @@ class container:
             yield f"\n#EXTINF:{idata[fid]['gap']}" \
                   + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]['x']), seq + num1, url)
 
-    async def new_generatem3u8(self, host, fid, hd, background_tasks):
+    def new_generatem3u8(self, host, fid, hd, background_tasks):
         gap, seq, url, begin = self.generalfun(fid, hd)
         if default_cfg.get("downchoose") == "online":
             background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
@@ -183,7 +183,7 @@ def call_get(url, data):
         logger.info((data['filepath'], url[:20], res.text))
 
 
-async def backtaskonline(url, fid, seq, hd, begin, host):
+def backtaskonline(url, fid, seq, hd, begin, host):
     threads = []
     # 分布式下载，改成你的链接，看不懂就去看我发布的教程
     # urlset = ["https://www.example1.com/url3?url=", "https://www.example2.com/url3?url=",
@@ -212,10 +212,10 @@ async def backtaskonline(url, fid, seq, hd, begin, host):
         threads.append(t)
     for index, element in enumerate(threads):
         element.start()
-        await asyncio.sleep(1 + index * 0.1)
+        time.sleep(1 + index * 0.1)
 
 
-async def backtasklocal(url, fid, seq, hd, begin, host):
+def backtasklocal(url, fid, seq, hd, begin, host):
     threads = []
     # 本地多线程下载
     for i in range(0, vbuffer):
@@ -229,7 +229,7 @@ async def backtasklocal(url, fid, seq, hd, begin, host):
         threads.append(t)
     for index, element in enumerate(threads):
         element.start()
-        await asyncio.sleep(1 + index * 0.1)
+        time.sleep(1 + index * 0.1)
 
 
 def downvideo(url: str, filepath: str):

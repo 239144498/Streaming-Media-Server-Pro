@@ -14,3 +14,4 @@ email-validator
 aiodns
 aiohttp
 Brotli
+httptools

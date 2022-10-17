@@ -3,8 +3,7 @@
 import re
 import time
 
-import aiohttp
-
+from app.common.request import request
 from app.conf.config import gdata, host1, host2, tvglogo
 from urllib.parse import urljoin
 
@@ -30,16 +29,14 @@ def writefile(filename, content):
         f.write(content)
 
 
-async def get_4gtv(url):
+def get_4gtv(url):
     header = {
         "Accept": "*/*",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
         "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
     }
-    start = now_time()
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url=url, headers=header) as res:
-            return await res.text(encoding="utf-8"), start
+    with request.get(url=url, headers=header) as res:
+        return res.text
 
 
 def solvelive(now, t1, t2, gap):
@@ -66,4 +63,3 @@ def generate_url(fid, host, hd, begin, seq, url):
 
 def now_time():
     return int(time.time())
-

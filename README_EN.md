@@ -14,7 +14,7 @@ want to create a goal that everyone has their own TV channel, where everyone can
 and have a free and smooth viewing experience._ 
 
 ---
-### &emsp;&emsp;The latest version of the program structural refactoring, network requests to asynchronous + iterative way, performance has been greatly improved; and new log management, all the features of the program has been basically perfect, you guys give a star ⭐ encourage support. 
+### &emsp;&emsp;The latest version of the program structural refactoring, network requests to asynchronous + generator way, performance has been greatly improved; and new log management, all the features of the program has been basically perfect, you guys give a star ⭐ encourage support. 
 
 ---
 

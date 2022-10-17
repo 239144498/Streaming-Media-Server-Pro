@@ -10,15 +10,14 @@ import logging
 from loguru import logger
 from fastapi import FastAPI
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from app.conf import config
 from app.common.costum_logging import InterceptHandler, format_record
 from .a4gtv.tasks import gotask, sqltask
-from ..conf.config import DEBUG
 from .v2 import v2
+from ..conf.config import DEBUG
 from ..scheams.basic import Response200
 
 
@@ -47,7 +46,7 @@ app.include_router(v2)
 @app.get('/', summary="首页")
 async def index():
     return Response200(data="这是一个开源的IPTV服务项目，功能强大且适合任意平台。",
-                msg="了解更多请访问：https://github.com/239144498/Streaming-Media-Server-Pro", code=200)
+                       msg="了解更多请访问：https://github.com/239144498/Streaming-Media-Server-Pro", code=200)
 
 
 @app.on_event("startup")
@@ -61,18 +60,9 @@ async def startup():
         'coalesce': True,  # 默认为新任务关闭合并模式（）
         'max_instances': 3  # 设置新任务的默认最大实例数为3
     }
-    REDIS = {
-        'host': 'apn1-trusted-blowfish-33507.upstash.io',
-        'port': '33507',
-        'password': '1e14dcdcb8ff491a8fc60b8209153942',
-        'ssl': True,
-    }
-    jobstores = {
-        'redis': RedisJobStore(**REDIS),
-    }
     global scheduler
     scheduler = BackgroundScheduler()
-    scheduler.configure(jobstores=jobstores, executors=executors, job_defaults=job_defaults,
+    scheduler.configure(executors=executors, job_defaults=job_defaults,
                         timezone=pytz.timezone('Asia/Shanghai'))
     # cron表达式
     # 0 0 * * 0-6 每天凌晨执行一次 更新epg

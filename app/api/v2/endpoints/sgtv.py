@@ -11,10 +11,8 @@ from fastapi import APIRouter, Query, Response
 from loguru import logger
 from fastapi.background import BackgroundTasks
 from fastapi.responses import StreamingResponse, RedirectResponse
-
 from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
-from app.common.header import random_header
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
 from app.scheams.basic import Response200, Response400
@@ -39,10 +37,10 @@ async def online(
     t = idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
-    code = await get.check(fid)
+    code = get.check(fid)
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
-    return StreamingResponse(get.new_generatem3u8(host, fid, hd, background_tasks), 200, headers=headers2)
+    return Response("".join((i for i in get.new_generatem3u8(host, fid, hd, background_tasks))), 200, headers=headers2)
 
 
 @sgtv.get('/channel.m3u8', summary="代理|转发m3u8")
@@ -60,10 +58,10 @@ async def channel1(
     t = idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
-    code = await get.check(fid)  # 檢查是否出错
+    code = get.check(fid)  # 檢查是否出错
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
-    return StreamingResponse(get.generatem3u8(host or "239144498@qq.com", fid, hd), 200, headers=headers2)
+    return Response("".join((i for i in get.generatem3u8(host or "239144498@qq.com", fid, hd))), 200, headers=headers2)
 
 
 @sgtv.get('/channel2.m3u8', summary="重定向m3u8")
@@ -80,7 +78,7 @@ async def channel2(
     t = idata[fid].get("lt", 0) - now_time()
     if t > 0:  # 冷卻期
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
-    code = await get.check(fid)  # 檢查是否出错
+    code = get.check(fid)  # 檢查是否出错
     if code != 200:
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     host = host or host2 if "4gtv-live" in fid else host1
@@ -146,7 +144,7 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
         file_path += f"?token1={token1}&expires1={expires1}"
     url = host2 + file_path if "live/pool/4gtv-live" in file_path else host1 + file_path
     header = {
-        "User-Agent": random_header(),
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
         "Accept-Encoding": "gzip, deflate, br",
@@ -155,6 +153,5 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
     async with aiohttp.ClientSession(headers=header) as session:
         async with session.get(url=url) as res:
             if res.status != 200:
-                logger.warning(await res.text())
                 return Response400(msg="Error in requestr")
-            return Response(content=await res.read(), status_code=200, headers=headers)
+            return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')

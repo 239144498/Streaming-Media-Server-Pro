@@ -14,7 +14,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 *并且拥有免费且流畅的观看体验。*
 
 ---
-### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+迭代方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，各位给个star⭐鼓励支持下。
+### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，各位给个star⭐鼓励支持下。
 
 ---
 
@@ -44,6 +44,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 ├── app
 │   ├── __init__.py
 │   ├── main.py
+│   ├── log
 │   ├── api
 │   │   ├── __init__.py
 │   │   ├── a4gtv
@@ -62,7 +63,6 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 │   ├── assets
 │   │   ├── EPG.xml
 │   │   ├── diyepg.txt
-│   │   └── log
 │   ├── common
 │   │   ├── __init__.py
 │   │   ├── costum_logging.py
