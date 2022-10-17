@@ -17,6 +17,7 @@ def generate_m3u(host, hd, name):
     :return:
     """
     yield '#EXTM3U x-tvg-url=""\n'
+    yield '#EXTINF:-1, Open Source Projects\nhttps://github.com/239144498/Streaming-Media-Server-Pro\n\n'
     for i in gdata:
         # tvg-ID="" 频道id匹配epg   fsLOGO_MOBILE 台标 | fsHEAD_FRAME 播放预览
         yield '#EXTINF:{} tvg-chno="{}" tvg-id="{}" tvg-name="{}" tvg-logo="{}" group-title="{}",{}\n'.format(
