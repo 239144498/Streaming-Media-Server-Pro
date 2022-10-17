@@ -7,7 +7,6 @@ import time
 from threading import Thread
 from urllib.parse import urlparse, urljoin
 
-import asyncio
 import requests
 from loguru import logger
 
