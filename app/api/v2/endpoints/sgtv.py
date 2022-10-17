@@ -6,13 +6,13 @@
 # @Software: PyCharm
 import asyncio
 
-import aiohttp
 from fastapi import APIRouter, Query, Response
 from loguru import logger
 from fastapi.background import BackgroundTasks
 from fastapi.responses import StreamingResponse, RedirectResponse
 from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
+from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
 from app.scheams.basic import Response200, Response400
@@ -150,8 +150,5 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
         "Accept-Encoding": "gzip, deflate, br",
         "Upgrade-Insecure-Requests": "1",
     }
-    async with aiohttp.ClientSession(headers=header) as session:
-        async with session.get(url=url) as res:
-            if res.status != 200:
-                return Response400(msg="Error in requestr")
-            return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')
+    with request.get(url=url, headers=header) as res:
+        return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')

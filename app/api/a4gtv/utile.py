@@ -111,19 +111,21 @@ class container:
                 code = self.updateonline(fid)
         return code
 
-    def generalfun(self, fid, hd):
+    def generalfun(self, fid, hd, x=0):
         """
         通用生成参数
         :param fid:
         :param hd:
         :return:
         """
+        if "4gtv-4gtv073" == fid:
+            x = 110
         data = self.para.get(fid)
         token = "?" + urlparse(data['url']).query
         if "4gtv-4gtv" in fid or "litv-ftv10" in fid or "litv-longturn17" == fid or "litv-longturn18" == fid:
             url = idata[fid][hd] + token
             now = now_time()
-            seq = round((now - data['start']) / idata[fid]['x']) - 2
+            seq = round((now - data['start']) / idata[fid]['x']) - 2 + x
             begin = (seq + data['seq']) * idata[fid]['x']
             return data["gap"], (begin - idata[fid]['x1']) // idata[fid]['x'], url, begin
         if "4gtv-live" in fid:
