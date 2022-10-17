@@ -149,7 +149,7 @@ class container:
         for num1 in range(5):
             yield f"\n#EXTINF:{idata[fid]['gap']}" \
                   + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]['x']), seq + num1, url)
-        yield "\n\nOpen Source Projects: https://github.com/239144498/Streaming-Media-Server-Pro"
+        yield "\n\n#Open Source Projects: https://github.com/239144498/Streaming-Media-Server-Pro"
 
     def new_generatem3u8(self, host, fid, hd, background_tasks):
         gap, seq, url, begin = self.generalfun(fid, hd)
@@ -171,7 +171,7 @@ class container:
             for num1 in range(1):
                 url = "\n" + urljoin(localhost, f"call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}")
                 yield f"\n#EXTINF:{idata[fid]['gap']}" + url
-        yield "\n\nOpen Source Projects: https://github.com/239144498/Streaming-Media-Server-Pro"
+        yield "\n\n#Open Source Projects: https://github.com/239144498/Streaming-Media-Server-Pro"
 
     def geturl(self, fid, hd):
         return re.sub(r"(\w+\.m3u8)", HD[hd], self.para[fid]['url'])
