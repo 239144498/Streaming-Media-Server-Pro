@@ -6,13 +6,13 @@
 # @Software: PyCharm
 import asyncio
 
+import aiohttp
 from fastapi import APIRouter, Query, Response
 from loguru import logger
 from fastapi.background import BackgroundTasks
 from fastapi.responses import StreamingResponse, RedirectResponse
 from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
-from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
 from app.scheams.basic import Response200, Response400
@@ -27,7 +27,6 @@ async def online(
         fid=Query(...),
         hd=Query("1080")):
     """
-    最新版 api v3
     该版本具有redis缓存，视频中转缓存处理等优点,直白说就是播放稳定不卡顿，看超清、4k不是问题
     """
     if default_cfg['defaultdb'] == "":
@@ -49,7 +48,6 @@ async def channel1(
         fid=Query(...),
         hd=Query("720")):
     """
-    新版优化api v3
     在redis中设置截止时间，过期重新获取保存到redis，默认通过读取redis参数，构造ts链接
     新增对接口复用，channel2接口重定向到该接口做转发，默认采取代理方式
     """
@@ -70,7 +68,6 @@ async def channel2(
         fid=Query(...),
         hd=Query("720")):
     """
-    新版优化api v2
     读取redis获取链接进行重定向
     """
     if not (fid in idata):
@@ -83,6 +80,25 @@ async def channel2(
         return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     host = host or host2 if "4gtv-live" in fid else host1
     return RedirectResponse(f"channel.m3u8?fid={fid}&hd={hd}&host={host}", status_code=302)
+
+
+@sgtv.get('/channel3.m3u8', summary="重定向m3u8")
+async def channel3(
+        fid=Query(...),
+        hd=Query("720")):
+    """
+    根据大家的需要特意新增该接口，用于直接重定向m3u8
+    该链接最稳定，推荐使用该接口
+    """
+    if not (fid in idata):
+        return Response400(data=f"Not found {fid}", code=404)
+    t = idata[fid].get("lt", 0) - now_time()
+    if t > 0:
+        return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
+    code = get.check(fid)  # 檢查是否出错
+    if code != 200:
+        return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
+    return RedirectResponse(get.geturl(fid, hd), status_code=307)
 
 
 @sgtv.get('/program.m3u', summary="IPTV频道列表")
@@ -150,5 +166,10 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
         "Accept-Encoding": "gzip, deflate, br",
         "Upgrade-Insecure-Requests": "1",
     }
-    with request.get(url=url, headers=header) as res:
-        return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
+    # with request.get(url=url, headers=header) as res:
+    #     return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
+    async with aiohttp.ClientSession(headers=header) as session:
+        async with session.get(url=url) as res:
+            if res.status != 200:
+                return Response400(msg="Error in requestr")
+            return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')

@@ -4,17 +4,21 @@
 -------------
 [![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/31776721-e836-4042-a22a-3afe29ff1824/deploy-status)](https://app.netlify.com/sites/nowtv/deploys)  
+[![Python version](https://img.shields.io/badge/python->=3.8-green.svg?style=plastic&logo=python)](https://www.python.org/downloads/release/python-380/)
+[![Docker pulls](https://img.shields.io/docker/pulls/239144498/streaming.svg?style=plastic&logo=docker)](https://hub.docker.com/r/239144498/streaming)
+[![GitHub stars](https://img.shields.io/github/stars/239144498/Streaming-Media-Server-Pro?color=brightgreen&style=plastic&logo=Apache%20Spark)](https://github.com/239144498/Streaming-Media-Server-Pro/stargazers)
+[![MIT license](https://img.shields.io/badge/license-GNU3.0-green.svg?style=plastic&logo=React%20Hook%20Form)](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
 
 Documentation: English version | [中文版](https://github.com/239144498/Streaming-Media-Server-Pro)
 
 </div>
 
-_&emsp;&emsp; In today's fast growing internet, there are thousands of users who have a need to watch TV, and I, 
+>_&emsp;&emsp; In today's fast growing internet, there are thousands of users who have a need to watch TV, and I, 
 want to create a goal that everyone has their own TV channel, where everyone can filter their favorite shows to their liking, 
 and have a free and smooth viewing experience._ 
 
 ---
-### &emsp;&emsp;The latest version of the program structural refactoring, network requests to asynchronous + generator way, performance has been greatly improved; and new log management, all the features of the program has been basically perfect, you guys give a star ⭐ encourage support. 
+### &emsp;&emsp;The latest version of the program structural refactoring, network requests to asynchronous + generator way, performance has been greatly improved; and new log management, all the features of the program has been basically perfect, Please help to light up the star⭐.  
 
 ---
 
@@ -305,6 +309,12 @@ Many thanks to "[these users](https://github.com/239144498/Streaming-Media-Serve
 ❤ Donation
 ---
   If you find this project helpful, please consider donating to this project to motivate me to devote more time to maintenance and development. If you find this project helpful, please consider supporting the project going forward.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/naihe)  
+
+PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
+
+> Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
 

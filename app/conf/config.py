@@ -34,7 +34,7 @@ class Config(BaseSettings):
 - **向下滑动查看**
 """
 
-    VERSION = "2.2"
+    VERSION = "2.3"
 
     CONTACT = {
         "name": "Naihe",
@@ -50,12 +50,13 @@ class Config(BaseSettings):
 
     LOG_DIR = ROOT / "log"
 
+    count = 0
+
 
 logger.info("配置加载中...")
 config = Config()
 
 request = requests.session()
-
 cfg = ConfigParser()
 cfg.read(config.ROOT / "assets/config.ini", encoding="utf-8")
 redis_cfg = dict(cfg.items("redis"))
@@ -105,7 +106,6 @@ headers2 = {
     'Content-Type': 'application/vnd.apple.mpegurl',
     'Expires': '-1',
 }
-
 print(".", end="")
 idata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data",
                          headers={
@@ -123,10 +123,10 @@ edata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 print(".", end="")
-version = request.get("https://raw.githubusercontent.com/382420058/owner/main/version",
-                         headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text.strip("\n")
+version = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/version",
+                           headers={
+                               "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text)
 print(".", end="\n")
-
 if config.VERSION != version:
     logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")
     logger.warning("更新地址：https://github.com/239144498/Streaming-Media-Server-Pro")

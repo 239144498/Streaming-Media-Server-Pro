@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
 from app.conf import config
+from app.scheams.basic import Response200
 
 more = APIRouter(tags=["更多频道"])
 
@@ -24,4 +25,13 @@ async def diychannel():
         'Pragma': 'no-cache',
         'Content-Type': 'application/vnd.apple.mpegurl'
     })
+
+
+@more.get('/count', summary="统计")
+async def count1():
+    """
+    统计使用次数
+    """
+    return Response200(data=str(config.count))
+
 

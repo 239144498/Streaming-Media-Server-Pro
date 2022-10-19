@@ -4,17 +4,21 @@
 -------------
 [![builds](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml/badge.svg)](https://github.com/239144498/Streaming-Media-Server-Pro/actions/workflows/docker-image.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/31776721-e836-4042-a22a-3afe29ff1824/deploy-status)](https://app.netlify.com/sites/nowtv/deploys)  
+[![Python version](https://img.shields.io/badge/python->=3.8-green.svg?style=plastic&logo=python)](https://www.python.org/downloads/release/python-380/)
+[![Docker pulls](https://img.shields.io/docker/pulls/239144498/streaming.svg?style=plastic&logo=docker)](https://hub.docker.com/r/239144498/streaming)
+[![GitHub stars](https://img.shields.io/github/stars/239144498/Streaming-Media-Server-Pro?color=brightgreen&style=plastic&logo=Apache%20Spark)](https://github.com/239144498/Streaming-Media-Server-Pro/stargazers)
+[![MIT license](https://img.shields.io/badge/license-GNU3.0-green.svg?style=plastic&logo=React%20Hook%20Form)](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
 
 Documentation: [English version](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/README_EN.md) | 中文版
 
 </div>
 
-*&emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，*
+> *&emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，*
 *想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，*
 *并且拥有免费且流畅的观看体验。*
 
 ---
-### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，各位给个star⭐鼓励支持下。
+### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理，程序所有功能已基本完善，各位可否点亮star⭐。
 
 ---
 
@@ -304,6 +308,12 @@ python3 main.py
 ❤ 打赏 Donation
 ---
   如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/naihe)  
+
+PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
+
+> Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
 

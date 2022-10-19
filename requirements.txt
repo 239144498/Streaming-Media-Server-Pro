@@ -11,6 +11,7 @@ asyncio>=3.4.3
 pydantic>=1.8.2
 configparser>=5.2.0
 email-validator
+sentry-sdk[fastapi]
 aiodns
 aiohttp
 Brotli
