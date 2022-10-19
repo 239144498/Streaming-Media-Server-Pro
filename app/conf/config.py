@@ -57,6 +57,7 @@ logger.info("配置加载中...")
 config = Config()
 
 request = requests.session()
+
 cfg = ConfigParser()
 cfg.read(config.ROOT / "assets/config.ini", encoding="utf-8")
 redis_cfg = dict(cfg.items("redis"))
@@ -126,8 +127,9 @@ print(".", end="")
 version = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/version",
                            headers={
                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text)
+
 print(".", end="\n")
-if config.VERSION != version:
+if config.VERSION != str(version):
     logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")
     logger.warning("更新地址：https://github.com/239144498/Streaming-Media-Server-Pro")
 
