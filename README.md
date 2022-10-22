@@ -38,7 +38,6 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 - [现已支持频道](#现已支持频道)
 - [📋 打赏名单 Donation List](#-打赏名单-donation-list)
 - [❤ 打赏 Donation](#-打赏-donation)
-- [免责声明](#免责声明)
 
 项目树形图
 ---
