@@ -18,7 +18,7 @@ from app.common.costum_logging import InterceptHandler, format_record
 from .a4gtv.tasks import gotask, sqltask
 from .v2 import v2
 from ..conf.config import DEBUG
-from ..scheams.basic import Response200
+from ..scheams.response import Response200
 
 
 def init_app():

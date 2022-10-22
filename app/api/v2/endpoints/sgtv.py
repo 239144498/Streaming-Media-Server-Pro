@@ -6,16 +6,17 @@
 # @Software: PyCharm
 import asyncio
 
-import aiohttp
 from fastapi import APIRouter, Query, Response
 from loguru import logger
 from fastapi.background import BackgroundTasks
 from fastapi.responses import StreamingResponse, RedirectResponse
 from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
+from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
-from app.scheams.basic import Response200, Response400
+from app.scheams.api_model import Clarity, Channels
+from app.scheams.response import Response200, Response400
 
 sgtv = APIRouter(tags=["4GTV"])
 
@@ -25,9 +26,12 @@ async def online(
         background_tasks: BackgroundTasks,
         host=Query(localhost),
         fid=Query(...),
-        hd=Query("1080")):
+        hd: Clarity = Query("1080")):
     """
     该版本具有redis缓存，视频中转缓存处理等优点,直白说就是播放稳定不卡顿，看超清、4k不是问题
+    - **host**: 服务器地址
+    - **fid**: 频道id
+    - **hd**: 清晰度
     """
     if default_cfg['defaultdb'] == "":
         return Response200(msg="此功能禁用，请连接数据库")
@@ -46,10 +50,13 @@ async def online(
 async def channel1(
         host=Query(localhost),
         fid=Query(...),
-        hd=Query("720")):
+        hd: Clarity = Query("720")):
     """
     在redis中设置截止时间，过期重新获取保存到redis，默认通过读取redis参数，构造ts链接
     新增对接口复用，channel2接口重定向到该接口做转发，默认采取代理方式
+    - **host**: 服务器地址
+    - **fid**: 频道id
+    - **hd**: 清晰度
     """
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
@@ -66,9 +73,12 @@ async def channel1(
 async def channel2(
         host=Query(None),
         fid=Query(...),
-        hd=Query("720")):
+        hd: Clarity = Query("720")):
     """
     读取redis获取链接进行重定向
+    - **host**: 服务器地址
+    - **fid**: 频道id
+    - **hd**: 清晰度
     """
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
@@ -85,10 +95,12 @@ async def channel2(
 @sgtv.get('/channel3.m3u8', summary="重定向m3u8")
 async def channel3(
         fid=Query(...),
-        hd=Query("720")):
+        hd: Clarity = Query("720")):
     """
     根据大家的需要特意新增该接口，用于直接重定向m3u8
     该链接最稳定，推荐使用该接口
+    - **fid**: 频道id
+    - **hd**: 清晰度
     """
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
@@ -104,10 +116,13 @@ async def channel3(
 @sgtv.get('/program.m3u', summary="IPTV频道列表")
 async def program(
         host=Query(localhost),
-        hd=Query("720"),
-        name="channel2"):
+        hd: Clarity = Query("720"),
+        name: Channels = Query("channel2")):
     """
     生成频道表，由程序生成数据
+    - **host**: 服务器地址
+    - **hd**: 清晰度
+    - **name**: 接口指向
     """
     name += ".m3u8"
     return StreamingResponse(generate_m3u(host, hd, name), 200, headers=headers2)
@@ -124,7 +139,7 @@ def epg():
 @sgtv.get('/call.ts', summary="缓存式ts视频下载")
 async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     """
-    api v3 版中读取数据库ts片响应给客户端，采用多线程下载ts片，加载视频没有等待时长！
+    读取数据库ts片响应给客户端，采用多线程下载ts片，加载视频没有等待时长！
     """
     if default_cfg['defaultdb'] == "":
         return Response200(msg="此功能禁用，请连接数据库")
@@ -151,7 +166,7 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
 @sgtv.get("/live/{file_path:path}", summary="代理ts视频下载")
 async def downlive(file_path: str, token1: str = None, expires1: int = None):
     """
-    api v2 版代理请求，客户端无需翻墙即可观看海外电视
+    用于代理请求，客户端无需翻墙即可观看海外电视
     """
     file_path = "/live/" + file_path
     if "live/pool/" not in file_path:
@@ -166,10 +181,5 @@ async def downlive(file_path: str, token1: str = None, expires1: int = None):
         "Accept-Encoding": "gzip, deflate, br",
         "Upgrade-Insecure-Requests": "1",
     }
-    # with request.get(url=url, headers=header) as res:
-    #     return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')
-    async with aiohttp.ClientSession(headers=header) as session:
-        async with session.get(url=url) as res:
-            if res.status != 200:
-                return Response400(msg="Error in requestr")
-            return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')
+    with request.get(url=url, headers=header) as res:
+        return Response(content=res.content, status_code=200, headers=headers, media_type='video/MP2T')

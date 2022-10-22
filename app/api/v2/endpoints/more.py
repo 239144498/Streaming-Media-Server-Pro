@@ -8,7 +8,7 @@ from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
 from app.conf import config
-from app.scheams.basic import Response200
+from app.scheams.response import Response200
 
 more = APIRouter(tags=["更多频道"])
 
