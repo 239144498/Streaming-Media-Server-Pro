@@ -38,7 +38,6 @@ Contents
 - [Channels are now supported](#channels-are-now-supported)
 - [📋 Reward List Donation List](#-reward-list-donation-list)
 - [❤ Donation](#-donation)
-- [Disclaimers](#disclaimers)
 
 Project tree diagram
 ---
@@ -319,9 +318,3 @@ PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
 
 **&emsp;&emsp;The `star` or `sponsorship` you give on GitHub is what keeps me going for a long time, thank you from the bottom of my heart to each and every supporter, "every time you spend money you're voting for the world you want". Also, recommending this project to as many people as possible is a way to support it, the more people who use it the more motivation there is to update it.**
-
-Disclaimers
--------
-This program is for learning purposes only, please delete within 24 hours of downloading, no commercial use, text, data and images are copyrighted, if reproduced, please cite the source Use of this program must comply with the deployment disclaimer This program is for learning purposes only, please delete within 24 hours of downloading, no commercial use, text, data and images are copyrighted, if reproduced, please cite the source
-
-Use of this program is subject to the laws and regulations of the country in which the server is located, the country in which it is deployed and the country in which the user is located, and the author of the program is not responsible for any misconduct of the user.
