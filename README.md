@@ -308,10 +308,6 @@ python3 main.py
 ---
   如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/naihe)  
-
-PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
-
 > Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
