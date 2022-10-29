@@ -316,4 +316,4 @@ python3 main.py
 
 License
 ---
-[GNU v3.0](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
+[GNU-3.0 © naihe](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
