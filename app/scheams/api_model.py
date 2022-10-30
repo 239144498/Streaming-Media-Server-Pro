@@ -19,3 +19,8 @@ class Channels(str, Enum):
     channel = "channel"
     channel2 = "channel2"
     channel3 = "channel3"
+
+
+class Witch(str, Enum):
+    yes = "y"
+    no = "n"

@@ -18,6 +18,8 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 *并且拥有免费且流畅的观看体验。*
 
 ---
+### &emsp;&emsp;_NEW_ 最新版来了，增加了对任意视频网站的视频流代理功能，解决了播放不同视频网站的跨域等问题。
+
 ### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理和channel3接口，程序所有功能已基本完善，各位可否点亮star⭐。
 
 ---
@@ -106,6 +108,7 @@ https://player.naihe.cf
 核心功能
 ---
 
+- 代理任意视频网站的视频流【_NEW_】
 - 生成m3u文件
 - 生成m3u8文件
 - 视频中转（具有缓冲区）
@@ -162,7 +165,7 @@ https://player.naihe.cf
 使用方式
 ---
 ### python部署: 
-python版本推荐3.9+
+python版本>=3.8+
 ``` code
 git clone https://github.com/239144498/Streaming-Media-Server-Pro.git
 ```

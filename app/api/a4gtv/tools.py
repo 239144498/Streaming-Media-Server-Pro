@@ -64,5 +64,8 @@ def generate_url(fid, host, hd, begin, seq, url):
         return urljoin(host or host1, url.format(seq))
 
 
-def now_time():
-    return int(time.time())
+def now_time(_=None):
+    if _:
+        return time.time()
+    else:
+        return int(time.time())

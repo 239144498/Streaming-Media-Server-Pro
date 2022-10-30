@@ -52,6 +52,8 @@ class Config(BaseSettings):
 
     count = 0
 
+    url_regex = r"(http|https)://((?:[\w-]+\.)+[a-z0-9]+)((?:\/[^/?#]*)+)?(\?[^#]+)?(#.+)?"
+
 
 logger.info("配置加载中...")
 config = Config()
