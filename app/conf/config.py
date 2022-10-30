@@ -34,7 +34,7 @@ class Config(BaseSettings):
 - **向下滑动查看**
 """
 
-    VERSION = "2.3"
+    VERSION = "2.4"
 
     CONTACT = {
         "name": "Naihe",
