@@ -316,3 +316,7 @@ python3 main.py
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
 
 **&emsp;&emsp;你在GitHub给的`star`或者`赞助`是我长期维护此项目的动力所在，由衷感谢每一位支持者，“每一次你花的钱都是在为你想要的世界投票”。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。**
+
+License
+---
+[GNU-3.0 © naihe](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)

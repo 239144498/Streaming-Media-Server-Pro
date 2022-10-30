@@ -318,3 +318,7 @@ PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
 ![](https://ik.imagekit.io/naihe/pay/zsm.png)
 
 **&emsp;&emsp;The `star` or `sponsorship` you give on GitHub is what keeps me going for a long time, thank you from the bottom of my heart to each and every supporter, "every time you spend money you're voting for the world you want". Also, recommending this project to as many people as possible is a way to support it, the more people who use it the more motivation there is to update it.**
+
+License
+---
+[GNU v3.0](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
