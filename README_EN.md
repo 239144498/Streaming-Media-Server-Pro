@@ -27,7 +27,7 @@ Contents
 - [Project tree diagram](#project-tree-diagram)
 - [Public service video sites](#public-service-video-sites)
 - [Core functions](#core-functions)
-- [REST API Guide](#rest-api-guide)
+- [API reference](#api-reference)
 - [Playback effects](#playback-effects)
 - [Principle](#principle)
 - [Text Detail](#text-detail)
@@ -121,9 +121,9 @@ Core functions
 - Customizable clarity
 - Reverse proxy or set of CDN requests (load balancing)
 
-REST API Guide
+API reference
 ---
-[https://stream.naihe.cf/docs](https://stream.naihe.cf/docs)  
+[https://stream.naihe.cf/redoc](https://stream.naihe.cf/redoc)  
 <img src="https://ik.imagekit.io/naihe/github/apilist.png" title="api list"/>
 
 Playback effects
