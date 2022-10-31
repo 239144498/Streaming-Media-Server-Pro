@@ -12,7 +12,6 @@ from fastapi.responses import FileResponse
 from fastapi.requests import Request
 from starlette.responses import StreamingResponse
 from app.api.a4gtv.more_util import parse, processing, splicing
-from app.common.header import random_header
 from app.conf import config
 from app.conf.config import headers
 from app.scheams.response import Response200, Response400

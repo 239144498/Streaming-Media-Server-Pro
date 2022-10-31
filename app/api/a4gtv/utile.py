@@ -73,10 +73,12 @@ class container:
             idata[fid]["lt"] = start + 30
         elif status_code == 403:  # 链接失效
             idata[fid]["lt"] = start + 60
-        elif status_code == 430:  # 接口每日上限
+        elif status_code == 229:  # 频率过快
+            idata[fid]["lt"] = start + 3
+        elif status_code == 230:  # 接口每日上限
             idata[fid]["lt"] = start + 3600
-        elif status_code == 416:
-            logger.error("该ip已被拉黑，无法访问")
+        elif status_code == 216:
+            logger.error("该ip已被程序拉黑，无法访问")
             logger.error(
                 "请更换ip或者联系作者，了解封禁规则https://github.com/239144498/Streaming-Media-Server-Pro/issues/14")
             exit(-1)
