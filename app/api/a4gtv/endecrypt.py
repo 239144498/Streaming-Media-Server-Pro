@@ -40,7 +40,7 @@ def encrypt(fs4GTV_ID):
 
 
 def get4gtvurl(fs4GTV_ID):
-    _a = now_time(1)
+    _a = now_time()
     if "http" in data3['a3']:
         info = encrypt(fs4GTV_ID)
         link = decrypt(info)
