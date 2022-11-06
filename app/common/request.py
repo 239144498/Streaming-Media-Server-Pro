@@ -25,10 +25,10 @@ class netreq(object):
         return requests.session()
 
     def get(self, url, headers=None, **kwargs):
-        return self.request.get(url, headers=headers, proxies=self.proxies, **kwargs)
+        return self.request.get(url, headers=headers, proxies=self.proxies, timeout=10, **kwargs)
 
     def post(self, url, data=None, json=None, headers=None, **kwargs):
-        return self.request.post(url, data=data, json=json, headers=headers, proxies=self.proxies, **kwargs)
+        return self.request.post(url, data=data, json=json, headers=headers, proxies=self.proxies, timeout=10, **kwargs)
 
     def put(self, url, data=None, json=None, headers=None, **kwargs):
         return self.request.put(url, data=data, json=json, headers=headers, proxies=self.proxies, **kwargs)

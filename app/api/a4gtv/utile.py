@@ -186,7 +186,7 @@ get = container()
 
 
 def call_get(url, data):
-    with request.post(url, json=data) as res:
+    with request.post(url, json=data, timeout=10) as res:
         get.filename.update({data['filepath']: 1})
         logger.info((data['filepath'], url[:20], res.text))
 
