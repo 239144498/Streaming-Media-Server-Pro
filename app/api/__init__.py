@@ -66,9 +66,9 @@ async def startup():
                         timezone=pytz.timezone('Asia/Shanghai'))
     # cron表达式
     # 0 0 * * 0-6 每天凌晨执行一次 更新epg
-    # 0/30 * * * * 每30分钟执行一次 清理缓存
+    # 0 * * * * 每1小时执行一次 清理缓存
     scheduler.add_job(gotask, CronTrigger.from_crontab("0 0 * * 0-6"), max_instances=2, misfire_grace_time=120)
-    scheduler.add_job(sqltask, CronTrigger.from_crontab("0/30 * * * *"), max_instances=3, misfire_grace_time=120)
+    scheduler.add_job(sqltask, CronTrigger.from_crontab("0 * * * *"), max_instances=3, misfire_grace_time=120)
     logger.info(scheduler.get_jobs())
     logger.info("已开启定时任务")
     scheduler.start()
