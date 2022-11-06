@@ -3,6 +3,8 @@
 import time
 import pymysql
 import contextlib
+
+from loguru import logger
 from pymysql.cursors import DictCursor, Cursor
 
 from app.conf.config import mysql_cfg
@@ -23,6 +25,9 @@ class MySQLConnect(object):
         )
         self.connection.autocommit(True)
 
+    def ping(self):
+        self.connection.ping(reconnect=True)  # ping 校验连接是否异常
+
     # 通过以下两个方法判断mysql是否连通，以及重连。
     def is_connected(self, num=3600, stime=3):
         # num = 28800
@@ -31,13 +36,14 @@ class MySQLConnect(object):
         while _status and _number <= num:
             """Check if the server is alive"""
             try:
-                self.connection.ping(reconnect=True)  # ping 校验连接是否异常
+                self.ping()
                 _status = False
             except:
                 if self.re_connect():  # 重新连接,成功退出
                     _status = False
                     break
                 _number += 1
+                logger.info(f"mysql连接失败，正在第{_number}次重连...")
                 time.sleep(stime)  # 连接不成功,休眠3秒钟,继续循环，知道成功或重试次数结束
 
     def re_connect(self):

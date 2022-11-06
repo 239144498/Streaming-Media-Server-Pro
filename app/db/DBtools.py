@@ -5,6 +5,7 @@
 # @Email   : 239144498@qq.com
 # @File    : dbMysql.py
 # @Software: PyCharm
+import pymysql
 import redis
 from loguru import logger
 
@@ -37,8 +38,13 @@ def connect_redis():
 cur, redisState = connect_redis()
 
 if defaultdb == "mysql":
-    DBconnect = get_mysql_conn()
-    logger.success("mysql已连接")
+    try:
+        DBconnect = get_mysql_conn()
+        print(DBconnect.ping())
+        logger.success("mysql已连接")
+    except pymysql.err.OperationalError:
+        DBconnect = None
+        logger.warning("mysql连接失败")
 else:
     DBconnect = None
     logger.warning("mysql连接失败")

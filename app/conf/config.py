@@ -135,6 +135,8 @@ if config.VERSION != str(version):
     logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")
     logger.warning("更新地址：https://github.com/239144498/Streaming-Media-Server-Pro")
 
+if localhost and "http" not in localhost:
+    logger.warning("localhost配置错误，具体查看教程https://www.cnblogs.com/1314h/p/16651157.html")
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }

@@ -156,7 +156,7 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
         logger.info(f"第{i}次尝试获取{get.filename.get(vname)}")
         if get.filename.get(vname) and get.filename.get(vname) != 0:
             sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
-            content = DBconnect.fetchone(sql)
+            content = DBconnect().fetchone(sql)
             return Response(content=content['vcontent'], status_code=200, headers=headers)
         else:
             await asyncio.sleep(1 + i * 0.095)
