@@ -253,7 +253,7 @@ def downvideo(url: str, filepath: str):
     }
     a = time.time()
     repo = str(datetime.date.today())
-    with requests.get(url=url, headers=header) as res:
+    with requests.get(url=url, headers=header, timeout=10) as res:
         status = res.status_code
         print(status)
         content = res.content
