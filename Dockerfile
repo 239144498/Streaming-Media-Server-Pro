@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9-slim
 LABEL maintainer="Naihe <239144498@qq.com>"
 WORKDIR /code
 

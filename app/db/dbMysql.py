@@ -122,6 +122,31 @@ def get_mysql_conn(cursorclass=DictCursor):
     }
     return MySQLConnect(cursorclass, mysql_config)
 
+# 初始化数据库，创建database和表
+def init_database(cursorclass=DictCursor):
+    mysql_config = {
+        'host': mysql_cfg['host'],
+        'user': mysql_cfg['user'],
+        'password': mysql_cfg['password'],
+        'port': int(mysql_cfg['port']),
+        'database': 'mysql',
+        'charset': 'utf8'
+    }
+    mysql = MySQLConnect(cursorclass, mysql_config)
+    sql = "select count(1) cnt from information_schema.TABLES where TABLE_SCHEMA='media' and TABLE_NAME='video'"
+    result = mysql.fetchone(sql)    
+    
+    if result['cnt']:
+        logger.info("video表已存在")
+    else:
+        with mysql.connection.cursor() as cursor:
+            cursor.execute('CREATE DATABASE media')
+            cursor.execute('create table media.video(vname varchar(30) not null,CONSTRAINT video_pk PRIMARY KEY (vname),vcontent  MEDIUMBLOB NOT NULL,vsize varchar(20) NULL,ctime  timestamp(0) default now())')
+            cursor.execute('SET GLOBAL event_scheduler = ON')
+            cursor.execute('DROP event IF EXISTS media.auto_delete')
+            cursor.execute('CREATE EVENT media.auto_delete ON SCHEDULE EVERY 30 minute DO TRUNCATE video')
+        
+    return '初始化数据库表完成'
 
 if __name__ == '__main__':
     mysql = get_mysql_conn()

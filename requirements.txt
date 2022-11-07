@@ -16,3 +16,4 @@ aiodns
 aiohttp
 Brotli
 httptools
+cryptography
