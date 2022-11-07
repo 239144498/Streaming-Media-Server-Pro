@@ -259,7 +259,7 @@ def downvideo(url: str, filepath: str):
         content = res.content
         b = time.time()
         sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
-        a1 = DBconnect().execute(sql, (filepath, content, len(content)))  # 执行sql语句
+        a1 = DBconnect.execute(sql, (filepath, content, len(content)))  # 执行sql语句
         get.filename.update({filepath: 1})
         c = time.time()
         return {
