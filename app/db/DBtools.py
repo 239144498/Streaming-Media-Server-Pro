@@ -42,10 +42,11 @@ def mysql_connect_test():
         DBconnect = get_mysql_conn()
         print(DBconnect.ping())
         logger.success("mysql已连接")
+        return DBconnect, True
     except pymysql.err.OperationalError:
         DBconnect = None
         logger.error("mysql连接失败")
-    return DBconnect
+        return DBconnect, False
 
 
 if defaultdb == "mysql":
@@ -53,9 +54,11 @@ if defaultdb == "mysql":
     try:
         init_database()
         logger.success("mysql已创建初始化表")
-    except:
-            logger.error("mysql初始化表失败")
-    DBconnect = mysql_connect_test()
+    except pymysql.err.OperationalError as e:
+        logger.error(e)
+        logger.error("mysql初始化表失败")
+    DBconnect, sqlState = mysql_connect_test()
 else:
     DBconnect = None
+    sqlState = False
     logger.warning("defaultdb未配置mysql")
