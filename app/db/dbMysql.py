@@ -124,6 +124,7 @@ def get_mysql_conn(cursorclass=DictCursor):
 
 # 初始化数据库，创建database和表
 def init_database(cursorclass=DictCursor):
+    # 数据库账号需要拥有SUPER或SYSTEM_VARIABLES_ADMIN权限才能自动初始化
     mysql_config = {
         'host': mysql_cfg['host'],
         'user': mysql_cfg['user'],
