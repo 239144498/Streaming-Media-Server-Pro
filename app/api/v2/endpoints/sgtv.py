@@ -14,7 +14,7 @@ from app.api.a4gtv.tools import generate_m3u, now_time
 from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
 from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
-from app.db.DBtools import DBconnect
+from app.db.DBtools import DBconnect, sqlState
 from app.scheams.api_model import Clarity, Channels
 from app.scheams.response import Response200, Response400
 
@@ -33,7 +33,7 @@ async def online(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    if default_cfg['defaultdb'] == "":
+    if default_cfg['defaultdb'] == "" or sqlState is False:
         return Response200(msg="此功能禁用，请连接数据库")
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
@@ -141,7 +141,7 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     """
     读取数据库ts片响应给客户端，采用多线程下载ts片，加载视频没有等待时长！
     """
-    if default_cfg['defaultdb'] == "":
+    if default_cfg['defaultdb'] == "" or sqlState is False:
         return Response200(msg="此功能禁用，请连接数据库")
     logger.info(f"{fid} {seq}")
     if not (fid in idata):
