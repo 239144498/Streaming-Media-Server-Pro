@@ -5,7 +5,7 @@ WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
 
 RUN apt-get update -y && \
-    apt-get install libffi-dev -y
+    apt-get install gcc libffi-dev -y
 # cryptography库需要gcc编译，导致镜像体积过大，默认不安装
 #RUN apt-get update -y && \
 #    apt-get install build-essential libssl-dev libffi-dev \
