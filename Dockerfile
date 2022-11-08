@@ -5,12 +5,9 @@ WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
 
 RUN apt-get update -y && \
-    apt-get install gcc libffi-dev -y
-# cryptography库需要gcc编译，导致镜像体积过大，默认不安装
-#RUN apt-get update -y && \
-#    apt-get install build-essential libssl-dev libffi-dev \
-#    python3-dev cargo -y
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    apt-get install build-essential libssl-dev libffi-dev \
+    python3-dev cargo -y && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo 'Asia/Shanghai' >/etc/timezone && \
     pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./app /code/app
