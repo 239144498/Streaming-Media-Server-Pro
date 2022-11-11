@@ -43,8 +43,9 @@ def mysql_connect_test():
         print(DBconnect.ping())
         logger.success("mysql已连接")
         return DBconnect, True
-    except pymysql.err.OperationalError:
+    except pymysql.err.OperationalError as e:
         DBconnect = None
+        logger.error(e)
         logger.error("mysql连接失败")
         return DBconnect, False
 
