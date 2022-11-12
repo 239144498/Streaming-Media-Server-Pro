@@ -15,7 +15,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.conf import config
 from app.common.costum_logging import InterceptHandler, format_record
-from .a4gtv.tasks import gotask, sqltask
+from .a4gtv.tasks import gotask, sqltask, filetask  #新增文件删除模块
 from .v2 import v2
 from ..conf.config import DEBUG
 from ..scheams.response import Response200
@@ -67,8 +67,10 @@ async def startup():
     # cron表达式
     # 0 0 * * 0-6 每天凌晨执行一次 更新epg
     # 0 * * * * 每1小时执行一次 清理缓存
+    # */10 * * * * 每10分钟执行一次 清理缓存的视频文件
     scheduler.add_job(gotask, CronTrigger.from_crontab("0 0 * * 0-6"), max_instances=2, misfire_grace_time=120)
     scheduler.add_job(sqltask, CronTrigger.from_crontab("0 * * * *"), max_instances=3, misfire_grace_time=120)
+    scheduler.add_job(filetask, CronTrigger.from_crontab("*/10 * * * *"), max_instances=3, misfire_grace_time=120)
     logger.info(scheduler.get_jobs())
     logger.info("已开启定时任务")
     scheduler.start()
