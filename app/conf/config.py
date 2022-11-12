@@ -49,6 +49,8 @@ class Config(BaseSettings):
     ROOT = Path(__file__).parent.parent  # .app
 
     LOG_DIR = ROOT / "log"
+    
+    datadir = os.path.join(ROOT,'data')
 
     count = 0
 
@@ -140,5 +142,10 @@ if localhost and "http" not in localhost:
 HD = {
     "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
 }
+
+
+
+
+
 
 logger.info("配置加载完成")
