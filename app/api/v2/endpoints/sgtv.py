@@ -18,9 +18,6 @@ from app.db.DBtools import DBconnect, sqlState
 from app.scheams.api_model import Clarity, Channels
 from app.scheams.response import Response200, Response400
 
-from app.db.localfile import vfile    # 新增本地文件处理模块
-from loguru import logger
-
 sgtv = APIRouter(tags=["4GTV"])
 
 
@@ -37,8 +34,7 @@ async def online(
     - **hd**: 清晰度
     """
     if default_cfg['defaultdb'] == "" or sqlState is False:
-        #return Response200(msg="此功能禁用，请连接数据库")
-        logger.warning("未连接数据库，将使用硬盘缓存")
+        return Response200(msg="此功能禁用，请连接数据库")
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
     t = idata[fid].get("lt", 0) - now_time()
@@ -146,8 +142,7 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     读取数据库ts片响应给客户端，采用多线程下载ts片，加载视频没有等待时长！
     """
     if default_cfg['defaultdb'] == "" or sqlState is False:
-        #return Response200(msg="此功能禁用，请连接数据库")        
-        logger.debug("未连接数据库，将使用硬盘缓存")
+        return Response200(msg="此功能禁用，请连接数据库")
     logger.info(f"{fid} {seq}")
     if not (fid in idata):
         return Response200(msg="NOT FOUND " + fid)
@@ -157,19 +152,12 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
         background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, None)
     elif default_cfg.get("downchoose") == "local":
         background_tasks.add_task(backtasklocal, url, fid, seq, hd, begin, None)
-        logger.debug('启动后台任务backtasklocal')
     for i in range(1, 10):
-        logger.debug(f"第{i}次尝试获取{ vname }")
+        logger.info(f"第{i}次尝试获取{get.filename.get(vname)}")
         if get.filename.get(vname) and get.filename.get(vname) != 0:
-            # 从mysql数据库加载
-            if default_cfg.get("defaultdb") == "mysql":
-                sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
-                content = DBconnect.fetchone(sql)
-                return Response(content=content['vcontent'], status_code=200, headers=headers)
-            # 从本地文件夹加载
-            else:
-                content = vfile.file_get(vname)
-                return Response(content=content, status_code=200, headers=headers)
+            sql = "SELECT vcontent FROM video where vname='{}'".format(vname)
+            content = DBconnect.fetchone(sql)
+            return Response(content=content['vcontent'], status_code=200, headers=headers)
         else:
             await asyncio.sleep(1 + i * 0.095)
     return Response400(msg="NOT FOUND " + vname)
