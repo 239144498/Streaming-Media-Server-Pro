@@ -17,6 +17,7 @@ from app.common.header import random_header
 from app.conf.config import repoowner, repoaccess_token, repoState, idata, default_cfg, localhost, vbuffer, \
     HD, mysql_cfg, downurls
 from app.db.DBtools import redisState, cur, DBconnect
+from app.db.localfile import vfile    # 新增本地文件处理模块
 
 
 class container:
@@ -234,6 +235,7 @@ def backtasklocal(url, fid, seq, hd, begin, host):
         get.filename.update({tsname: 0})
         herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
         t = Thread(target=downvideo, args=(herf, tsname))
+        logger.info('启动downvideo完成')
         threads.append(t)
     for index, element in enumerate(threads):
         element.start()
@@ -253,13 +255,23 @@ def downvideo(url: str, filepath: str):
     }
     a = time.time()
     repo = str(datetime.date.today())
+    logger.debug('开始下载视频')
     with requests.get(url=url, headers=header, timeout=10) as res:
         status = res.status_code
         print(status)
         content = res.content
+        logger.debug('完成下载视频')
         b = time.time()
-        sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
-        a1 = DBconnect.execute(sql, (filepath, content, len(content)))  # 执行sql语句
+        # 保存到mysql数据库
+        if default_cfg.get("defaultdb") == "mysql":
+            sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
+            a1 = DBconnect.execute(sql, (filepath, content, len(content)))  # 执行sql语句
+        
+        # 保存到本地硬盘
+        else:
+            a1 = vfile.file_store(filepath,content)
+            logger.debug('保存视频完成')
+            
         get.filename.update({filepath: 1})
         c = time.time()
         return {
