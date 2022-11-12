@@ -21,7 +21,10 @@ class MySQLConnect(object):
             password=config['password'],
             db=config['database'],
             cursorclass=cursorclass,
-            charset=config['charset']
+            charset=config['charset'],
+            connect_timeout = 5,  # 连接超时秒数
+            read_timeout = 10,  # 读取超时秒数
+            write_timeout  = 10  # 写入超时秒数
         )
         self.connection.autocommit(True)
 
