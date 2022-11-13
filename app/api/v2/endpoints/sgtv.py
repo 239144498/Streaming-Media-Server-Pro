@@ -7,11 +7,10 @@
 import asyncio
 
 from fastapi import APIRouter, Query, Response
-from loguru import logger
 from fastapi.background import BackgroundTasks
 from fastapi.responses import StreamingResponse, RedirectResponse
-from app.api.a4gtv.tools import generate_m3u, now_time
-from app.api.a4gtv.utile import get, backtaskonline, backtasklocal
+from app.plugins.a4gtv import generate_m3u, now_time
+from app.plugins.a4gtv.utile import get, backtaskonline, backtasklocal
 from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect, sqlState

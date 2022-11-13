@@ -7,12 +7,13 @@
 import asyncio
 from loguru import logger
 
-from app.api.a4gtv.generateEpg import generateprog, postask
+from app.plugins.a4gtv.generateEpg import generateprog, postask
 from app.common.gitrepo import agit
 from app.conf import config
 from app.conf.config import gdata, xmlowner, xmlaccess_token, xmlrepo, repoState
-from app.api.a4gtv.utile import get
-from app.db.localfile import vfile    # 新增本地文件处理模块
+from app.plugins.a4gtv.utile import get
+from app.db.localfile import vfile  # 新增本地文件处理模块
+
 
 def gotask():
     get.filename.clear()
@@ -48,6 +49,7 @@ def sqltask():
                 _.update({element: get.filename.get(element)})
         get.filename = _
     logger.success("get.filename 删除完成")
+
 
 def filetask():
     # 保留最近3分钟的视频文件，避免占用过多磁盘空间

@@ -1,13 +1,12 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-import asyncio
 import re
 import json
 from urllib.parse import urljoin
 
 from loguru import logger
 
-from app.api.a4gtv.tools import get_4gtv, now_time
+from app.plugins.a4gtv.tools import get_4gtv, now_time
 from app.common.header import random_header
 from app.common.request import request
 from app.conf.config import data3, edata

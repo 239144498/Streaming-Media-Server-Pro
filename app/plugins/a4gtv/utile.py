@@ -10,14 +10,14 @@ from urllib.parse import urlparse, urljoin
 import requests
 from loguru import logger
 from app.conf.config import config
-from app.api.a4gtv.endecrypt import get4gtvurl
-from app.api.a4gtv.tools import genftlive, now_time, generate_url, solvelive
+from app.plugins.a4gtv.endecrypt import get4gtvurl
+from app.plugins.a4gtv.tools import genftlive, now_time, generate_url, solvelive
 from app.common.gitrepo import agit, request
 from app.common.header import random_header
 from app.conf.config import repoowner, repoaccess_token, repoState, idata, default_cfg, localhost, vbuffer, \
     HD, mysql_cfg, downurls
 from app.db.DBtools import redisState, cur, DBconnect
-from app.db.localfile import vfile    # 新增本地文件处理模块
+from app.db.localfile import vfile  # 新增本地文件处理模块
 
 
 class container:
@@ -258,7 +258,7 @@ def downvideo(url: str, filepath: str):
     logger.debug('开始下载视频')
     with requests.get(url=url, headers=header, timeout=10) as res:
         status = res.status_code
-        print(status)
+        # print(status)
         content = res.content
         logger.debug('完成下载视频')
         b = time.time()
@@ -266,12 +266,12 @@ def downvideo(url: str, filepath: str):
         if default_cfg.get("defaultdb") == "mysql":
             sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
             a1 = DBconnect.execute(sql, (filepath, content, len(content)))  # 执行sql语句
-        
+
         # 保存到本地硬盘
         else:
-            a1 = vfile.file_store(filepath,content)
-            logger.debug('保存视频完成')
-            
+            a1 = vfile.file_store(filepath, content)
+        logger.debug('保存视频完成')
+
         get.filename.update({filepath: 1})
         c = time.time()
         return {
