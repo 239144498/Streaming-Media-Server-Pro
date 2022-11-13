@@ -15,7 +15,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.conf import config
 from app.common.costum_logging import InterceptHandler, format_record
-from app.plugins.a4gtv import gotask, sqltask, filetask  #新增文件删除模块
+from app.plugins.a4gtv.tasks import gotask, sqltask, filetask  #新增文件删除模块
 from .v2 import v2
 from ..conf.config import DEBUG
 from ..scheams.response import Response200
