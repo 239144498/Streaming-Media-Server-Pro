@@ -18,9 +18,11 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 *并且拥有免费且流畅的观看体验。*
 
 ---
-### &emsp;&emsp;_NEW_ 最新版来了，新增对任意视频网站的视频流代理功能，解决了播放不同视频网站的跨域等问题。
+### &emsp;&emsp;_NEW_ 最新版来了，增加了对online接口本地缓存支持，项目增加模块化拓展，欢迎大家PR。
 
-### &emsp;&emsp;最新版对程序结构性进行了重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理和channel3接口，程序所有功能已基本完善，各位可否点亮star⭐。
+### &emsp;&emsp;新增对任意视频网站的视频流代理功能，解决了播放不同视频网站的跨域等问题。
+
+### &emsp;&emsp;新增对程序结构性进行重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理和channel3接口，程序所有功能已基本完善，各位可否点亮star⭐。
 
 ---
 
@@ -97,7 +99,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 公益视频网站
 ---
 
-后端对接的项目接口，可以在线观看接口内的所有电视。
+后端对接的本项目接口，可以在线观看接口内的所有电视。
 
 https://player.naihe.cf  
 
@@ -108,21 +110,21 @@ https://player.naihe.cf
 核心功能
 ---
 
+- 高效流媒体（具有缓冲区）
 - 代理任意视频网站的视频流【_NEW_】
 - 生成m3u文件
 - 生成m3u8文件
-- 视频中转（具有缓冲区）
-- 异步下载视频
+- 异步下载流
 - 流媒体转发
 - 生成[EPG节目单](https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml) 每日实时更新
-- 分布式处理ts片段
+- 分布式处理ts片
 - Redis缓存参数
-- MySql或PostgreSql缓存视频
+- MySql缓存数据
 - 正向代理请求
-- 自定义增加节目频道
+- 自定义节目频道
 - 自定义电视台标
-- 清晰度可自定义
-- 反向代理或套CDN请求（负载均衡）
+- 自定义清晰度
+- 支持反向代理或使用CDN（负载均衡）
 
 程序接口指南
 ---
@@ -134,9 +136,7 @@ https://player.naihe.cf
 
 <img src="https://ik.imagekit.io/naihe/github/1.png" title="播放效果" alt=""/>
 
-<img height="600" src="https://ik.imagekit.io/naihe/github/2.png" title="频道表" alt=""/>
-
-<img height="600" src="https://ik.imagekit.io/naihe/github/3.png" title="节目单" alt=""/>
+<img height="600" src="https://ik.imagekit.io/naihe/github/4.png" title="节目单&频道表" alt=""/>
 
 原理介绍
 ---
