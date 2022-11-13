@@ -13,12 +13,13 @@ from app.plugins.a4gtv.tools import generate_m3u, now_time
 from app.plugins.a4gtv.utile import get, backtaskonline, backtasklocal
 from app.common.request import request
 from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
-from app.db.DBtools import DBconnect, sqlState
+from app.db.DBtools import DBconnect
 from app.scheams.api_model import Clarity, Channels
 from app.scheams.response import Response200, Response400
 
-from app.db.localfile import vfile    # 新增本地文件处理模块
+from app.db.localfile import vfile  # 新增本地文件处理模块
 from loguru import logger
+
 
 sgtv = APIRouter(tags=["4GTV"])
 
@@ -35,9 +36,9 @@ async def online(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    if default_cfg['defaultdb'] == "" or sqlState is False:
-        #return Response200(msg="此功能禁用，请连接数据库")
-        logger.warning("未连接数据库，将使用硬盘缓存")
+    # if default_cfg['defaultdb'] == "" or sqlState is False:
+    #     #return Response200(msg="此功能禁用，请连接数据库")
+    #     logger.warning("未连接数据库，将使用硬盘缓存")
     if not (fid in idata):
         return Response400(data=f"Not found {fid}", code=404)
     t = idata[fid].get("lt", 0) - now_time()
@@ -144,9 +145,9 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     """
     读取数据库ts片响应给客户端，采用多线程下载ts片，加载视频没有等待时长！
     """
-    if default_cfg['defaultdb'] == "" or sqlState is False:
-        #return Response200(msg="此功能禁用，请连接数据库")        
-        logger.debug("未连接数据库，将使用硬盘缓存")
+    # if default_cfg['defaultdb'] == "" or sqlState is False:
+    #     #return Response200(msg="此功能禁用，请连接数据库")
+    #     logger.debug("未连接数据库，将使用硬盘缓存")
     logger.info(f"{fid} {seq}")
     if not (fid in idata):
         return Response200(msg="NOT FOUND " + fid)
