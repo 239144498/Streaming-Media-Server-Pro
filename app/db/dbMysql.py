@@ -138,8 +138,8 @@ def init_database(cursorclass=DictCursor):
     }
     mysql = MySQLConnect(cursorclass, mysql_config)
     sql = "select count(1) cnt from information_schema.TABLES where TABLE_SCHEMA='media' and TABLE_NAME='video'"
-    result = mysql.fetchone(sql)    
-    
+    result = mysql.fetchone(sql)
+
     if result['cnt']:
         logger.info("video表已存在")
     else:
@@ -149,7 +149,7 @@ def init_database(cursorclass=DictCursor):
             cursor.execute('SET GLOBAL event_scheduler = ON')
             cursor.execute('DROP event IF EXISTS media.auto_delete')
             cursor.execute('CREATE EVENT media.auto_delete ON SCHEDULE EVERY 30 minute DO TRUNCATE video')
-        
+
     return '初始化数据库表完成'
 
 if __name__ == '__main__':
