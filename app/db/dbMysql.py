@@ -29,7 +29,7 @@ class MySQLConnect(object):
         self.connection.autocommit(True)
 
     def ping(self):
-        self.connection.ping(reconnect=True)  # ping 校验连接是否异常
+        self.connection.ping(reconnect=True)
 
     @contextlib.contextmanager
     def cursor(self, cursor=None):
