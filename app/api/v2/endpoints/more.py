@@ -35,7 +35,7 @@ async def diychannel():
 
 
 @more.get('/proxy', summary="代理任意m3u8")
-async def online1(request: Request, url: str = Query(..., regex=config.url_regex)):
+async def proxy(request: Request, url: str = Query(..., regex=config.url_regex)):
     """
     可代理任意m3u8链接，解决网站播放其他域名链接出现的跨域问题，解决封锁地区问题等等
     - **url**: m3u8链接
@@ -59,7 +59,7 @@ async def online1(request: Request, url: str = Query(..., regex=config.url_regex
 
 
 @more.get('/pdl/{url:path}', summary="代理下载")
-async def online1(request: Request, url: str = Query(..., regex=config.url_regex)):
+async def pdl(request: Request, url: str = Query(..., regex=config.url_regex)):
     """
     可代理任意m3u8链接，解决网站播放其他域名链接出现的跨域问题，解决封锁地区问题等等
     - **url**: 视频链接
