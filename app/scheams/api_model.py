@@ -8,10 +8,10 @@ from enum import Enum
 
 
 class Clarity(str, Enum):
-    f = "360"  # 流畅 360P
-    s = "480"  # 标准 480P
-    c = "720"  # 高清 720P
-    h = "1080"  # 超清 1080P
+    f = "360"
+    s = "480"
+    c = "720"
+    h = "720"
 
 
 class Channels(str, Enum):

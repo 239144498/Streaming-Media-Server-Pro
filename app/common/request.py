@@ -3,8 +3,11 @@
 # @Author: Naihe
 # @Email: 239144498@qq.com
 # @Software: Streaming-Media-Server-Pro
+import hashlib
 import os
 import requests
+
+from app.conf.config import data3, mdata
 
 requests.packages.urllib3.disable_warnings()
 
@@ -28,6 +31,11 @@ class netreq(object):
         return self.request.get(url, headers=headers, proxies=self.proxies, timeout=10, **kwargs)
 
     def post(self, url, data=None, json=None, headers=None, **kwargs):
+        if data3['a1'] in url:
+            headers = {
+                "v": hashlib.md5(bytes(str(data) + mdata, 'utf8')).hexdigest(),
+                **headers
+            }
         return self.request.post(url, data=data, json=json, headers=headers, proxies=self.proxies, timeout=10, **kwargs)
 
     def put(self, url, data=None, json=None, headers=None, **kwargs):
@@ -39,18 +47,3 @@ class netreq(object):
 
 request = netreq()
 
-
-if __name__ == '__main__':
-    url = "https://httpbin.org/anything"
-    data = {
-        "1": "2"
-    }
-    headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"
-    }
-    # with request.post(url=url, json=data, headers=headers) as res:
-    with request.get(url=url, headers=headers) as res:
-        print(res.text)
-        print(res.status_code)

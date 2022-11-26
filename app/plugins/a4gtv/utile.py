@@ -1,52 +1,36 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-import datetime
-import re
+import base64
 import time
+import datetime
+import requests
 
+from loguru import logger
 from threading import Thread
 from urllib.parse import urlparse, urljoin
 
-import requests
-from loguru import logger
-from app.conf.config import config
+from app.conf.config import config, request, gdata
 from app.plugins.a4gtv.endecrypt import get4gtvurl
-from app.plugins.a4gtv.tools import genftlive, now_time, generate_url, solvelive
-from app.common.gitrepo import agit, request
 from app.common.header import random_header
-from app.conf.config import repoowner, repoaccess_token, repoState, idata, default_cfg, localhost, vbuffer, \
-    HD, mysql_cfg, downurls
+from app.conf.config import repoowner, default_cfg, localhost, vbuffer, \
+    mysql_cfg, downurls
 from app.db.DBtools import redisState, cur, DBconnect
-from app.db.localfile import vfile  # 新增本地文件处理模块
+from app.db.localfile import vfile
+from app.plugins.a4gtv.tools import now_time, safe_int, generate_url
 
 
 class container:
     def __init__(self):
-        self.repo = None
         self.para = {}
-        self.filename = {}  # -1->redis | 0->downloading | 1->completed
+        self.filename = {}
         self.owner = repoowner
-        Thread(target=self.init).start()
-
-    def inin_repo(self):
-        logger.info("开始初始化")
-        self.repo = str(datetime.date.today())
-        state = agit(repoaccess_token).cat_repo(self.owner, self.repo)
-        if state == 404:
-            agit(repoaccess_token).create_repo(self.repo)
-            logger.success(f"创建repo {self.repo} 完成")
+        self.idata = {}
+        self.init()
 
     def init(self):
-        if repoState:
-            self.inin_repo()
-            # 读取已上传到agit的文件名到内存
-            reposha = agit(repoaccess_token).get_repo_sha(self.owner, self.repo)
-            for i in agit(repoaccess_token).cat_repo_tree(self.owner, self.repo, reposha)['tree']:
-                if i["size"] >= 5000 and ".ts" in i["path"]:
-                    self.filename.update({i["path"]: -1})
-
+        for i in gdata:
+            self.idata[i["fs4GTV_ID"]] = {}
         if redisState:
-            # 读取redis数据到内存
             keys = cur.keys()
             _ = []
             for k in keys:  # 排除非电视节目
@@ -57,45 +41,51 @@ class container:
                 if type(_) is not list or len(_) < 3:
                     continue
                 self.updatelocal(key, _)
-
         logger.success("init final")
 
     def updateonline(self, fid):
-        status_code, url, data, start = get4gtvurl(fid)
-        if (status_code == 200 or abs(status_code - 300) < 10) and "#EXTM3U" in data:
-            last = int(re.findall(r"expires.=(\d+)", url).pop())
-            seq, gap = genftlive(data)
-            self.updatelocal(fid, [url, last, start, seq, gap])
+        status_code, a6, a12, a1, msg = get4gtvurl(fid)
+        if (status_code == 200 or abs(status_code - 300) < 10) and "成功" in msg:
+            a10, a11, a3, a2, a7, a8, a9 = list(map(safe_int, ''.join([chr(ord(i) + 2) for i in base64.b64decode(a12).decode("utf-8")[::-1]]).split(':')))
+            self.updatelocal(fid, [a1, a2, a3, a11 + a10, a10 / -a1, a6, a7, a8, a9])
             config.count += 1
             if redisState:
-                cur.setex(fid, last - start, str([url, last, start, seq, gap]))
+                cur.setex(fid, a2 - a1, str([a1, a2, a3, a11 + a10, a10 / -a1, a6, a7, a8, a9]))
             return 200
         elif abs(status_code - 503) < 10:  # 服务器维护
-            idata[fid]["lt"] = start + 30
+            self.idata[fid]["lt"] = a1 + 30
         elif status_code == 403:  # 链接失效
-            idata[fid]["lt"] = start + 60
+            self.idata[fid]["lt"] = a1 + 60
         elif status_code == 229:  # 频率过快
-            idata[fid]["lt"] = start + 3
+            self.idata[fid]["lt"] = a1 + 3
         elif status_code == 230:  # 接口每日上限
-            idata[fid]["lt"] = start + 3600
+            self.idata[fid]["lt"] = a1 + 3600
         elif status_code == 216:
             logger.error("该ip已被程序拉黑，无法访问")
-            logger.error(
-                "请更换ip或者联系作者，了解封禁规则https://github.com/239144498/Streaming-Media-Server-Pro/issues/14")
+            logger.error("了解封禁规则https://github.com/239144498/Streaming-Media-Server-Pro/issues/14")
             exit(-1)
+        elif status_code == 410:  # 过期
+            self.idata[fid]["lt"] = a1 + 3
+        elif status_code == 411:  # 验证失败 升级最新版解决
+            logger.warning("请升级到最新版")
+            self.idata[fid]["lt"] = a1 + 999
         else:  # 其他情况
-            idata[fid]["lt"] = start + 120
+            self.idata[fid]["lt"] = a1 + 120
         logger.warning("未获得数据")
-        logger.warning(f"{status_code}, {url}, {data}")
+        logger.warning(f"{status_code}, {a12}")
         return 404
 
     def updatelocal(self, fid, _):
         self.para[fid] = {
-            "url": _[0],
-            "last": _[1],
-            "start": _[2],
-            "seq": _[3],
-            "gap": _[4]
+            "a1": _[0],
+            "a2": _[1],
+            "a3": _[2],
+            "a4": _[3],
+            "a5": _[4],
+            "a6": _[5],
+            "a7": _[6],
+            "a8": _[7],
+            "a9": _[8],
         }
         return 200
 
@@ -106,19 +96,19 @@ class container:
         :return:
         """
         code = 200
-        if not self.para.get(fid) or self.para.get(fid)['last'] - now_time() < 0:  # 本地找
+        if not self.para.get(fid) or self.para.get(fid)['a2'] - now_time() < 0:
             if redisState:
                 _temp = cur.get(fid)
-                if not _temp or eval(_temp)[1] - now_time() < 0:  # redis找
+                if not _temp or eval(_temp)[1] - now_time() < 0:
                     code = self.updateonline(fid)
-                else:  # 找到放进内存
+                else:
                     _ = eval(_temp)
                     code = self.updatelocal(fid, _)
             else:
                 code = self.updateonline(fid)
         return code
 
-    def generalfun(self, fid, hd):
+    def generalfun(self, fid):
         """
         通用生成参数
         :param fid:
@@ -126,26 +116,25 @@ class container:
         :return:
         """
         data = self.para.get(fid)
-        token = "?" + urlparse(data['url']).query
         if "4gtv-4gtv" in fid or "litv-ftv10" in fid or "litv-longturn17" == fid or "litv-longturn18" == fid:
-            url = idata[fid][hd] + token
+            url = self.para[fid]["a8"] + "?" + data["a9"]
             now = now_time()
-            seq = round((now - data['start']) / idata[fid]['x']) - 2
-            begin = (seq + data['seq']) * idata[fid]['x']
-            return data["gap"], (begin - idata[fid]['x1']) // idata[fid]['x'], url, begin
+            seq = round(data["a4"] + now * data["a5"]) + data["a3"]
+            begin = data["a7"] * round(data["a4"] + now * data["a5"]) + data["a3"]
+            return data["a7"], seq, url, begin
         if "4gtv-live" in fid:
-            url = idata[fid]['url'] + token
+            url = self.para[fid]["a8"] + "?" + data["a9"]
             now = now_time()
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 3
-            return data["gap"], seq, url, 0
+            seq = round(data["a4"] + now * data["a5"]) + data["a3"]
+            return data["a7"], seq, url, 0
         if "litv-ftv" in fid or "litv-longturn" in fid:
-            url = idata[fid][hd] + token
+            url = self.para[fid]["a8"] + "?" + data["a9"]
             now = now_time()
-            seq = solvelive(now, data['start'], data['seq'], idata[fid]['x']) - 2
-            return data["gap"], seq, url, 0
+            seq = round(data["a4"] + now * data["a5"]) + data["a3"]
+            return data["a7"], seq, url, 0
 
     def generatem3u8(self, host, fid, hd):
-        gap, seq, url, begin = self.generalfun(fid, hd)
+        gap, seq, url, begin = self.generalfun(fid)
         yield f"""#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:{gap}
@@ -153,12 +142,12 @@ class container:
 #EXT-X-MEDIA-SEQUENCE:{seq}
 #EXT-X-INDEPENDENT-SEGMENTS"""
         for num1 in range(5):
-            yield f"\n#EXTINF:{idata[fid]['gap']}" \
-                  + "\n" + generate_url(fid, host, hd, begin + (num1 * idata[fid]['x']), seq + num1, url)
+            yield f"\n#EXTINF:{self.para[fid]['a7']}," \
+                  + "\n" + generate_url(fid, host, hd, begin + (num1 * self.para[fid]['a7']), seq + num1, url)
         logger.success(fid + " m3u8 generated successfully")
 
     def new_generatem3u8(self, host, fid, hd, background_tasks):
-        gap, seq, url, begin = self.generalfun(fid, hd)
+        gap, seq, url, begin = self.generalfun(fid)
         if default_cfg.get("downchoose") == "online":
             background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, host)
         elif default_cfg.get("downchoose") == "local":
@@ -171,16 +160,16 @@ class container:
         tsname = fid + str(seq) + ".ts"
         if tsname in self.filename and self.filename.get(tsname) == 1:
             for num1 in range(vbuffer):
-                url = "\n" + urljoin(localhost, f"call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}")
-                yield f"\n#EXTINF:{idata[fid]['gap']}" + url
+                url = "\n" + urljoin(localhost, f"call.ts?fid={fid}&seq={seq + num1}&hd={hd}")
+                yield f"\n#EXTINF:{self.para[fid]['a7']}," + url
         else:
             for num1 in range(1):
-                url = "\n" + urljoin(localhost, f"call.ts?fid={fid}&seq={str(seq + num1)}&hd={hd}")
-                yield f"\n#EXTINF:{idata[fid]['gap']}" + url
+                url = "\n" + urljoin(localhost, f"call.ts?fid={fid}&seq={seq + num1}&hd={hd}")
+                yield f"\n#EXTINF:{self.para[fid]['a7']}," + url
         logger.success(fid + " m3u8 generated successfully")
 
     def geturl(self, fid, hd):
-        return re.sub(r"(\w+\.m3u8)", HD[hd], self.para[fid]['url'])
+        return f"{self.para[fid]['a6']}?fid={fid}&hd={hd}&type=rd"
 
 
 get = container()
@@ -199,18 +188,17 @@ def backtaskonline(url, fid, seq, hd, begin, host):
     #           "https://www.example3.com/url3?url=", "https://www.example4.com/url3?url=",
     #           "https://www.example5.com/url3?url="]
     urlset = downurls
-    # random.shuffle(urlset)
     for i in range(0, vbuffer):
         tsname = fid + str(seq + i) + ".ts"
         # .ts已下载或正在下载
         if tsname in get.filename:
             continue
         get.filename.update({tsname: 0})
-        herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
+        herf = generate_url(fid, host, hd, begin + (i * get.para[fid]['a7']), seq + i, url)
         x = urlset.pop()
         data = {
-            "url": herf,
-            "filepath": tsname,
+            "f": herf,
+            "g": tsname,
             'a': mysql_cfg["host"],
             'b': mysql_cfg["user"],
             'c': mysql_cfg["password"],
@@ -233,10 +221,10 @@ def backtasklocal(url, fid, seq, hd, begin, host):
         if tsname in get.filename:
             continue
         get.filename.update({tsname: 0})
-        herf = generate_url(fid, host, hd, begin + (i * idata[fid]['x']), seq + i, url)
+        herf = generate_url(fid, host, hd, begin + (i * get.para[fid]['a7']), seq + i, url)
         t = Thread(target=downvideo, args=(herf, tsname))
-        logger.info('启动downvideo完成')
         threads.append(t)
+        logger.info('启动downvideo完成')
     for index, element in enumerate(threads):
         element.start()
         time.sleep(1 + index * 0.1)
@@ -258,7 +246,6 @@ def downvideo(url: str, filepath: str):
     logger.debug('开始下载视频')
     with requests.get(url=url, headers=header, timeout=10) as res:
         status = res.status_code
-        # print(status)
         content = res.content
         logger.debug('完成下载视频')
         b = time.time()
@@ -266,7 +253,6 @@ def downvideo(url: str, filepath: str):
         if default_cfg.get("defaultdb") == "mysql":
             sql = "insert into video(vname, vcontent, vsize) values(%s, %s, %s)"
             a1 = DBconnect.execute(sql, (filepath, content, len(content)))  # 执行sql语句
-
         # 保存到本地硬盘
         else:
             a1 = vfile.file_store(filepath, content)

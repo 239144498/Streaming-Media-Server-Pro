@@ -1,5 +1,3 @@
-#EXTINF:-1 tvg-id="" group-title="其他",周星星粤语经典版
-http://txtest-xp2p.p2p.huya.com/src/1250011-1250011-5368756364640256-2777036638-10057-A-0-1.xs
 #EXTINF:-1 tvg-id="CCTV1.cn" status="online",CCTV-1综合 (1080p)
 http://39.134.115.163:8080/PLTV/88888910/224/3221225618/index.m3u8
 #EXTINF:-1 tvg-id="CCTV1.cn" status="online",CCTV-1综合 (1080p)

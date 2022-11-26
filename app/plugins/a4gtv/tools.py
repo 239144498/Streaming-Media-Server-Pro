@@ -1,23 +1,22 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
-import re
 import time
 
 from loguru import logger
+from urllib.parse import urljoin
 
 from app.common.request import request
 from app.conf.config import gdata, host1, host2, tvglogo
-from urllib.parse import urljoin
+
+
+def safe_int(s):
+    try:
+        return int(s)
+    except ValueError:
+        return s
 
 
 def generate_m3u(host, hd, name):
-    """
-    构造 m3u 数据
-    :param host:
-    :param hd:
-    :param name: online | channel | channel2
-    :return:
-    """
     yield '#EXTM3U x-tvg-url=""\n'
     for i in gdata:
         # tvg-ID="" 频道id匹配epg   fsLOGO_MOBILE 台标 | fsHEAD_FRAME 播放预览
@@ -40,18 +39,6 @@ def get_4gtv(url):
     }
     with request.get(url=url, headers=header) as res:
         return res.text
-
-
-def solvelive(now, t1, t2, gap):
-    x = now - t1
-    seq = round(t2 + x // gap)
-    return seq
-
-
-def genftlive(data):
-    seq = re.findall(r"#EXT-X-MEDIA-SEQUENCE:(\d+)\n", data).pop()
-    gap = re.findall(r"#EXT-X-TARGETDURATION:(\d+)\n", data).pop()
-    return int(seq), int(gap)
 
 
 def generate_url(fid, host, hd, begin, seq, url):

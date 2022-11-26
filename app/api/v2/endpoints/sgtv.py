@@ -12,12 +12,12 @@ from fastapi.responses import StreamingResponse, RedirectResponse
 from app.plugins.a4gtv.tools import generate_m3u, now_time
 from app.plugins.a4gtv.utile import get, backtaskonline, backtasklocal
 from app.common.request import request
-from app.conf.config import default_cfg, idata, localhost, host2, host1, headers, headers2
+from app.conf.config import default_cfg, localhost, host2, host1, headers, headers2
 from app.db.DBtools import DBconnect
 from app.scheams.api_model import Clarity, Channels
 from app.scheams.response import Response200, Response400
 
-from app.db.localfile import vfile  # 新增本地文件处理模块
+from app.db.localfile import vfile
 from loguru import logger
 
 
@@ -36,17 +36,14 @@ async def online(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    # if default_cfg['defaultdb'] == "" or sqlState is False:
-    #     #return Response200(msg="此功能禁用，请连接数据库")
-    #     logger.warning("未连接数据库，将使用硬盘缓存")
-    if not (fid in idata):
+    if fid not in get.idata:
         return Response400(data=f"Not found {fid}", code=404)
-    t = idata[fid].get("lt", 0) - now_time()
+    t = get.idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
     code = get.check(fid)
     if code != 200:
-        return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
+        return Response400(data=f"{fid} 频道暂不可用，请过 {get.idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     return Response("".join((i for i in get.new_generatem3u8(host, fid, hd, background_tasks))), 200, headers=headers2)
 
 
@@ -62,14 +59,14 @@ async def channel1(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    if not (fid in idata):
+    if fid not in get.idata:
         return Response400(data=f"Not found {fid}", code=404)
-    t = idata[fid].get("lt", 0) - now_time()
+    t = get.idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
     code = get.check(fid)  # 檢查是否出错
     if code != 200:
-        return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
+        return Response400(data=f"{fid} 频道暂不可用，请过 {get.idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     return Response("".join((i for i in get.generatem3u8(host or "239144498@qq.com", fid, hd))), 200, headers=headers2)
 
 
@@ -84,14 +81,14 @@ async def channel2(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    if not (fid in idata):
+    if fid not in get.idata:
         return Response400(data=f"Not found {fid}", code=404)
-    t = idata[fid].get("lt", 0) - now_time()
+    t = get.idata[fid].get("lt", 0) - now_time()
     if t > 0:  # 冷卻期
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
     code = get.check(fid)  # 檢查是否出错
     if code != 200:
-        return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
+        return Response400(data=f"{fid} 频道暂不可用，请过 {get.idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     host = host or host2 if "4gtv-live" in fid else host1
     return RedirectResponse(f"channel.m3u8?fid={fid}&hd={hd}&host={host}", status_code=302)
 
@@ -106,14 +103,14 @@ async def channel3(
     - **fid**: 频道id
     - **hd**: 清晰度
     """
-    if not (fid in idata):
+    if fid not in get.idata:
         return Response400(data=f"Not found {fid}", code=404)
-    t = idata[fid].get("lt", 0) - now_time()
+    t = get.idata[fid].get("lt", 0) - now_time()
     if t > 0:
         return Response400(data=f"{fid} 频道暂不可用，请过 {t} 秒后重试", code=405)
     code = get.check(fid)  # 檢查是否出错
     if code != 200:
-        return Response400(data=f"{fid} 频道暂不可用，请过 {idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
+        return Response400(data=f"{fid} 频道暂不可用，请过 {get.idata[fid].get('lt', 0) - now_time()} 秒后重试", code=406)
     return RedirectResponse(get.geturl(fid, hd), status_code=307)
 
 
@@ -149,10 +146,10 @@ async def call(background_tasks: BackgroundTasks, fid: str, seq: str, hd: str):
     #     #return Response200(msg="此功能禁用，请连接数据库")
     #     logger.debug("未连接数据库，将使用硬盘缓存")
     logger.info(f"{fid} {seq}")
-    if not (fid in idata):
-        return Response200(msg="NOT FOUND " + fid)
+    if fid not in get.idata:
+        return Response400(data=f"Not found {fid}", code=404)
     vname = fid + str(seq) + ".ts"
-    gap, seq, url, begin = get.generalfun(fid, hd)
+    gap, seq, url, begin = get.generalfun(fid)
     if default_cfg.get("downchoose") == "online":
         background_tasks.add_task(backtaskonline, url, fid, seq, hd, begin, None)
     elif default_cfg.get("downchoose") == "local":

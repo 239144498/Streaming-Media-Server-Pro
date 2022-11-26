@@ -17,13 +17,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 *想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，*
 *并且拥有免费且流畅的观看体验。*
 
----
-### &emsp;&emsp;_NEW_ 最新版来了，增加了对online接口本地缓存支持，项目增加模块化拓展，欢迎大家PR。
-
-### &emsp;&emsp;新增对任意视频网站的视频流代理功能，解决了播放不同视频网站的跨域等问题。
-
-### &emsp;&emsp;新增对程序结构性进行重构，网络请求改为异步+生成器方式，性能得到大幅提高；并且新增了日志管理和channel3接口，程序所有功能已基本完善，各位可否点亮star⭐。
-
+[更新日志](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
 ---
 
 目录

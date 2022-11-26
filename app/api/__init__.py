@@ -4,6 +4,7 @@
 # @Email   : 239144498@qq.com
 # @File    : __init__.py
 # @Software: PyCharm
+import base64
 import sys
 import logging
 
@@ -15,7 +16,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.conf import config
 from app.common.costum_logging import InterceptHandler, format_record
-from app.plugins.a4gtv.tasks import gotask, sqltask, filetask  # 新增文件删除模块
+from app.plugins.a4gtv.tasks import gotask, sqltask, filetask
 from .v2 import v2
 from ..conf.config import DEBUG
 from ..scheams.response import Response200
@@ -32,8 +33,7 @@ def init_app():
     logging.getLogger().handlers = [InterceptHandler()]
     logger.configure(handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}])
     logger.add(config.LOG_DIR / "日志文件.log", encoding='utf-8', rotation="0:00", enqueue=True, serialize=False,
-               retention="7 days",
-               backtrace=True, diagnose=True)
+               retention="15 days")
     logger.debug('日志系统已加载')
     logging.getLogger("uvicorn.access").handlers = [InterceptHandler()]
     return app
@@ -45,8 +45,8 @@ app.include_router(v2)
 
 @app.get('/', summary="首页")
 async def index():
-    return Response200(data="这是一个开源的IPTV服务项目，功能强大且适合任意平台。",
-                       msg="了解更多请访问：https://github.com/239144498/Streaming-Media-Server-Pro", code=200)
+    return Response200(data=base64.b64decode("6L+Z5piv5LiA5Liq5byA5rqQ55qESVBUVuacjeWKoemhueebru+8jOWKn+iDveW8uuWkp+S4lOmAguWQiOS7u+aEj+W5s+WPsOOAgg==").decode("utf-8"),
+                       msg=base64.b64decode("5LqG6Kej5pu05aSa6K+36K6/6Zeu77yaaHR0cHM6Ly9naXRodWIuY29tLzIzOTE0NDQ5OC9TdHJlYW1pbmctTWVkaWEtU2VydmVyLVBybw==").decode("utf-8"), code=200)
 
 
 @app.on_event("startup")
@@ -71,7 +71,6 @@ async def startup():
     scheduler.add_job(gotask, CronTrigger.from_crontab("0 0 * * 0-6"), max_instances=2, misfire_grace_time=120)
     scheduler.add_job(sqltask, CronTrigger.from_crontab("0 * * * *"), max_instances=3, misfire_grace_time=120)
     scheduler.add_job(filetask, CronTrigger.from_crontab("*/10 * * * *"), max_instances=3, misfire_grace_time=120)
-    logger.info(scheduler.get_jobs())
     logger.info("已开启定时任务")
     scheduler.start()
 

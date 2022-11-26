@@ -4,13 +4,11 @@
 # @Email   : 239144498@qq.com
 # @File    : tasks.py
 # @Software: PyCharm
-import asyncio
+import requests
 from loguru import logger
 
-from app.plugins.a4gtv.generateEpg import generateprog, postask
-from app.common.gitrepo import agit
 from app.conf import config
-from app.conf.config import gdata, xmlowner, xmlaccess_token, xmlrepo, repoState
+from app.conf.config import repoState
 from app.plugins.a4gtv.utile import get
 from app.db.localfile import vfile  # 新增本地文件处理模块
 
@@ -18,28 +16,14 @@ from app.db.localfile import vfile  # 新增本地文件处理模块
 def gotask():
     get.filename.clear()
     if repoState:
-        import platform
-        get.inin_repo()
-        if "Windows" in platform.platform():
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-            asyncio.run(postask())
-        else:
-            new_loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(new_loop)
-            loop = asyncio.get_event_loop()
-            task = asyncio.ensure_future(postask())
-            loop.run_until_complete(asyncio.wait([task]))
-
-        content = generateprog(gdata)
-        filepath = "4gtvchannel.xml"
-        agit(xmlaccess_token).update_repo_file(xmlowner, xmlrepo, filepath, content)
-        with open(config.ROOT / "assets/EPG.xml", "wb") as f:
-            f.write(content)
+        with requests.get("https://agit.ai/239144498/demo/raw/branch/master/4gtvchannel.xml") as res:
+            with open(config.ROOT / "assets/EPG.xml", "wb") as f:
+                f.write(res.content)
     logger.success("今日任务完成")
 
 
 def sqltask():
-    # 保留最近100条缓存，避免长时间运行内存溢出
+    # 保留最新100条缓存，避免长时间运行内存溢出
     keys = list(get.filename)
     keys.reverse()
     _ = {}

@@ -10,7 +10,3 @@ def return_diyepg():
             return f.read()
     return ""
 
-
-if __name__ == '__main__':
-    a = return_diyepg()
-    print(a)

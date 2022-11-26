@@ -1,3 +1,5 @@
+import hashlib
+import uuid
 from pathlib import Path
 from typing import Optional
 from pydantic import BaseSettings
@@ -6,6 +8,7 @@ import os
 import requests
 from loguru import logger
 from configparser import ConfigParser
+from platform import platform, python_version, machine
 
 
 class Config(BaseSettings):
@@ -35,7 +38,7 @@ class Config(BaseSettings):
 - **向下滑动查看**
 """
 
-    VERSION = "2.5"
+    VERSION = "2.6"
 
     CONTACT = {
         "name": "Naihe",
@@ -71,7 +74,7 @@ default_cfg = dict(cfg.items("default"))
 advanced_cfg = dict(cfg.items("advanced"))
 other_cfg = dict(cfg.items("other"))
 PORT = int(os.getenv("PORT", default=default_cfg.get("port")))
-
+mdata = hashlib.md5(config.VERSION.encode()).hexdigest()
 vbuffer = int(default_cfg.get("vbuffer"))
 downurls = eval(default_cfg.get("downurls"))
 downurls = downurls * (vbuffer // len(downurls) + 1)
@@ -91,7 +94,7 @@ xmlrepo = other_cfg.get("xmlrepo")
 xmlaccess_token = other_cfg.get("xmlaccess_token")
 repoowner = other_cfg.get("repoowner")
 repoaccess_token = other_cfg.get("repoaccess_token")
-
+mac = uuid.UUID(int=uuid.getnode()).hex[-12:]
 if xmlowner and xmlaccess_token:
     xmlState = True
 else:
@@ -112,27 +115,19 @@ headers2 = {
     'Content-Type': 'application/vnd.apple.mpegurl',
     'Expires': '-1',
 }
+machine = f"Pyhton/{python_version()} ({machine()} {platform()} {mac}) Version/{config.VERSION}"
 print(".", end="")
-idata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data",
+data3 = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/data2",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 print(".", end="")
-data3 = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data3",
+gdata = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 print(".", end="")
-gdata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data2",
-                         headers={
-                             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
-print(".", end="")
-edata = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/data4",
-                         headers={
-                             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
-print(".", end="")
-version = eval(request.get("https://raw.githubusercontent.com/382420058/owner/main/version",
+version = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/version",
                            headers={
                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text)
-
 print(".", end="\n")
 if config.VERSION != str(version):
     logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")
@@ -140,8 +135,5 @@ if config.VERSION != str(version):
 
 if localhost and "http" not in localhost:
     logger.warning("localhost配置错误，具体查看教程https://www.cnblogs.com/1314h/p/16651157.html")
-HD = {
-    "360": "stream0.m3u8", "480": "stream1.m3u8", "720": "stream2.m3u8", "1080": "stream2.m3u8",
-}
 
 logger.info("配置加载完成")

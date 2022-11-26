@@ -1,7 +1,6 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
 
-import os
 import time
 from loguru import logger
 from app.conf import config
@@ -46,8 +45,7 @@ class Vfile():
     def clean_file(self, timeout=180):
         # 删除存在时间超过180秒的文件
         cnt = 0
-
-        for f in self.datadir.iterdir():
+        for f in self.datadir.glob("*.ts"):
             path = self.datadir / f
             st_mtime = path.stat().st_mtime
             if time.time() > st_mtime + timeout:
