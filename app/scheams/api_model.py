@@ -11,7 +11,7 @@ class Clarity(str, Enum):
     f = "360"
     s = "480"
     c = "720"
-    h = "720"
+    h = "1080"
 
 
 class Channels(str, Enum):
