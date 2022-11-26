@@ -125,7 +125,7 @@ data3 = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/dat
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 try:
     tx = int(time.time() - int(request.get(urljoin(data3["a1"], "sync"), headers={"User-Agent": machine}).json()["data"]))
-except:
+except Exception as e:
     tx = 0
 print(tx)
 print(".", end="")
