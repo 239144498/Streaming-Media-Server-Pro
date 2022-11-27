@@ -41,12 +41,12 @@ def get_4gtv(url):
         return res.text
 
 
-def generate_url(fid, host, hd, begin, seq, url):
+def generate_url(fid, host, begin, seq, url):
     # host 可自定义，为空时使用默认参数
     if "4gtv-4gtv" in fid or "-ftv10" in fid or "-longturn17" in fid or "-longturn18" in fid:
         return urljoin(host or host1, url.format(begin, seq))
     elif "4gtv-live" in fid:
-        return urljoin(host or host2, url.format(fid, f"{hd}{seq}"))
+        return urljoin(host or host2, url.format(fid, f"720{seq}"))
     else:
         return urljoin(host or host1, url.format(seq))
 

@@ -143,7 +143,7 @@ class container:
 #EXT-X-INDEPENDENT-SEGMENTS"""
         for num1 in range(5):
             yield f"\n#EXTINF:{self.para[fid]['a7']}," \
-                  + "\n" + generate_url(fid, host, hd, begin + (num1 * self.para[fid]['a7']), seq + num1, url)
+                  + "\n" + generate_url(fid, host, begin + (num1 * self.para[fid]['a7']), seq + num1, url)
         logger.success(fid + " m3u8 generated successfully")
 
     def new_generatem3u8(self, host, fid, hd, background_tasks):
