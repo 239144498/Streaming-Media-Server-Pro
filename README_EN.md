@@ -315,7 +315,7 @@ PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
 
 > Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
-![](https://ik.imagekit.io/naihe/pay/zsm.png)
+![](https://ik.imagekit.io/naihe/pay/hbm.jpg)
 
 **&emsp;&emsp;The `star` or `sponsorship` you give on GitHub is what keeps me going for a long time, thank you from the bottom of my heart to each and every supporter, "every time you spend money you're voting for the world you want". Also, recommending this project to as many people as possible is a way to support it, the more people who use it the more motivation there is to update it.**
 

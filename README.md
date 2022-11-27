@@ -307,7 +307,7 @@ python3 main.py
 
 > Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
-![](https://ik.imagekit.io/naihe/pay/zsm.png)
+![](https://ik.imagekit.io/naihe/pay/hbm.jpg)
 
 **&emsp;&emsp;你在GitHub给的`star`或者`赞助`是我长期维护此项目的动力所在，由衷感谢每一位支持者，“每一次你花的钱都是在为你想要的世界投票”。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。**
 
