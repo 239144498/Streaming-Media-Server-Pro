@@ -194,7 +194,7 @@ def backtaskonline(url, fid, seq, hd, begin, host):
         if tsname in get.filename:
             continue
         get.filename.update({tsname: 0})
-        herf = generate_url(fid, host, hd, begin + (i * get.para[fid]['a7']), seq + i, url)
+        herf = generate_url(fid, host, begin + (i * get.para[fid]['a7']), seq + i, url)
         x = urlset.pop()
         data = {
             "f": herf,
@@ -221,7 +221,7 @@ def backtasklocal(url, fid, seq, hd, begin, host):
         if tsname in get.filename:
             continue
         get.filename.update({tsname: 0})
-        herf = generate_url(fid, host, hd, begin + (i * get.para[fid]['a7']), seq + i, url)
+        herf = generate_url(fid, host, begin + (i * get.para[fid]['a7']), seq + i, url)
         t = Thread(target=downvideo, args=(herf, tsname))
         threads.append(t)
         logger.info('启动downvideo完成')
