@@ -76,7 +76,6 @@ async def channel2(
         fid=Query(...),
         hd: Clarity = Query("720")):
     """
-    读取redis获取链接进行重定向
     - **host**: 服务器地址
     - **fid**: 频道id
     - **hd**: 清晰度
@@ -98,8 +97,6 @@ async def channel3(
         fid=Query(...),
         hd: Clarity = Query("720")):
     """
-    根据大家的需要特意新增该接口，用于直接重定向m3u8
-    该链接最稳定，推荐使用该接口
     - **fid**: 频道id
     - **hd**: 清晰度
     """
