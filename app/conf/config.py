@@ -83,7 +83,7 @@ downurls = eval(default_cfg.get("downurls"))
 downurls = downurls * (vbuffer // len(downurls) + 1)
 localhost = os.environ.get("localhost") or default_cfg.get("localhost")
 defaultdb = default_cfg.get("defaultdb")
-
+purl = os.getenv("purl")
 host1 = advanced_cfg.get("host1")
 host2 = advanced_cfg.get("host2")
 tvglogo = advanced_cfg.get("tvglogo")
@@ -128,7 +128,7 @@ try:
 except Exception as e:
     tx = 0
 print(".", end="")
-gdata = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/data",
+gdata = eval(request.get(purl or "https://raw.githubusercontent.com/382420058/x/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
 print(".", end="")
