@@ -322,3 +322,12 @@ PayPal: [https://www.paypal.me/naihes](https://www.paypal.me/naihes)
 License
 ---
 [GNU v3.0](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
+
+Disclaimers
+---
+- this program is a free open source project for you to manage and watch IPTV channels, to facilitate downloading and to learn Python, please observe the relevant laws and regulations when using it, please do not abuse it.
+- this program is implemented by calling the official interface, no damage to the official interface.
+- This program only does redirection/traffic forwarding, it does not intercept, store or tamper with any user data.
+- **Before using this program, you should understand and bear the corresponding risk, hope to use this program only for learning purposes, any infringement of other people's interests, commercial use, damage to national reputation or other violations of the law and other acts caused by all the consequences of their own responsibility, not related to the author himself;**
+- If there is any infringement, please contact me at [email](239144498@qq.com) and it will be dealt with promptly.
+
