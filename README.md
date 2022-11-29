@@ -193,7 +193,6 @@ python3 main.py
 - [x] 靖天育乐台
 - [x] KLT-靖天国际台
 - [x] Nice TV 靖天欢乐台
-- [x] 中天全民最大党
 - [x] TVBS欢乐台
 - [x] Lifetime 娱乐频道
 - [x] 电影原声台CMusic
