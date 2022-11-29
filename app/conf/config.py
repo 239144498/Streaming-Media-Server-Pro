@@ -128,6 +128,7 @@ try:
 except Exception as e:
     tx = 0
 print(".", end="")
+
 gdata = eval(request.get(purl or "https://raw.githubusercontent.com/382420058/x/main/data",
                          headers={
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
