@@ -10,3 +10,4 @@ requests>=2.28.1
 sentry_sdk>=1.9.10
 starlette>=0.20.4
 uvicorn>=0.17.6
+gunicorn
