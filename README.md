@@ -20,6 +20,12 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 [更新日志](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
 ---
 
+- 我创建了`IPTV频道`群组，可供交流、测试、反馈， **加入可直接访问 [https://t.me/+QmBC4d4jtgo2M2M9](https://t.me/+QmBC4d4jtgo2M2M9) ，或者扫码加入：**
+
+<a href="https://t.me/+QmBC4d4jtgo2M2M9"><img src="https://ik.imagekit.io/naihe/github/img.png" alt="stream.png" border="0" width="220px" height="220px" /></a>
+
+
+
 目录
 -------------------
 - [项目树形图](#项目树形图)
@@ -255,7 +261,8 @@ python3 main.py
 
 > Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
 
-![](https://ik.imagekit.io/naihe/pay/hbm.jpg)
+
+<a href="https://ik.imagekit.io/naihe/pay/hbm.jpg"><img src="https://ik.imagekit.io/naihe/pay/hbm.jpg" alt="stream.png" border="0" width="400px" height="220px" /></a>
 
 **&emsp;&emsp;你在GitHub给的`star`或者`赞助`是我长期维护此项目的动力所在，由衷感谢每一位支持者，“每一次你花的钱都是在为你想要的世界投票”。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。**
 
