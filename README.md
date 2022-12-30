@@ -36,10 +36,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
   - [安装依赖](#安装依赖)
   - [运行](#运行)
 - [现已支持频道](#现已支持频道)
-- [📋 打赏名单 Donation List](#-打赏名单-donation-list)
-- [❤ 打赏 Donation](#-打赏-donation)
 - [License](#License)
-- [免责声明](#免责声明)
 
 项目树形图
 ---
@@ -94,22 +91,11 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 
 ```
 
-公益视频网站
----
-
-后端对接的本项目接口，可以在线观看接口内的所有电视。
-
-https://player.naihe.cf  
-
-![](https://ik.imagekit.io/naihe/enshan/img2.png)  
-
-![](https://ik.imagekit.io/naihe/enshan/img1.png)  
-
 核心功能
 ---
 
 - 高效流媒体（具有缓冲区）
-- 代理任意视频网站的视频流【_NEW_】
+- 代理任意视频网站的视频流
 - 生成m3u文件
 - 生成m3u8文件
 - 异步下载流
@@ -247,30 +233,7 @@ python3 main.py
 - [x] 华语戏剧台
 - [x] 在diychannel.txt文件添加更多频道
 
-📋 打赏名单 Donation List
----
-非常感谢「 [这些用户](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/Donation-List) 」对本项目的赞助支持！
-
-❤ 打赏 Donation
----
-  如果你觉得本项目对你有帮助，请考虑打赏本项目，以激励我投入更多的时间进行维护与开发。 If you find this project helpful, please consider supporting the project going forward. Your support is greatly appreciated.
-
-> Every time you spend money, you're casting a vote for the kind of world you want. -- Anna Lappe
-
-
-<a href="https://ik.imagekit.io/naihe/pay/hbm.jpg"><img src="https://ik.imagekit.io/naihe/pay/hbm.jpg" alt="stream.png" border="0" width="400px" height="220px" /></a>
-
-**&emsp;&emsp;你在GitHub给的`star`或者`赞助`是我长期维护此项目的动力所在，由衷感谢每一位支持者，“每一次你花的钱都是在为你想要的世界投票”。 另外，将本项目推荐给更多的人，也是一种支持的方式，用的人越多更新的动力越足。**
-
 License
 ---
 [GNU-3.0 © naihe](https://github.com/239144498/Streaming-Media-Server-Pro/blob/main/LICENSE)
 
-
-免责声明
----
-- 本程序为免费开源项目，供大家管理及观看IPTV频道，方便下载以及学习Python，使用时请遵守相关法律法规，请勿滥用；
-- 本程序通过调用官方接口实现，无破坏官方接口行为；
-- 本程序仅做重定向/流量转发，不拦截、存储、篡改任何用户数据；
-- **在使用本程序之前，你应了解并承担相应的风险，希望使用此程序仅以学习为目的，任何侵害他人利益、商业用途、损害国家名誉或其他违法违规等行为造成的一切后果自行承担，与作者本人无关；**
-- 如有侵权，请通过[邮件](239144498@qq.com)与我联系，会及时处理。
