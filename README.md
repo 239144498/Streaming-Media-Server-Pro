@@ -13,10 +13,6 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 
 </div>
 
-> *&emsp;&emsp;在互联网快速发展的今天，有成千上万个用户都有观看电视的需求，而我，*
-*想打造一个让每个人都拥有自己的电视频道的目标，每个人都可以根据自己的喜欢去筛选喜欢的节目，*
-*并且拥有免费且流畅的观看体验。*
-
 [更新日志](https://github.com/239144498/Streaming-Media-Server-Pro/wiki/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
 ---
 
