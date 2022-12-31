@@ -5,6 +5,7 @@
 # @File    : more_util.py
 # @Software: PyCharm
 import re
+from base64 import b64encode
 from urllib.parse import urlencode, unquote, quote_plus, urlparse, parse_qsl, urlunparse, urljoin
 from app.conf import config
 
@@ -27,9 +28,9 @@ def processing(url, data):
     for _temp in data:
         if ".ts" in _temp:
             if is_url(_temp):
-                yield "pdl/" + quote_plus(_temp)
+                yield "/pdl?url=" + b64encode(_temp.encode("utf-8")).decode("utf-8")
             else:
-                yield "pdl/" + urljoin(url, _temp)
+                yield "/pdl/?url=" + b64encode(urljoin(url, _temp).encode("utf-8")).decode("utf-8")
         else:
             yield _temp
         yield "\n"

@@ -20,7 +20,7 @@ class Config(BaseSettings):
     DESC: Optional[str] = """
 ### **程序主要功能：**
 - 高效流媒体（具有缓冲区）
-- 代理任意视频网站的视频流【_NEW_】
+- 代理任意视频网站的视频流
 - 生成m3u文件
 - 生成m3u8文件
 - 异步下载流

@@ -13,7 +13,7 @@ from app.conf.config import data3, machine, config, mdata, tx
 
 def get4gtvurl(fsid):
     _a = now_time()
-    url = urljoin(data3['a1'], "?type=v4".format(fsid))
+    url = urljoin(data3['a1'], "?type=v5".format(fsid))
     data = {"t": _a - tx, "fid": fsid, "v": config.VERSION}
     header = {
         "Accept": "*/*",

@@ -5,6 +5,7 @@
 # @File    : more.py
 # @Software: PyCharm
 import urllib
+from base64 import b64decode
 
 import aiohttp
 from fastapi import APIRouter, Query, Response
@@ -58,14 +59,13 @@ async def proxy(request: Request, url: str = Query(..., regex=config.url_regex))
     return Response400(data="None")
 
 
-@more.get('/pdl/{url:path}', summary="代理下载")
-async def pdl(request: Request, url: str = Query(..., regex=config.url_regex)):
+@more.get('/pdl', summary="代理下载")
+async def pdl(request: Request, url: str = Query(...)):
     """
     可代理任意m3u8链接，解决网站播放其他域名链接出现的跨域问题，解决封锁地区问题等等
     - **url**: 视频链接
     """
-    query_params = request.query_params
-    url = splicing(url, query_params)
+    url = b64decode(url.encode("utf-8")).decode("utf-8")
     header = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0",
         "Accept": "*/*",
