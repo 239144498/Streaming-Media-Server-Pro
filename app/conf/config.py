@@ -120,22 +120,16 @@ headers2 = {
 }
 machine = f"Pyhton/{python_version()} ({machine()} {platform()} {mac}) Version/{config.VERSION}"
 print(".", end="")
-data3 = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/data2",
-                         headers={
-                             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+data3 = None
 try:
     tx = int(time.time() - int(request.get(urljoin(data3["a1"], "sync"), headers={"User-Agent": machine}).json()["data"]))
 except Exception as e:
     tx = 0
 print(".", end="")
 
-gdata = eval(request.get(purl or "https://raw.githubusercontent.com/382420058/x/main/data",
-                         headers={
-                             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).content)
+gdata = None
 print(".", end="")
-version = eval(request.get("https://raw.githubusercontent.com/382420058/x/main/version",
-                           headers={
-                               "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0"}).text)
+version = None
 print(".", end="\n")
 if config.VERSION != str(version):
     logger.warning(f"当前版本为{config.VERSION}，最新版本为{version}，请及时更新！")

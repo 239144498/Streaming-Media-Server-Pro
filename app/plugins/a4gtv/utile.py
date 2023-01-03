@@ -28,8 +28,6 @@ class container:
         self.init()
 
     def init(self):
-        for i in gdata:
-            self.idata[i["fs4GTV_ID"]] = {}
         if redisState:
             keys = cur.keys()
             _ = []
