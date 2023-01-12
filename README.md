@@ -35,7 +35,6 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
   - [python部署:](#python部署)
   - [安装依赖](#安装依赖)
   - [运行](#运行)
-- [现已支持频道](#现已支持频道)
 - [License](#License)
 
 项目树形图
@@ -166,72 +165,7 @@ python3 main.py
 
 现已支持频道
 ---
-- [x] TVBS精采台
-- [x] LiveABC互动英语频道
-- [x] 达文西频道
-- [x] ELTV生活英语台
-- [x] Nick Jr. 儿童频道
-- [x] 尼克儿童频道
-- [x] 靖天卡通台
-- [x] 靖洋卡通Nice Bingo
-- [x] i-Fun动漫台
-- [x] MOMO亲子台
-- [x] CN卡通
-- [x] 猪哥亮歌厅秀
-- [x] 靖天育乐台
-- [x] KLT-靖天国际台
-- [x] Nice TV 靖天欢乐台
-- [x] TVBS欢乐台
-- [x] Lifetime 娱乐频道
-- [x] 电影原声台CMusic
-- [x] TRACE Urban
-- [x] MTV Live HD 音乐频道
-- [x] Mezzo Live HD
-- [x] CLASSICA 古典乐
-- [x] 博斯高球台
-- [x] 博斯运动一台
-- [x] 博斯无限台
-- [x] 博斯网球台
-- [x] TRACE Sport Stars
-- [x] 智林体育台
-- [x] 时尚运动X
-- [x] 车迷TV
-- [x] GINX Esports TV
-- [x] Pet Club TV
-- [x] 滚动力rollor
-- [x] 亚洲旅游台
-- [x] 幸福空间居家台
-- [x] Love Nature
-- [x] History 历史频道
-- [x] Smithsonian Channel
-- [x] 爱尔达生活旅游台
-- [x] LUXE TV Channel
-- [x] TV5MONDE STYLE HD 生活时尚
-- [x] 中天美食旅游
-- [x] 公视戏剧
-- [x] 民视影剧台
-- [x] 龙华戏剧台
-- [x] HITS频道
-- [x] 八大精彩台
-- [x] 靖天戏剧台
-- [x] 靖洋戏剧台
-- [x] CI 罪案侦查频道
-- [x] 金光布袋戏
-- [x] 采昌影剧台
-- [x] 靖天映画
-- [x] 靖天电影台
-- [x] 龙华电影台
-- [x] 影迷数位电影台
-- [x] amc最爱电影
-- [x] CinemaWorld
-- [x] CATCHPLAY Beyond
-- [x] CATCHPLAY电影台
-- [x] My Cinema Europe HD 我的欧洲电影
-- [x] 经典电影台
-- [x] 经典卡通台
-- [x] 精选动漫台
-- [x] 华语戏剧台
-- [x] 在diychannel.txt文件添加更多频道
+- [x] 在diychannel.txt文件添加自定义频道
 
 License
 ---
