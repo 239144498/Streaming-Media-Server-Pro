@@ -31,6 +31,12 @@ def processing(url, data):
                 yield "/pdl?url=" + b64encode(_temp.encode("utf-8")).decode("utf-8")
             else:
                 yield "/pdl/?url=" + b64encode(urljoin(url, _temp).encode("utf-8")).decode("utf-8")
+        # 补充/proxy接口，如果获取的是不含域名的m3u8列表，则拼出完整地址        
+        elif len(_temp)>4:
+            if _temp[0] != '#' and _temp[:4] != 'http':
+                yield urljoin(url, _temp)
+            else:
+                yield _temp
         else:
             yield _temp
         yield "\n"
