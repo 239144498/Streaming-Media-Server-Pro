@@ -147,6 +147,18 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 
 使用方式
 ---
+> 💡提示：最好将本项目部署至美国地区的服务器，否则可能会出现奇怪的BUG。
+
+推荐大家使用[Digitalocean](https://www.digitalocean.com/?refcode=b71d602787d2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)的服务器，主要是因为免费。
+
+<a href="https://www.digitalocean.com/?refcode=b71d602787d2&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge"><img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" /></a>
+
+使用我的邀请链接注册，你可以获得$200的credit，当你在上面消费$25时，我也可以获得$25的奖励。
+
+我的邀请链接：
+
+[https://m.do.co/c/9f72a27dec35](https://m.do.co/c/b71d602787d2)
+> 根据以下通用命令部署本项目
 ### python部署: 
 python版本>=3.8+
 ``` code
