@@ -94,6 +94,7 @@ async def ytb(request: Request, url: str = Query(...)):
         "Upgrade-Insecure-Requests": "1",
     }
     data = get_ytb(url,headers)
+    print(data)
     return Response(data, status_code=200)
 
 @more.get('/count', summary="统计")
