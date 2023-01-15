@@ -29,7 +29,7 @@ def parse(url):
 
 def processing(url, data):
     for _temp in data:
-        if ".ts" in _temp:
+        if ".ts" in _temp or "googlevideo.com/videoplayback" in _temp :
             if is_url(_temp):
                 yield "/pdl?url=" + b64encode(_temp.encode("utf-8")).decode("utf-8")
             else:
@@ -73,6 +73,7 @@ def get_ytb(url,headers):
     else:
         logger.info(f"youtube直播源不存在 {url}")
         update_ytb(url,headers,stream_id)
+        
     stream_url = "/proxy?url="+ytb_stream[stream_id]['stream_url']
     data = "#EXTM3U\n#EXTINF:\n"+stream_url
     return data
