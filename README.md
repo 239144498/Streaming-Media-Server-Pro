@@ -157,7 +157,7 @@ Documentation: [English version](https://github.com/239144498/Streaming-Media-Se
 
 我的邀请链接：
 
-[https://m.do.co/c/9f72a27dec35](https://m.do.co/c/45e25f5e4569)
+[https://m.do.co/c/45e25f5e4569](https://m.do.co/c/45e25f5e4569)
 > 根据以下通用命令部署本项目
 ### python部署: 
 python版本>=3.8+
