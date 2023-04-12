@@ -12,7 +12,7 @@ from fastapi import APIRouter, Query, Response
 from fastapi.responses import FileResponse
 from fastapi.requests import Request
 from starlette.responses import StreamingResponse
-from app.plugins.a4gtv.more_util import parse, processing, splicing
+from app.plugins.a4gtv.more_util import parse, processing, splicing, get_ytb
 from app.conf import config
 from app.conf.config import headers
 from app.scheams.response import Response200, Response400
@@ -76,6 +76,26 @@ async def pdl(request: Request, url: str = Query(...)):
         async with session.get(url=url) as res:
             return Response(content=await res.read(), status_code=200, headers=headers, media_type='video/MP2T')
 
+
+@more.get('/ytb', summary="获取youtube直播源")
+async def ytb(request: Request, url: str = Query(...)):
+    """
+    从youtube直播页面获取直播源，输入url作为参数即可
+    
+    例如，直播页面地址为"https://www.youtube.com/watch?v=c6lkorBJ1LY&ab_channel=SPACE%28Official%29"
+    
+    使用/ytb接口即可作为iptv直播源，如"http://域名:8080/ytb?url=https://www.youtube.com/watch?v=c6lkorBJ1LY&ab_channel=SPACE%28Official%29"
+    - **url**: 视频链接
+    """
+    header = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0",
+        "Accept": "*/*",
+        "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+        "Upgrade-Insecure-Requests": "1",
+    }
+    data = get_ytb(url,headers)
+    print(data)
+    return Response(data, status_code=200)
 
 @more.get('/count', summary="统计")
 async def count1():

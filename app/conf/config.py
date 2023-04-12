@@ -138,4 +138,6 @@ if config.VERSION != str(version):
 if localhost and "http" not in localhost:
     logger.warning("localhost配置错误，具体查看教程https://www.cnblogs.com/1314h/p/16651157.html")
 
+ytb_stream = {}
+
 logger.info("配置加载完成")
